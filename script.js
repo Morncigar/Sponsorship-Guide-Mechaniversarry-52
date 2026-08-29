@@ -11,7 +11,7 @@ const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
 
 // Paste ONLY your Supabase Publishable Key here.
 // NEVER paste sb_secret_... or service_role here.
-const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_PBP6LR26bD28r0bdT7EVFg_cekn47a7";
 
 const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
