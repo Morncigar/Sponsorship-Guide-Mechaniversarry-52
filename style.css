@@ -1,9 +1,13 @@
 /* =========================================================
    REBELS HALVEGAS OVERRIDE
    MECHANIVERSARY 52 — SPONSOR DATABASE
+   MATCHED TO CURRENT JAVASCRIPT
    ========================================================= */
 
-/* ---------- COLOR SYSTEM ---------- */
+
+/* =========================================================
+   COLOR SYSTEM
+   ========================================================= */
 
 :root {
     --navy: #041E41;
@@ -60,12 +64,18 @@ body {
         ),
         var(--navy);
 
-    font-family: "Space Grotesk", sans-serif;
+    color: var(--text);
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
 
     letter-spacing: -.01em;
 }
 
-/* subtle print / poster texture */
+
+/* Texture */
+
 body::before {
     content: "";
 
@@ -73,6 +83,7 @@ body::before {
     inset: 0;
 
     pointer-events: none;
+
     z-index: 9999;
 
     opacity: .18;
@@ -90,7 +101,16 @@ body::before {
 
 
 /* =========================================================
-   TOPBAR — BIKER CLUB HEADER
+   UTILITY
+   ========================================================= */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================================
+   TOPBAR
    ========================================================= */
 
 .topbar {
@@ -118,10 +138,14 @@ body::before {
     width: 48px;
     height: 48px;
 
-    background: var(--yellow);
-    color: var(--navy);
+    background:
+        var(--yellow);
 
-    border: 2px solid var(--black);
+    color:
+        var(--navy);
+
+    border:
+        2px solid var(--black);
 
     transform:
         rotate(-3deg)
@@ -148,9 +172,11 @@ body::before {
 }
 
 .brand-text span {
-    color: var(--yellow);
+    color:
+        var(--yellow);
 
     font-size: 8px;
+
     letter-spacing: .18em;
 }
 
@@ -164,7 +190,8 @@ body::before {
 
     border-radius: 2px;
 
-    border: 2px solid var(--white);
+    border:
+        2px solid var(--white);
 
     font-family:
         "DM Mono",
@@ -184,7 +211,8 @@ body::before {
     transition:
         transform .12s ease,
         box-shadow .12s ease,
-        background .12s ease;
+        background .12s ease,
+        color .12s ease;
 }
 
 .btn:hover {
@@ -201,6 +229,17 @@ body::before {
 
     box-shadow:
         1px 1px 0 var(--black);
+}
+
+.btn-small {
+    min-height: 32px;
+
+    padding:
+        7px 11px;
+
+    font-size: 8px;
+
+    line-height: 1;
 }
 
 .btn-primary {
@@ -262,7 +301,7 @@ body::before {
 
 
 /* =========================================================
-   LOGIN — WESTERN POSTER
+   LOGIN
    ========================================================= */
 
 .login-screen {
@@ -312,9 +351,11 @@ body::before {
 
     position: absolute;
 
-    color: var(--yellow);
+    color:
+        var(--yellow);
 
-    font-size: 22px;
+    font-size:
+        22px;
 }
 
 .login-card::before {
@@ -360,7 +401,7 @@ body::before {
 
 .login-card > p {
     color:
-        #aeb6c2;
+        var(--muted);
 }
 
 
@@ -379,6 +420,15 @@ textarea {
 
     background:
         rgba(0,0,0,.25);
+
+    color:
+        var(--white);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color:
+        var(--muted-dark);
 }
 
 input:focus,
@@ -389,6 +439,9 @@ textarea:focus {
 
     box-shadow:
         4px 4px 0 var(--maroon);
+
+    outline:
+        none;
 }
 
 .form-group label,
@@ -406,7 +459,7 @@ textarea:focus {
 
 
 /* =========================================================
-   MAIN HEADER
+   MAIN APP
    ========================================================= */
 
 .main-app {
@@ -473,7 +526,7 @@ textarea:focus {
 
 
 /* =========================================================
-   STATS — PATCH / BADGE LOOK
+   STATS
    ========================================================= */
 
 .stats-grid {
@@ -632,7 +685,7 @@ textarea:focus {
 
 
 /* =========================================================
-   TABLE — GARAGE / RACE SHEET
+   TABLE
    ========================================================= */
 
 .table-wrapper {
@@ -645,11 +698,20 @@ textarea:focus {
 
     box-shadow:
         6px 6px 0 var(--black);
+
+    overflow-x:
+        auto;
 }
 
 .sponsor-table {
     min-width:
         1000px;
+
+    width:
+        100%;
+
+    border-collapse:
+        collapse;
 }
 
 .sponsor-table th {
@@ -678,6 +740,14 @@ textarea:focus {
 
     border-bottom:
         1px solid rgba(255,255,255,.09);
+
+    vertical-align:
+        middle;
+}
+
+.sponsor-table tbody tr {
+    transition:
+        background .12s ease;
 }
 
 .sponsor-table tbody tr:hover {
@@ -689,6 +759,9 @@ textarea:focus {
 }
 
 .sponsor-table td:first-child strong {
+    display:
+        block;
+
     font-family:
         "Archivo Black",
         sans-serif;
@@ -700,23 +773,90 @@ textarea:focus {
         -.02em;
 }
 
+.sponsor-table td:first-child small {
+    display:
+        block;
+
+    margin-top:
+        4px;
+
+    color:
+        var(--muted);
+
+    font-family:
+        "DM Mono",
+        monospace;
+
+    font-size:
+        8px;
+
+    text-transform:
+        uppercase;
+}
+
 
 /* =========================================================
-   STATUS — CASINO / PATCH COLORS
+   TABLE ACTIONS
+   IMPORTANT:
+   JS USES .table-actions
+   ========================================================= */
+
+.table-actions {
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        6px;
+
+    align-items:
+        center;
+}
+
+
+/* =========================================================
+   STATUS
    ========================================================= */
 
 .status-badge {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        5px 8px;
+
     border:
         1px solid currentColor;
 
     border-radius:
         2px;
 
+    font-family:
+        "DM Mono",
+        monospace;
+
+    font-size:
+        8px;
+
     font-weight:
         500;
 
     letter-spacing:
         .08em;
+
+    text-transform:
+        uppercase;
+
+    white-space:
+        nowrap;
 }
 
 .status-prospect {
@@ -776,13 +916,32 @@ textarea:focus {
    OBJECTIVE TAGS
    ========================================================= */
 
+.objective-tags {
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        5px;
+
+    align-items:
+        center;
+}
+
 .objective-tag {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
     padding:
         4px 8px;
 
     border:
-        1px solid
-        var(--yellow);
+        1px solid var(--yellow);
 
     border-radius:
         1px;
@@ -793,42 +952,18 @@ textarea:focus {
     color:
         var(--yellow);
 
-    font-size:
-        8px;
-
-    text-transform:
-        uppercase;
-}
-
-
-/* =========================================================
-   ACTION BUTTONS
-   ========================================================= */
-
-.table-action {
-    border:
-        1px solid rgba(255,255,255,.25);
-
-    border-radius:
-        2px;
-
     font-family:
         "DM Mono",
         monospace;
 
+    font-size:
+        8px;
+
+    line-height:
+        1.2;
+
     text-transform:
         uppercase;
-}
-
-.table-action:hover {
-    background:
-        var(--yellow);
-
-    border-color:
-        var(--black);
-
-    color:
-        var(--navy);
 }
 
 
@@ -854,11 +989,25 @@ textarea:focus {
 }
 
 .activity-item {
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    gap:
+        12px;
+
     padding:
         18px 20px;
 
     border-bottom:
         1px solid rgba(255,255,255,.09);
+}
+
+.activity-item:last-child {
+    border-bottom:
+        none;
 }
 
 .activity-item:hover {
@@ -867,11 +1016,17 @@ textarea:focus {
 }
 
 .activity-dot {
+    flex:
+        0 0 auto;
+
     width:
         10px;
 
     height:
         10px;
+
+    margin-top:
+        5px;
 
     background:
         var(--yellow);
@@ -883,7 +1038,21 @@ textarea:focus {
         2px 2px 0 var(--maroon);
 }
 
-.activity-main strong {
+.activity-content {
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        4px;
+
+    min-width:
+        0;
+}
+
+.activity-content strong {
     font-family:
         "Space Grotesk",
         sans-serif;
@@ -892,9 +1061,21 @@ textarea:focus {
         700;
 }
 
+.activity-content span {
+    color:
+        var(--muted);
+
+    font-family:
+        "DM Mono",
+        monospace;
+
+    font-size:
+        8px;
+}
+
 
 /* =========================================================
-   MODAL — GARAGE NOTICE BOARD
+   MODAL
    ========================================================= */
 
 .modal-backdrop {
@@ -947,6 +1128,12 @@ textarea:focus {
 
     border-radius:
         2px;
+
+    background:
+        transparent;
+
+    color:
+        var(--white);
 }
 
 .modal-close:hover {
@@ -1016,28 +1203,165 @@ textarea:focus {
 
 
 /* =========================================================
-   DETAIL
+   DETAIL MODAL
+   IMPORTANT:
+   JS USES .detail-grid AND .detail-item
    ========================================================= */
 
-.detail-row,
-.detail-block {
+.detail-grid {
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap:
+        0;
+}
+
+.detail-item {
+    padding:
+        16px 18px;
+
     border-bottom:
         1px solid rgba(255,255,255,.12);
 }
 
-.detail-row span,
-.detail-block > span {
+.detail-item > span {
+    display:
+        block;
+
+    margin-bottom:
+        6px;
+
     color:
         var(--yellow);
 
+    font-family:
+        "DM Mono",
+        monospace;
+
+    font-size:
+        8px;
+
     font-weight:
         500;
+
+    letter-spacing:
+        .12em;
+
+    text-transform:
+        uppercase;
 }
 
-.detail-row strong {
+.detail-item strong {
+    display:
+        block;
+
     font-family:
         "Space Grotesk",
         sans-serif;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.45;
+
+    overflow-wrap:
+        anywhere;
+}
+
+.detail-item p {
+    margin:
+        0;
+
+    color:
+        var(--muted);
+
+    line-height:
+        1.6;
+
+    white-space:
+        pre-wrap;
+}
+
+.detail-full {
+    grid-column:
+        1 / -1;
+}
+
+.detail-item a {
+    color:
+        var(--white);
+
+    text-decoration:
+        underline;
+
+    text-decoration-color:
+        var(--yellow);
+
+    text-underline-offset:
+        3px;
+}
+
+.detail-item a:hover {
+    color:
+        var(--yellow);
+}
+
+
+/* =========================================================
+   EMPTY STATES
+   ========================================================= */
+
+.empty-state {
+    padding:
+        45px 20px !important;
+
+    text-align:
+        center;
+}
+
+.empty-state strong,
+.empty-state span {
+    display:
+        block;
+}
+
+.empty-state strong {
+    margin-bottom:
+        6px;
+
+    font-family:
+        "Archivo Black",
+        sans-serif;
+
+    color:
+        var(--yellow);
+}
+
+.empty-state span {
+    color:
+        var(--muted);
+}
+
+.empty-activity {
+    padding:
+        25px;
+
+    color:
+        var(--muted);
+
+    text-align:
+        center;
+
+    font-family:
+        "DM Mono",
+        monospace;
+
+    font-size:
+        10px;
 }
 
 
@@ -1134,6 +1458,22 @@ textarea:focus {
 
 
 /* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline:
+        3px solid var(--yellow);
+
+    outline-offset:
+        3px;
+}
+
+
+/* =========================================================
    MOBILE
    ========================================================= */
 
@@ -1209,6 +1549,19 @@ textarea:focus {
             4px 4px 0 var(--black);
     }
 
+    .table-actions {
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+    }
+
+    .table-actions .btn {
+        width:
+            100%;
+    }
+
     .modal-card {
         border-width:
             2px;
@@ -1217,20 +1570,13 @@ textarea:focus {
             5px 5px 0 var(--maroon);
     }
 
-}
+    .detail-grid {
+        grid-template-columns:
+            1fr;
+    }
 
-
-/* =========================================================
-   ACCESSIBILITY
-   ========================================================= */
-
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-    outline:
-        3px solid var(--yellow);
-
-    outline-offset:
-        3px;
+    .detail-full {
+        grid-column:
+            auto;
+    }
 }
