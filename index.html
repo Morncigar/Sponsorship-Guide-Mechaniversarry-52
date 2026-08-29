@@ -1,2012 +1,1021 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-    <meta
-        name="theme-color"
-        content="#041E41"
-    >
-
-    <meta
-        name="description"
-        content="Mechaniversary 52 Sponsorship Partnership Operating System"
-    >
-
-    <title>M52 — Partnership OS</title>
-
-    <!-- =====================================================
-         FONTS
-    ====================================================== -->
+    <title>Mechaniversary 52 — Sponsor Database</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link
         href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap"
         rel="stylesheet"
     >
 
-    <!-- =====================================================
-         STYLES
-    ====================================================== -->
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- =========================================================
-     APP LOADER
-========================================================= -->
+    <!-- =====================================================
+         APP
+    ====================================================== -->
 
-<div
-    id="appLoader"
-    class="app-loader"
->
+    <div id="app">
 
-    <div class="loader-mark">
-        M<span>52</span>
-    </div>
+        <!-- ================= HEADER ================= -->
 
-    <div class="loader-text">
-        INITIALIZING PARTNERSHIP OS...
-    </div>
+        <header class="topbar">
 
-</div>
+            <div class="brand">
+                <div class="brand-mark">M52</div>
 
-
-<!-- =========================================================
-     LOGIN SCREEN
-========================================================= -->
-
-<section
-    id="loginScreen"
-    class="login-screen hidden"
->
-
-    <div class="login-background-grid"></div>
-
-    <div class="login-decoration">
-        52
-    </div>
-
-
-    <div class="login-container">
-
-        <!-- BRAND -->
-
-        <div class="login-brand">
-
-            <div class="login-mark">
-                M<span>52</span>
-            </div>
-
-            <div class="login-brand-text">
-
-                <strong>
-                    MECHANIVERSARY
-                </strong>
-
-                <span>
-                    PARTNERSHIP DIVISION
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <!-- LOGIN CONTENT -->
-
-        <div class="login-content">
-
-            <div class="eyebrow">
-                INTERNAL SYSTEM / 2026
-            </div>
-
-            <h1>
-                PARTNERSHIP<br>
-                <span>OPERATING SYSTEM</span>
-            </h1>
-
-            <p>
-                Satu sistem untuk mengelola prospect,
-                partnership, follow-up, activation,
-                dan sponsor relationship.
-            </p>
-
-
-            <!-- LOGIN FORM -->
-
-            <form
-                id="loginForm"
-                autocomplete="on"
-            >
-
-                <div class="input-group">
-
-                    <label for="loginEmail">
-                        EMAIL
-                    </label>
-
-                    <input
-                        id="loginEmail"
-                        name="email"
-                        type="email"
-                        autocomplete="email"
-                        placeholder="email@company.com"
-                        required
-                    >
-
+                <div class="brand-text">
+                    <strong>MECHANIVERSARY</strong>
+                    <span>SPONSOR DATABASE</span>
                 </div>
+            </div>
 
+            <div class="header-right">
 
-                <div class="input-group">
-
-                    <label for="loginPassword">
-                        PASSWORD
-                    </label>
-
-                    <input
-                        id="loginPassword"
-                        name="password"
-                        type="password"
-                        autocomplete="current-password"
-                        placeholder="••••••••"
-                        required
-                    >
-
+                <div id="userInfo" class="user-info">
+                    <span id="userName">Guest</span>
+                    <span id="userRole" class="role-badge">USER</span>
                 </div>
-
 
                 <button
-                    id="loginButton"
-                    class="primary-button login-button"
-                    type="submit"
+                    id="logoutBtn"
+                    class="btn btn-outline hidden"
+                    type="button"
                 >
-
-                    <span>
-                        ENTER SYSTEM
-                    </span>
-
-                    <span>
-                        →
-                    </span>
-
+                    Keluar
                 </button>
 
-
-                <div
-                    id="loginError"
-                    class="form-error"
-                    role="alert"
-                ></div>
-
-            </form>
-
-        </div>
-
-
-        <!-- FOOTER -->
-
-        <div class="login-footer">
-
-            <span>
-                M52
-            </span>
-
-            <span>
-                MECHANICAL ENGINEERING
-            </span>
-
-            <span>
-                PARTNERSHIP SYSTEM
-            </span>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     MAIN APPLICATION
-========================================================= -->
-
-<div
-    id="app"
-    class="app hidden"
->
-
-
-    <!-- =====================================================
-         MOBILE HEADER
-    ====================================================== -->
-
-    <header class="mobile-header">
-
-        <button
-            id="mobileMenuButton"
-            class="icon-button"
-            type="button"
-            aria-label="Open navigation"
-        >
-            ☰
-        </button>
-
-
-        <div class="mobile-logo">
-
-            <strong>
-                M<span>52</span>
-            </strong>
-
-            <small>
-                PARTNERSHIP OS
-            </small>
-
-        </div>
-
-
-        <button
-            id="mobileLogoutButton"
-            class="icon-button"
-            type="button"
-            aria-label="Logout"
-        >
-            ↪
-        </button>
-
-    </header>
-
-
-    <!-- =====================================================
-         SIDEBAR
-    ====================================================== -->
-
-    <aside
-        id="sidebar"
-        class="sidebar"
-    >
-
-        <!-- BRAND -->
-
-        <div class="sidebar-brand">
-
-            <div class="sidebar-logo">
-                M<span>52</span>
             </div>
 
-            <div class="sidebar-brand-text">
-
-                <strong>
-                    PARTNERSHIP
-                </strong>
-
-                <small>
-                    OPERATING SYSTEM
-                </small>
-
-            </div>
-
-        </div>
+        </header>
 
 
-        <div class="sidebar-divider"></div>
-
-
-        <!-- NAVIGATION -->
-
-        <nav
-            class="sidebar-navigation"
-            aria-label="Main navigation"
-        >
-
-            <button
-                class="nav-item active"
-                data-page="dashboard"
-                type="button"
-            >
-
-                <span class="nav-number">
-                    01
-                </span>
-
-                <span>
-                    DASHBOARD
-                </span>
-
-            </button>
-
-
-            <button
-                class="nav-item"
-                data-page="crm"
-                type="button"
-            >
-
-                <span class="nav-number">
-                    02
-                </span>
-
-                <span>
-                    SPONSOR CRM
-                </span>
-
-            </button>
-
-
-            <button
-                class="nav-item"
-                data-page="pipeline"
-                type="button"
-            >
-
-                <span class="nav-number">
-                    03
-                </span>
-
-                <span>
-                    PIPELINE
-                </span>
-
-            </button>
-
-
-            <button
-                class="nav-item"
-                data-page="tasks"
-                type="button"
-            >
-
-                <span class="nav-number">
-                    04
-                </span>
-
-                <span>
-                    TASKS
-                </span>
-
-            </button>
-
-
-            <button
-                class="nav-item"
-                data-page="playbook"
-                type="button"
-            >
-
-                <span class="nav-number">
-                    05
-                </span>
-
-                <span>
-                    PLAYBOOK
-                </span>
-
-            </button>
-
-        </nav>
-
-
-        <!-- SIDEBAR USER -->
-
-        <div class="sidebar-bottom">
-
-            <div class="sidebar-divider"></div>
-
-
-            <div class="user-profile">
-
-                <div
-                    id="userAvatar"
-                    class="user-avatar"
-                >
-                    M
-                </div>
-
-
-                <div class="user-details">
-
-                    <strong id="userName">
-                        User
-                    </strong>
-
-                    <span id="userEmail">
-                        —
-                    </span>
-
-                    <small id="userRole">
-                        VIEWER
-                    </small>
-
-                </div>
-
-            </div>
-
-
-            <button
-                id="logoutButton"
-                class="logout-button"
-                type="button"
-            >
-                LOG OUT
-                <span>→</span>
-            </button>
-
-        </div>
-
-    </aside>
-
-
-    <!-- =====================================================
-         MAIN CONTENT
-    ====================================================== -->
-
-    <main class="main-content">
-
-
-        <!-- =================================================
-             DASHBOARD
-        ================================================== -->
+        <!-- ================= LOGIN ================= -->
 
         <section
-            id="page-dashboard"
-            class="page active-page"
+            id="loginScreen"
+            class="screen login-screen"
         >
 
-            <header class="page-header">
+            <div class="login-card">
+
+                <div class="login-label">
+                    INTERNAL SYSTEM / M52
+                </div>
+
+                <h1>
+                    Sponsor<br>
+                    <span>Database.</span>
+                </h1>
+
+                <p>
+                    Kelola, cari, dan pantau seluruh database
+                    calon partner Mechaniversary 52.
+                </p>
+
+                <form id="loginForm">
+
+                    <div class="form-group">
+                        <label for="loginEmail">
+                            Email
+                        </label>
+
+                        <input
+                            id="loginEmail"
+                            name="email"
+                            type="email"
+                            placeholder="nama@email.com"
+                            autocomplete="email"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">
+                            Password
+                        </label>
+
+                        <input
+                            id="loginPassword"
+                            name="password"
+                            type="password"
+                            placeholder="••••••••"
+                            autocomplete="current-password"
+                            required
+                        >
+                    </div>
+
+                    <button
+                        id="loginBtn"
+                        class="btn btn-primary btn-full"
+                        type="submit"
+                    >
+                        Masuk ke Database
+                    </button>
+
+                    <p
+                        id="loginError"
+                        class="form-error hidden"
+                    ></p>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= MAIN APP ================= -->
+
+        <main
+            id="mainApp"
+            class="main-app hidden"
+        >
+
+            <!-- ================= DASHBOARD ================= -->
+
+            <section class="dashboard-header">
 
                 <div>
-
                     <div class="eyebrow">
-                        01 / CONTROL ROOM
+                        MECHANIVERSARY 52
                     </div>
 
                     <h1>
-                        PARTNERSHIP<br>
-                        <span>DASHBOARD</span>
+                        Sponsor<br>
+                        <span>Command Center</span>
                     </h1>
 
+                    <p>
+                        Satu database untuk seluruh proses
+                        partnership.
+                    </p>
                 </div>
 
-
-                <div
-                    id="currentDate"
-                    class="page-date"
-                >
-                    —
-                </div>
-
-            </header>
-
-
-            <!-- KPI -->
-
-            <div class="stats-grid">
-
-
-                <article class="stat-card">
-
-                    <div class="stat-label">
-                        ACTIVE PROSPECTS
-                    </div>
-
-                    <div
-                        id="statProspects"
-                        class="stat-value"
-                    >
-                        0
-                    </div>
-
-                    <div class="stat-description">
-                        companies in pipeline
-                    </div>
-
-                </article>
-
-
-                <article class="stat-card stat-accent">
-
-                    <div class="stat-label">
-                        PIPELINE VALUE
-                    </div>
-
-                    <div
-                        id="statPipeline"
-                        class="stat-value"
-                    >
-                        Rp 0
-                    </div>
-
-                    <div class="stat-description">
-                        active opportunities
-                    </div>
-
-                </article>
-
-
-                <article class="stat-card">
-
-                    <div class="stat-label">
-                        SECURED
-                    </div>
-
-                    <div
-                        id="statSecured"
-                        class="stat-value"
-                    >
-                        Rp 0
-                    </div>
-
-                    <div class="stat-description">
-                        confirmed partnership
-                    </div>
-
-                </article>
-
-
-                <article class="stat-card">
-
-                    <div class="stat-label">
-                        OPEN TASKS
-                    </div>
-
-                    <div
-                        id="statTasks"
-                        class="stat-value"
-                    >
-                        0
-                    </div>
-
-                    <div class="stat-description">
-                        pending execution
-                    </div>
-
-                </article>
-
-            </div>
-
-
-            <!-- DASHBOARD GRID -->
-
-            <div class="dashboard-grid">
-
-
-                <!-- PIPELINE -->
-
-                <article class="panel">
-
-                    <div class="panel-header">
-
-                        <div>
-
-                            <span class="panel-number">
-                                01
-                            </span>
-
-                            <h2>
-                                PIPELINE OVERVIEW
-                            </h2>
-
-                        </div>
-
-
-                        <button
-                            class="panel-action"
-                            data-page-link="pipeline"
-                            type="button"
-                        >
-                            VIEW PIPELINE →
-                        </button>
-
-                    </div>
-
-
-                    <div
-                        id="pipelineBars"
-                        class="pipeline-bars"
-                    >
-
-                        <div class="empty-state">
-                            Loading pipeline...
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <!-- ACTIVITY -->
-
-                <article class="panel">
-
-                    <div class="panel-header">
-
-                        <div>
-
-                            <span class="panel-number">
-                                02
-                            </span>
-
-                            <h2>
-                                RECENT ACTIVITY
-                            </h2>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        id="recentActivities"
-                        class="activity-list"
-                    >
-
-                        <div class="empty-state">
-                            Loading activity...
-                        </div>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-
-            <!-- PRIORITY TASKS -->
-
-            <article class="panel priority-panel">
-
-                <div class="panel-header">
-
-                    <div>
-
-                        <span class="panel-number">
-                            03
-                        </span>
-
-                        <h2>
-                            PRIORITY FOLLOW UPS
-                        </h2>
-
-                    </div>
-
+                <div class="dashboard-actions">
 
                     <button
-                        class="panel-action"
-                        data-page-link="tasks"
+                        id="refreshBtn"
+                        class="btn btn-outline"
                         type="button"
                     >
-                        VIEW TASKS →
+                        ↻ Refresh
+                    </button>
+
+                    <button
+                        id="addSponsorBtn"
+                        class="btn btn-primary"
+                        type="button"
+                    >
+                        + Tambah Sponsor
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= STATISTICS ================= -->
+
+            <section class="stats-grid">
+
+                <div class="stat-card">
+                    <span class="stat-label">
+                        TOTAL SPONSOR
+                    </span>
+
+                    <strong id="totalSponsors">
+                        0
+                    </strong>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">
+                        PROSPEK
+                    </span>
+
+                    <strong id="prospectSponsors">
+                        0
+                    </strong>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">
+                        ONGOING
+                    </span>
+
+                    <strong id="ongoingSponsors">
+                        0
+                    </strong>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">
+                        DEAL
+                    </span>
+
+                    <strong id="dealSponsors">
+                        0
+                    </strong>
+                </div>
+
+            </section>
+
+
+            <!-- ================= DATABASE ================= -->
+
+            <section class="database-section">
+
+                <div class="section-heading">
+
+                    <div>
+                        <div class="eyebrow">
+                            DATABASE
+                        </div>
+
+                        <h2>
+                            Sponsor Pipeline
+                        </h2>
+                    </div>
+
+                    <div class="database-controls">
+
+                        <input
+                            id="searchInput"
+                            type="search"
+                            placeholder="Cari perusahaan..."
+                        >
+
+                        <select id="statusFilter">
+                            <option value="">
+                                Semua Status
+                            </option>
+
+                            <option value="PROSPECT">
+                                Prospect
+                            </option>
+
+                            <option value="CONTACTED">
+                                Contacted
+                            </option>
+
+                            <option value="NEGOTIATION">
+                                Negotiation
+                            </option>
+
+                            <option value="DEAL">
+                                Deal
+                            </option>
+
+                            <option value="REJECTED">
+                                Rejected
+                            </option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table class="sponsor-table">
+
+                        <thead>
+                            <tr>
+                                <th>PERUSAHAAN</th>
+                                <th>CONTACT</th>
+                                <th>EMAIL</th>
+                                <th>OBJECTIVE</th>
+                                <th>STATUS</th>
+                                <th>OWNER</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="sponsorTableBody">
+
+                            <tr id="emptyState">
+                                <td colspan="7">
+                                    <div class="empty-state">
+                                        <strong>
+                                            Belum ada data sponsor
+                                        </strong>
+
+                                        <span>
+                                            Tambahkan sponsor pertama
+                                            untuk mulai membangun
+                                            pipeline.
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= USER ACTIVITY ================= -->
+
+            <section
+                id="activitySection"
+                class="activity-section"
+            >
+
+                <div class="section-heading">
+
+                    <div>
+                        <div class="eyebrow">
+                            ACTIVITY
+                        </div>
+
+                        <h2>
+                            Aktivitas Terbaru
+                        </h2>
+                    </div>
+
+                </div>
+
+                <div id="activityList" class="activity-list">
+
+                    <div class="empty-activity">
+                        Belum ada aktivitas.
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         SPONSOR MODAL
+    ====================================================== -->
+
+    <div
+        id="sponsorModal"
+        class="modal hidden"
+        aria-hidden="true"
+    >
+
+        <div class="modal-backdrop"></div>
+
+        <div
+            class="modal-card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modalTitle"
+        >
+
+            <div class="modal-header">
+
+                <div>
+                    <div class="eyebrow">
+                        SPONSOR DATABASE
+                    </div>
+
+                    <h2 id="modalTitle">
+                        Tambah Sponsor
+                    </h2>
+                </div>
+
+                <button
+                    id="closeModalBtn"
+                    class="modal-close"
+                    type="button"
+                    aria-label="Tutup"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="sponsorForm">
+
+                <!-- Hidden ID untuk edit -->
+
+                <input
+                    id="sponsorId"
+                    type="hidden"
+                >
+
+
+                <!-- COMPANY -->
+
+                <div class="form-grid">
+
+                    <div class="form-group form-group-full">
+
+                        <label for="companyName">
+                            Nama Perusahaan *
+                        </label>
+
+                        <input
+                            id="companyName"
+                            name="company_name"
+                            type="text"
+                            placeholder="Contoh: Honda"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- CONTACT -->
+
+                    <div class="form-group">
+
+                        <label for="contactName">
+                            Nama Contact *
+                        </label>
+
+                        <input
+                            id="contactName"
+                            name="contact_name"
+                            type="text"
+                            placeholder="Nama PIC"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label for="contactEmail">
+                            Email *
+                        </label>
+
+                        <input
+                            id="contactEmail"
+                            name="email"
+                            type="email"
+                            placeholder="pic@company.com"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    <div class="form-group">
+
+                        <label for="contactPhone">
+                            Nomor Kontak
+                        </label>
+
+                        <input
+                            id="contactPhone"
+                            name="phone"
+                            type="tel"
+                            placeholder="08xxxxxxxxxx"
+                        >
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="form-group">
+
+                        <label for="sponsorStatus">
+                            Status *
+                        </label>
+
+                        <select
+                            id="sponsorStatus"
+                            name="status"
+                            required
+                        >
+
+                            <option value="PROSPECT">
+                                Prospect
+                            </option>
+
+                            <option value="CONTACTED">
+                                Contacted
+                            </option>
+
+                            <option value="NEGOTIATION">
+                                Negotiation
+                            </option>
+
+                            <option value="DEAL">
+                                Deal
+                            </option>
+
+                            <option value="REJECTED">
+                                Rejected
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= OBJECTIVES ================= -->
+
+                <div class="form-group objective-group">
+
+                    <div class="label-row">
+
+                        <label>
+                            Sponsor Objective *
+                        </label>
+
+                        <span class="helper-text">
+                            Bisa pilih lebih dari satu
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="objectiveOptions"
+                        class="objective-grid"
+                    >
+
+                        <label class="objective-option">
+
+                            <input
+                                type="checkbox"
+                                name="objectives"
+                                value="BRAND_AWARENESS"
+                            >
+
+                            <span>
+                                <strong>
+                                    Brand Awareness
+                                </strong>
+
+                                <small>
+                                    Meningkatkan awareness
+                                    terhadap brand
+                                </small>
+                            </span>
+
+                        </label>
+
+
+                        <label class="objective-option">
+
+                            <input
+                                type="checkbox"
+                                name="objectives"
+                                value="MARKET_ACCESS"
+                            >
+
+                            <span>
+                                <strong>
+                                    Market Access
+                                </strong>
+
+                                <small>
+                                    Akses ke audience &
+                                    komunitas
+                                </small>
+                            </span>
+
+                        </label>
+
+
+                        <label class="objective-option">
+
+                            <input
+                                type="checkbox"
+                                name="objectives"
+                                value="PRODUCT_TRIAL"
+                            >
+
+                            <span>
+                                <strong>
+                                    Product Trial
+                                </strong>
+
+                                <small>
+                                    Memberikan kesempatan
+                                    audience mencoba produk
+                                </small>
+                            </span>
+
+                        </label>
+
+
+                        <label class="objective-option">
+
+                            <input
+                                type="checkbox"
+                                name="objectives"
+                                value="CONTENT"
+                            >
+
+                            <span>
+                                <strong>
+                                    Content & UGC
+                                </strong>
+
+                                <small>
+                                    Mendapatkan exposure,
+                                    content, dan UGC
+                                </small>
+                            </span>
+
+                        </label>
+
+
+                        <label class="objective-option">
+
+                            <input
+                                type="checkbox"
+                                name="objectives"
+                                value="PRODUCT_FEEDBACK"
+                            >
+
+                            <span>
+                                <strong>
+                                    Product Feedback
+                                </strong>
+
+                                <small>
+                                    Consumer feedback &
+                                    product testing
+                                </small>
+                            </span>
+
+                        </label>
+
+
+                        <label class="objective-option">
+
+                            <input
+                                type="checkbox"
+                                name="objectives"
+                                value="BRAND_LEGACY"
+                            >
+
+                            <span>
+                                <strong>
+                                    Brand Legacy
+                                </strong>
+
+                                <small>
+                                    Membangun association
+                                    jangka panjang
+                                </small>
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                    <p
+                        id="objectiveError"
+                        class="form-error hidden"
+                    >
+                        Pilih minimal satu objective.
+                    </p>
+
+                </div>
+
+
+                <!-- ================= CATEGORY ================= -->
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label for="industry">
+                            Industri
+                        </label>
+
+                        <select
+                            id="industry"
+                            name="industry"
+                        >
+
+                            <option value="">
+                                Pilih industri
+                            </option>
+
+                            <option value="AUTOMOTIVE">
+                                Automotive
+                            </option>
+
+                            <option value="BANKING">
+                                Banking / Finance
+                            </option>
+
+                            <option value="FMCG">
+                                FMCG
+                            </option>
+
+                            <option value="FOOD_BEVERAGE">
+                                Food & Beverage
+                            </option>
+
+                            <option value="TECHNOLOGY">
+                                Technology
+                            </option>
+
+                            <option value="FASHION">
+                                Fashion
+                            </option>
+
+                            <option value="EDUCATION">
+                                Education
+                            </option>
+
+                            <option value="OTHER">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="priority">
+                            Prioritas
+                        </label>
+
+                        <select
+                            id="priority"
+                            name="priority"
+                        >
+
+                            <option value="LOW">
+                                Low
+                            </option>
+
+                            <option
+                                value="MEDIUM"
+                                selected
+                            >
+                                Medium
+                            </option>
+
+                            <option value="HIGH">
+                                High
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= NOTES ================= -->
+
+                <div class="form-group">
+
+                    <label for="notes">
+                        Catatan
+                    </label>
+
+                    <textarea
+                        id="notes"
+                        name="notes"
+                        rows="4"
+                        placeholder="Catatan mengenai perusahaan, kebutuhan sponsor, hasil komunikasi, dll."
+                    ></textarea>
+
+                </div>
+
+
+                <!-- ================= FORM ACTION ================= -->
+
+                <div class="modal-footer">
+
+                    <button
+                        id="cancelModalBtn"
+                        class="btn btn-outline"
+                        type="button"
+                    >
+                        Batal
+                    </button>
+
+                    <button
+                        id="saveSponsorBtn"
+                        class="btn btn-primary"
+                        type="submit"
+                    >
+                        Simpan Sponsor
                     </button>
 
                 </div>
 
 
-                <div
-                    id="priorityTasks"
-                    class="priority-task-list"
-                >
-
-                    <div class="empty-state">
-                        Loading tasks...
-                    </div>
-
-                </div>
-
-            </article>
-
-        </section>
-
-
-        <!-- =================================================
-             CRM
-        ================================================== -->
-
-        <section
-            id="page-crm"
-            class="page"
-        >
-
-            <header class="page-header">
-
-                <div>
-
-                    <div class="eyebrow">
-                        02 / DATABASE
-                    </div>
-
-                    <h1>
-                        SPONSOR<br>
-                        <span>CRM</span>
-                    </h1>
-
-                </div>
-
-
-                <button
-                    id="addCompanyButton"
-                    class="primary-button"
-                    type="button"
-                >
-                    + ADD COMPANY
-                </button>
-
-            </header>
-
-
-            <!-- CRM TOOLBAR -->
-
-            <div class="crm-toolbar">
-
-                <div class="search-wrapper">
-
-                    <span>
-                        SEARCH
-                    </span>
-
-                    <input
-                        id="companySearch"
-                        type="search"
-                        placeholder="Company, PIC, industry..."
-                    >
-
-                </div>
-
-
-                <select
-                    id="companyStatusFilter"
-                    class="filter-select"
-                >
-
-                    <option value="ALL">
-                        ALL STATUS
-                    </option>
-
-                    <option value="PROSPECT">
-                        PROSPECT
-                    </option>
-
-                    <option value="CONTACTED">
-                        CONTACTED
-                    </option>
-
-                    <option value="MEETING">
-                        MEETING
-                    </option>
-
-                    <option value="PROPOSAL">
-                        PROPOSAL
-                    </option>
-
-                    <option value="NEGOTIATION">
-                        NEGOTIATION
-                    </option>
-
-                    <option value="CLOSED">
-                        CLOSED
-                    </option>
-
-                    <option value="LOST">
-                        LOST
-                    </option>
-
-                </select>
-
-
-                <select
-                    id="companyIndustryFilter"
-                    class="filter-select"
-                >
-
-                    <option value="ALL">
-                        ALL INDUSTRIES
-                    </option>
-
-                    <option value="BANKING">
-                        BANKING
-                    </option>
-
-                    <option value="AUTOMOTIVE">
-                        AUTOMOTIVE
-                    </option>
-
-                    <option value="LUBRICANT">
-                        LUBRICANT
-                    </option>
-
-                    <option value="MODIFICATION">
-                        MODIFICATION
-                    </option>
-
-                    <option value="TECHNOLOGY">
-                        TECHNOLOGY
-                    </option>
-
-                    <option value="FMCG">
-                        FMCG
-                    </option>
-
-                    <option value="EDUCATION">
-                        EDUCATION
-                    </option>
-
-                    <option value="OTHER">
-                        OTHER
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <!-- COMPANY GRID -->
-
-            <div
-                id="companyGrid"
-                class="company-grid"
-            >
-
-                <div class="empty-state">
-                    Loading companies...
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             PIPELINE
-        ================================================== -->
-
-        <section
-            id="page-pipeline"
-            class="page"
-        >
-
-            <header class="page-header">
-
-                <div>
-
-                    <div class="eyebrow">
-                        03 / DEAL FLOW
-                    </div>
-
-                    <h1>
-                        SPONSORSHIP<br>
-                        <span>PIPELINE</span>
-                    </h1>
-
-                </div>
-
-            </header>
-
-
-            <div
-                id="kanban"
-                class="kanban-board"
-            >
-
-                <!-- JS WILL RENDER COLUMNS -->
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             TASKS
-        ================================================== -->
-
-        <section
-            id="page-tasks"
-            class="page"
-        >
-
-            <header class="page-header">
-
-                <div>
-
-                    <div class="eyebrow">
-                        04 / EXECUTION
-                    </div>
-
-                    <h1>
-                        FOLLOW<br>
-                        <span>UPS</span>
-                    </h1>
-
-                </div>
-
-
-                <button
-                    id="addTaskButton"
-                    class="primary-button"
-                    type="button"
-                >
-                    + ADD TASK
-                </button>
-
-            </header>
-
-
-            <div class="task-toolbar">
-
-                <button
-                    class="task-filter active"
-                    data-task-filter="ALL"
-                    type="button"
-                >
-                    ALL
-                </button>
-
-                <button
-                    class="task-filter"
-                    data-task-filter="OPEN"
-                    type="button"
-                >
-                    OPEN
-                </button>
-
-                <button
-                    class="task-filter"
-                    data-task-filter="OVERDUE"
-                    type="button"
-                >
-                    OVERDUE
-                </button>
-
-                <button
-                    class="task-filter"
-                    data-task-filter="COMPLETED"
-                    type="button"
-                >
-                    COMPLETED
-                </button>
-
-            </div>
-
-
-            <div
-                id="taskList"
-                class="task-list"
-            >
-
-                <div class="empty-state">
-                    Loading tasks...
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             PLAYBOOK
-        ================================================== -->
-
-        <section
-            id="page-playbook"
-            class="page"
-        >
-
-            <header class="page-header">
-
-                <div>
-
-                    <div class="eyebrow">
-                        05 / FIELD GUIDE
-                    </div>
-
-                    <h1>
-                        SPONSORSHIP<br>
-                        <span>PLAYBOOK</span>
-                    </h1>
-
-                </div>
-
-            </header>
-
-
-            <div class="playbook-intro">
-
-                <div class="playbook-statement">
-                    DON'T SELL<br>
-                    <span>A PACKAGE.</span>
-                </div>
-
-                <p>
-                    Pahami kebutuhan perusahaan terlebih dahulu.
-                    Kemudian bangun bentuk partnership yang
-                    memberikan value untuk kedua pihak.
-                </p>
-
-            </div>
-
-
-            <div class="playbook-grid">
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        01
-                    </span>
-
-                    <h2>
-                        FIND
-                    </h2>
-
-                    <p>
-                        Tentukan perusahaan yang relevan dengan
-                        audience, industri, aktivitas, dan karakter
-                        Mechaniversary 52.
-                    </p>
-
-                </article>
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        02
-                    </span>
-
-                    <h2>
-                        UNDERSTAND
-                    </h2>
-
-                    <p>
-                        Cari tahu objective perusahaan.
-                        Apakah mereka mengejar awareness,
-                        leads, trial, acquisition, content,
-                        atau community access?
-                    </p>
-
-                </article>
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        03
-                    </span>
-
-                    <h2>
-                        MATCH
-                    </h2>
-
-                    <p>
-                        Hubungkan objective sponsor dengan
-                        aset yang kita punya.
-                    </p>
-
-                </article>
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        04
-                    </span>
-
-                    <h2>
-                        PROPOSE
-                    </h2>
-
-                    <p>
-                        Buat penawaran yang menjawab kebutuhan
-                        perusahaan, bukan hanya daftar logo,
-                        booth, dan posting.
-                    </p>
-
-                </article>
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        05
-                    </span>
-
-                    <h2>
-                        NEGOTIATE
-                    </h2>
-
-                    <p>
-                        Bahas budget, deliverables, timeline,
-                        activation, eksposur, dan bentuk
-                        kerja sama.
-                    </p>
-
-                </article>
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        06
-                    </span>
-
-                    <h2>
-                        CLOSE
-                    </h2>
-
-                    <p>
-                        Pastikan seluruh kesepakatan tercatat:
-                        value, PIC, deliverables, timeline,
-                        dan commitment.
-                    </p>
-
-                </article>
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        07
-                    </span>
-
-                    <h2>
-                        ACTIVATE
-                    </h2>
-
-                    <p>
-                        Jalankan partnership sesuai kesepakatan
-                        dan pastikan sponsor mendapatkan
-                        experience yang dijanjikan.
-                    </p>
-
-                </article>
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        08
-                    </span>
-
-                    <h2>
-                        REPORT
-                    </h2>
-
-                    <p>
-                        Dokumentasikan hasil dan kirimkan
-                        post-event report untuk membangun
-                        relationship jangka panjang.
-                    </p>
-
-                </article>
-
-            </div>
-
-        </section>
-
-    </main>
-
-</div>
-
-
-<!-- =========================================================
-     COMPANY MODAL
-========================================================= -->
-
-<div
-    id="companyModal"
-    class="modal hidden"
-    aria-hidden="true"
->
-
-    <div
-        class="modal-backdrop"
-        data-close-modal
-    ></div>
-
-
-    <div
-        class="modal-card"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="companyModalTitle"
-    >
-
-        <header class="modal-header">
-
-            <div>
-
-                <div class="eyebrow">
-                    SPONSOR DATABASE
-                </div>
-
-                <h2 id="companyModalTitle">
-                    ADD COMPANY
-                </h2>
-
-            </div>
-
-
-            <button
-                class="modal-close"
-                data-close-modal
-                type="button"
-                aria-label="Close"
-            >
-                ×
-            </button>
-
-        </header>
-
-
-        <form id="companyForm">
-
-            <input
-                id="companyId"
-                type="hidden"
-            >
-
-
-            <div class="form-grid">
-
-
-                <!-- COMPANY -->
-
-                <div class="input-group full">
-
-                    <label for="companyName">
-                        COMPANY NAME *
-                    </label>
-
-                    <input
-                        id="companyName"
-                        type="text"
-                        placeholder="e.g. blu by BCA Digital"
-                        required
-                    >
-
-                </div>
-
-
-                <!-- INDUSTRY -->
-
-                <div class="input-group">
-
-                    <label for="companyIndustry">
-                        INDUSTRY
-                    </label>
-
-                    <select id="companyIndustry">
-
-                        <option value="BANKING">
-                            BANKING
-                        </option>
-
-                        <option value="AUTOMOTIVE">
-                            AUTOMOTIVE
-                        </option>
-
-                        <option value="LUBRICANT">
-                            LUBRICANT
-                        </option>
-
-                        <option value="MODIFICATION">
-                            MODIFICATION
-                        </option>
-
-                        <option value="TECHNOLOGY">
-                            TECHNOLOGY
-                        </option>
-
-                        <option value="FMCG">
-                            FMCG
-                        </option>
-
-                        <option value="EDUCATION">
-                            EDUCATION
-                        </option>
-
-                        <option value="OTHER">
-                            OTHER
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <!-- STATUS -->
-
-                <div class="input-group">
-
-                    <label for="companyStatus">
-                        PIPELINE STATUS
-                    </label>
-
-                    <select id="companyStatus">
-
-                        <option value="PROSPECT">
-                            PROSPECT
-                        </option>
-
-                        <option value="CONTACTED">
-                            CONTACTED
-                        </option>
-
-                        <option value="MEETING">
-                            MEETING
-                        </option>
-
-                        <option value="PROPOSAL">
-                            PROPOSAL
-                        </option>
-
-                        <option value="NEGOTIATION">
-                            NEGOTIATION
-                        </option>
-
-                        <option value="CLOSED">
-                            CLOSED
-                        </option>
-
-                        <option value="LOST">
-                            LOST
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <!-- OBJECTIVE -->
-
-                <div class="input-group">
-
-                    <label for="companyObjective">
-                        SPONSOR OBJECTIVE
-                    </label>
-
-                    <select id="companyObjective">
-
-                        <option value="">
-                            SELECT OBJECTIVE
-                        </option>
-
-                        <option value="AWARENESS">
-                            BRAND AWARENESS
-                        </option>
-
-                        <option value="PRODUCT_TRIAL">
-                            PRODUCT TRIAL
-                        </option>
-
-                        <option value="LEADS">
-                            LEAD GENERATION
-                        </option>
-
-                        <option value="CUSTOMER_ACQUISITION">
-                            CUSTOMER ACQUISITION
-                        </option>
-
-                        <option value="CONTENT">
-                            CONTENT
-                        </option>
-
-                        <option value="COMMUNITY">
-                            COMMUNITY ACCESS
-                        </option>
-
-                        <option value="BRAND_LEGACY">
-                            BRAND LEGACY
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <!-- VALUE -->
-
-                <div class="input-group">
-
-                    <label for="companyValue">
-                        POTENTIAL VALUE
-                    </label>
-
-                    <input
-                        id="companyValue"
-                        type="number"
-                        min="0"
-                        step="1000"
-                        placeholder="15000000"
-                    >
-
-                </div>
-
-
-                <!-- CONTACT -->
-
-                <div class="input-group">
-
-                    <label for="companyContact">
-                        COMPANY PIC
-                    </label>
-
-                    <input
-                        id="companyContact"
-                        type="text"
-                        placeholder="Nama PIC"
-                    >
-
-                </div>
-
-
-                <!-- PHONE -->
-
-                <div class="input-group">
-
-                    <label for="companyPhone">
-                        PHONE
-                    </label>
-
-                    <input
-                        id="companyPhone"
-                        type="tel"
-                        placeholder="08..."
-                    >
-
-                </div>
-
-
-                <!-- EMAIL -->
-
-                <div class="input-group">
-
-                    <label for="companyEmail">
-                        EMAIL
-                    </label>
-
-                    <input
-                        id="companyEmail"
-                        type="email"
-                        placeholder="pic@company.com"
-                    >
-
-                </div>
-
-
-                <!-- NEXT ACTION -->
-
-                <div class="input-group">
-
-                    <label for="companyNextAction">
-                        NEXT ACTION
-                    </label>
-
-                    <input
-                        id="companyNextAction"
-                        type="text"
-                        placeholder="Follow up proposal"
-                    >
-
-                </div>
-
-
-                <!-- NEXT ACTION DATE -->
-
-                <div class="input-group">
-
-                    <label for="companyNextDate">
-                        NEXT ACTION DATE
-                    </label>
-
-                    <input
-                        id="companyNextDate"
-                        type="date"
-                    >
-
-                </div>
-
-
-                <!-- INTERNAL PIC -->
-
-                <div class="input-group">
-
-                    <label for="companyInternalPic">
-                        INTERNAL PIC
-                    </label>
-
-                    <input
-                        id="companyInternalPic"
-                        type="text"
-                        placeholder="Nama panitia"
-                    >
-
-                </div>
-
-
-                <!-- NOTES -->
-
-                <div class="input-group full">
-
-                    <label for="companyNotes">
-                        INTERNAL NOTES
-                    </label>
-
-                    <textarea
-                        id="companyNotes"
-                        rows="5"
-                        placeholder="Catatan internal..."
-                    ></textarea>
-
-                </div>
-
-            </div>
-
-
-            <div
-                id="companyFormError"
-                class="form-error"
-                role="alert"
-            ></div>
-
-
-            <footer class="modal-actions">
-
-                <button
-                    class="secondary-button"
-                    type="button"
-                    data-close-modal
-                >
-                    CANCEL
-                </button>
-
-                <button
-                    class="primary-button"
-                    type="submit"
-                >
-                    SAVE COMPANY →
-                </button>
-
-            </footer>
-
-        </form>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     COMPANY DETAIL MODAL
-========================================================= -->
-
-<div
-    id="detailModal"
-    class="modal hidden"
-    aria-hidden="true"
->
-
-    <div
-        class="modal-backdrop"
-        data-close-modal
-    ></div>
-
-
-    <div
-        class="modal-card detail-modal"
-        role="dialog"
-        aria-modal="true"
-    >
-
-        <header class="modal-header">
-
-            <div>
-
-                <div
-                    id="detailIndustry"
-                    class="eyebrow"
-                >
-                    COMPANY
-                </div>
-
-                <h2 id="detailName">
-                    COMPANY NAME
-                </h2>
-
-            </div>
-
-
-            <button
-                class="modal-close"
-                data-close-modal
-                type="button"
-            >
-                ×
-            </button>
-
-        </header>
-
-
-        <!-- SUMMARY -->
-
-        <div class="detail-summary">
-
-
-            <div class="detail-stat">
-
-                <span>
-                    STATUS
-                </span>
-
-                <strong id="detailStatus">
-                    —
-                </strong>
-
-            </div>
-
-
-            <div class="detail-stat">
-
-                <span>
-                    POTENTIAL VALUE
-                </span>
-
-                <strong id="detailValue">
-                    Rp 0
-                </strong>
-
-            </div>
-
-
-            <div class="detail-stat">
-
-                <span>
-                    INTERNAL PIC
-                </span>
-
-                <strong id="detailPIC">
-                    —
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <!-- CONTACT / ACTION -->
-
-        <div class="detail-columns">
-
-
-            <div class="detail-section">
-
-                <div class="section-title">
-                    COMPANY CONTACT
-                </div>
-
-                <div
-                    id="detailContact"
-                    class="detail-content"
-                >
-                    —
-                </div>
-
-            </div>
-
-
-            <div class="detail-section">
-
-                <div class="section-title">
-                    NEXT ACTION
-                </div>
-
-                <div
-                    id="detailNextAction"
-                    class="detail-content"
-                >
-                    —
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- ACTIVITY -->
-
-        <div class="detail-section">
-
-            <div class="section-title">
-                ACTIVITY TIMELINE
-            </div>
-
-
-            <div
-                id="activityTimeline"
-                class="activity-timeline"
-            >
-
-                <div class="empty-state">
-                    No activity yet.
-                </div>
-
-            </div>
-
-
-            <form
-                id="activityForm"
-                class="activity-form"
-            >
-
-                <select id="activityType">
-
-                    <option value="CALL">
-                        CALL
-                    </option>
-
-                    <option value="WHATSAPP">
-                        WHATSAPP
-                    </option>
-
-                    <option value="EMAIL">
-                        EMAIL
-                    </option>
-
-                    <option value="MEETING">
-                        MEETING
-                    </option>
-
-                    <option value="PROPOSAL_SENT">
-                        PROPOSAL SENT
-                    </option>
-
-                    <option value="FOLLOW_UP">
-                        FOLLOW UP
-                    </option>
-
-                    <option value="OTHER">
-                        OTHER
-                    </option>
-
-                </select>
-
-
-                <input
-                    id="activityDescription"
-                    type="text"
-                    placeholder="What happened?"
-                    required
-                >
-
-
-                <button
-                    class="primary-button"
-                    type="submit"
-                >
-                    ADD
-                </button>
+                <p
+                    id="sponsorFormError"
+                    class="form-error hidden"
+                ></p>
 
             </form>
 
         </div>
 
+    </div>
 
-        <!-- NOTES -->
 
-        <div class="detail-section">
+    <!-- =====================================================
+         DETAIL MODAL
+    ====================================================== -->
 
-            <div class="section-title">
-                INTERNAL NOTES
+    <div
+        id="detailModal"
+        class="modal hidden"
+        aria-hidden="true"
+    >
+
+        <div class="modal-backdrop"></div>
+
+        <div
+            class="modal-card detail-card"
+            role="dialog"
+            aria-modal="true"
+        >
+
+            <div class="modal-header">
+
+                <div>
+                    <div class="eyebrow">
+                        SPONSOR PROFILE
+                    </div>
+
+                    <h2 id="detailCompanyName">
+                        —
+                    </h2>
+                </div>
+
+                <button
+                    id="closeDetailBtn"
+                    class="modal-close"
+                    type="button"
+                >
+                    ×
+                </button>
+
             </div>
 
-            <div
-                id="detailNotes"
-                class="notes-box"
-            >
-                —
+
+            <div class="detail-content">
+
+                <div class="detail-row">
+                    <span>Contact</span>
+                    <strong id="detailContact">
+                        —
+                    </strong>
+                </div>
+
+                <div class="detail-row">
+                    <span>Email</span>
+                    <strong id="detailEmail">
+                        —
+                    </strong>
+                </div>
+
+                <div class="detail-row">
+                    <span>Nomor</span>
+                    <strong id="detailPhone">
+                        —
+                    </strong>
+                </div>
+
+                <div class="detail-row">
+                    <span>Industri</span>
+                    <strong id="detailIndustry">
+                        —
+                    </strong>
+                </div>
+
+                <div class="detail-row">
+                    <span>Status</span>
+                    <strong id="detailStatus">
+                        —
+                    </strong>
+                </div>
+
+                <div class="detail-block">
+
+                    <span>
+                        Sponsor Objective
+                    </span>
+
+                    <div
+                        id="detailObjectives"
+                        class="objective-tags"
+                    ></div>
+
+                </div>
+
+                <div class="detail-block">
+
+                    <span>
+                        Catatan
+                    </span>
+
+                    <p id="detailNotes">
+                        —
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    id="editSponsorBtn"
+                    class="btn btn-primary"
+                    type="button"
+                >
+                    Edit Sponsor
+                </button>
+
+                <button
+                    id="deleteSponsorBtn"
+                    class="btn btn-danger"
+                    type="button"
+                >
+                    Hapus
+                </button>
+
             </div>
 
         </div>
 
-
-        <footer class="modal-actions">
-
-            <button
-                id="editCompanyFromDetail"
-                class="secondary-button"
-                type="button"
-            >
-                EDIT COMPANY
-            </button>
-
-        </footer>
-
     </div>
 
-</div>
 
-
-<!-- =========================================================
-     TASK MODAL
-========================================================= -->
-
-<div
-    id="taskModal"
-    class="modal hidden"
-    aria-hidden="true"
->
+    <!-- =====================================================
+         TOAST
+    ====================================================== -->
 
     <div
-        class="modal-backdrop"
-        data-close-modal
-    ></div>
+        id="toast"
+        class="toast hidden"
+        role="status"
+        aria-live="polite"
+    >
+        <span id="toastMessage"></span>
+    </div>
 
+
+    <!-- =====================================================
+         LOADING
+    ====================================================== -->
 
     <div
-        class="modal-card"
-        role="dialog"
-        aria-modal="true"
+        id="loadingOverlay"
+        class="loading-overlay hidden"
     >
 
-        <header class="modal-header">
+        <div class="loading-box">
 
-            <div>
+            <div class="loading-spinner"></div>
 
-                <div class="eyebrow">
-                    EXECUTION
-                </div>
+            <span id="loadingText">
+                Memproses...
+            </span>
 
-                <h2>
-                    ADD TASK
-                </h2>
-
-            </div>
-
-
-            <button
-                class="modal-close"
-                data-close-modal
-                type="button"
-            >
-                ×
-            </button>
-
-        </header>
-
-
-        <form id="taskForm">
-
-
-            <div class="input-group">
-
-                <label for="taskTitle">
-                    TASK TITLE *
-                </label>
-
-                <input
-                    id="taskTitle"
-                    type="text"
-                    placeholder="Follow up proposal BLU"
-                    required
-                >
-
-            </div>
-
-
-            <div class="input-group">
-
-                <label for="taskCompany">
-                    COMPANY
-                </label>
-
-                <select id="taskCompany">
-
-                    <option value="">
-                        SELECT COMPANY
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="input-group">
-
-                <label for="taskDueDate">
-                    DUE DATE
-                </label>
-
-                <input
-                    id="taskDueDate"
-                    type="date"
-                >
-
-            </div>
-
-
-            <div class="input-group">
-
-                <label for="taskDescription">
-                    DESCRIPTION
-                </label>
-
-                <textarea
-                    id="taskDescription"
-                    rows="5"
-                    placeholder="Detail pekerjaan..."
-                ></textarea>
-
-            </div>
-
-
-            <div
-                id="taskFormError"
-                class="form-error"
-                role="alert"
-            ></div>
-
-
-            <footer class="modal-actions">
-
-                <button
-                    class="secondary-button"
-                    type="button"
-                    data-close-modal
-                >
-                    CANCEL
-                </button>
-
-                <button
-                    class="primary-button"
-                    type="submit"
-                >
-                    CREATE TASK →
-                </button>
-
-            </footer>
-
-        </form>
+        </div>
 
     </div>
 
-</div>
 
+    <!-- =====================================================
+         SCRIPT
+    ====================================================== -->
 
-<!-- =========================================================
-     TOAST
-========================================================= -->
-
-<div
-    id="toast"
-    class="toast"
-    role="status"
-    aria-live="polite"
-></div>
-
-
-<!-- =========================================================
-     SUPABASE CLIENT
-========================================================= -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-<!-- =========================================================
-     APPLICATION SCRIPT
-========================================================= -->
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
