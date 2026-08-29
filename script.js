@@ -1,6 +1,8 @@
+```javascript
 /* =========================================================
    MECHANIVERSARY 52 — SPONSOR DATABASE
-   Supabase + Vanilla JS
+   SUPABASE + VANILLA JS
+   FINAL VERSION
    ========================================================= */
 
 const SUPABASE_URL =
@@ -31,39 +33,36 @@ let toastTimer = null;
 
 
 /* =========================================================
-   HELPERS
+   HELPER
    ========================================================= */
 
-const $ = id =>
-    document.getElementById(id);
+const $ = (id) => document.getElementById(id);
 
 
-function show(el) {
-    if (el) {
-        el.classList.remove("hidden");
+function show(element) {
+    if (element) {
+        element.classList.remove("hidden");
     }
 }
 
 
-function hide(el) {
-    if (el) {
-        el.classList.add("hidden");
+function hide(element) {
+    if (element) {
+        element.classList.add("hidden");
     }
 }
 
 
 function setText(id, value = "") {
+    const element = $(id);
 
-    const el = $(id);
-
-    if (el) {
-        el.textContent = value ?? "";
+    if (element) {
+        element.textContent = value ?? "";
     }
 }
 
 
 function escapeHTML(value = "") {
-
     return String(value)
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
@@ -85,39 +84,31 @@ function formatDate(date) {
         return "-";
     }
 
-    return new Intl.DateTimeFormat(
-        "id-ID",
-        {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-        }
-    ).format(parsed);
+    return new Intl.DateTimeFormat("id-ID", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    }).format(parsed);
 }
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+const STATUS_LABELS = {
+    PROSPECT: "Prospek",
+    CONTACTED: "Sudah Dihubungi",
+    NEGOTIATION: "Negosiasi",
+    DEAL: "Deal",
+    REJECTED: "Ditolak"
+};
 
 
 function formatStatus(status) {
 
-    const map = {
-
-        PROSPECT:
-            "Prospek",
-
-        CONTACTED:
-            "Sudah Dihubungi",
-
-        NEGOTIATION:
-            "Negosiasi",
-
-        DEAL:
-            "Deal",
-
-        REJECTED:
-            "Ditolak"
-    };
-
     return (
-        map[status] ||
+        STATUS_LABELS[status] ||
         status ||
         "-"
     );
@@ -133,6 +124,24 @@ function statusClass(status) {
 
 
 /* =========================================================
+   OBJECTIVE SLUG NORMALIZER
+   ========================================================= */
+
+function normalizeObjectiveSlug(value) {
+
+    if (!value) {
+        return "";
+    }
+
+    return String(value)
+        .trim()
+        .toLowerCase()
+        .replaceAll("_", "-")
+        .replaceAll(" ", "-");
+}
+
+
+/* =========================================================
    TOAST
    ========================================================= */
 
@@ -144,29 +153,19 @@ function showToast(
     const toast = $("toast");
 
     if (!toast) {
-        console.log(message);
         return;
     }
 
-    toast.textContent =
-        message;
-
-    toast.dataset.type =
-        type;
+    toast.textContent = message;
+    toast.dataset.type = type;
 
     show(toast);
 
-    clearTimeout(
-        toastTimer
-    );
+    clearTimeout(toastTimer);
 
-    toastTimer =
-        setTimeout(
-            () => {
-                hide(toast);
-            },
-            3500
-        );
+    toastTimer = setTimeout(() => {
+        hide(toast);
+    }, 3500);
 }
 
 
@@ -179,8 +178,7 @@ function setLoading(
     text = "Memuat..."
 ) {
 
-    const overlay =
-        $("loadingOverlay");
+    const overlay = $("loadingOverlay");
 
     if (!overlay) {
         return;
@@ -200,66 +198,46 @@ function setLoading(
 
 
 /* =========================================================
-   LOGIN ERROR
+   ERROR
    ========================================================= */
 
-function showLoginError(
-    message
-) {
+function showLoginError(message) {
 
-    const el =
-        $("loginError");
+    const element = $("loginError");
 
-    if (!el) {
+    if (!element) {
         return;
     }
 
-    el.textContent =
-        message;
+    element.textContent = message;
 
-    show(el);
+    show(element);
 }
 
 
 function hideLoginError() {
 
-    hide(
-        $("loginError")
-    );
+    hide($("loginError"));
 }
 
 
-/* =========================================================
-   SPONSOR FORM ERROR
-   ========================================================= */
+function showSponsorError(message) {
 
-function showSponsorError(
-    message
-) {
+    const element = $("sponsorFormError");
 
-    const el =
-        $("sponsorFormError");
-
-    if (!el) {
-        showToast(
-            message,
-            "error"
-        );
+    if (!element) {
         return;
     }
 
-    el.textContent =
-        message;
+    element.textContent = message;
 
-    show(el);
+    show(element);
 }
 
 
 function hideSponsorError() {
 
-    hide(
-        $("sponsorFormError")
-    );
+    hide($("sponsorFormError"));
 }
 
 
@@ -284,19 +262,16 @@ async function login(
         const {
             data,
             error
-        } =
-            await db.auth
-                .signInWithPassword({
-                    email,
-                    password
-                });
+        } = await db.auth.signInWithPassword({
+            email,
+            password
+        });
 
         if (error) {
             throw error;
         }
 
-        currentUser =
-            data.user;
+        currentUser = data.user;
 
         await loadUserProfile(
             currentUser.id
@@ -312,21 +287,15 @@ async function login(
         );
 
         showLoginError(
-
             error.message ===
             "Invalid login credentials"
-
                 ? "Email atau password salah."
-
-                : error.message ||
-                  "Gagal masuk."
+                : error.message
         );
 
     } finally {
 
-        setLoading(
-            false
-        );
+        setLoading(false);
     }
 }
 
@@ -346,33 +315,19 @@ async function logout() {
 
         const {
             error
-        } =
-            await db.auth
-                .signOut();
+        } = await db.auth.signOut();
 
         if (error) {
             throw error;
         }
 
-        currentUser =
-            null;
+        currentUser = null;
+        currentProfile = null;
+        sponsors = [];
+        objectives = [];
 
-        currentProfile =
-            null;
-
-        sponsors =
-            [];
-
-        objectives =
-            [];
-
-        hide(
-            $("app")
-        );
-
-        show(
-            $("loginScreen")
-        );
+        hide($("app"));
+        show($("loginScreen"));
 
         $("loginForm")?.reset();
 
@@ -390,9 +345,7 @@ async function logout() {
 
     } finally {
 
-        setLoading(
-            false
-        );
+        setLoading(false);
     }
 }
 
@@ -401,22 +354,16 @@ async function logout() {
    PROFILE
    ========================================================= */
 
-async function loadUserProfile(
-    userId
-) {
+async function loadUserProfile(userId) {
 
     const {
         data,
         error
-    } =
-        await db
-            .from("profiles")
-            .select("*")
-            .eq(
-                "id",
-                userId
-            )
-            .maybeSingle();
+    } = await db
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .maybeSingle();
 
     if (error) {
 
@@ -426,7 +373,7 @@ async function loadUserProfile(
         );
 
         throw new Error(
-            "Akun berhasil login, tetapi profil tidak dapat dibaca."
+            "Akun berhasil login, tetapi profil tidak dapat dibaca. Cek RLS tabel profiles."
         );
     }
 
@@ -437,8 +384,7 @@ async function loadUserProfile(
         );
     }
 
-    currentProfile =
-        data;
+    currentProfile = data;
 
     setText(
         "currentUserEmail",
@@ -450,8 +396,7 @@ async function loadUserProfile(
     setText(
         "currentUserRole",
         String(
-            data.role ||
-            "USER"
+            data.role || "USER"
         ).toUpperCase()
     );
 }
@@ -463,27 +408,16 @@ async function loadUserProfile(
 
 async function showMainApp() {
 
-    hide(
-        $("loginScreen")
-    );
-
-    show(
-        $("app")
-    );
+    hide($("loginScreen"));
+    show($("app"));
 
     updateInterfaceByRole();
 
     await loadObjectives();
-
     await loadSponsors();
-
     await loadActivities();
 }
 
-
-/* =========================================================
-   ROLE INTERFACE
-   ========================================================= */
 
 function updateInterfaceByRole() {
 
@@ -505,16 +439,10 @@ function updateInterfaceByRole() {
         return;
     }
 
-    if (role === "ADMIN") {
-
-        description.textContent =
-            "Kelola seluruh data prospek sponsor dan monitoring kerja sama.";
-
-    } else {
-
-        description.textContent =
-            "Lihat dan kelola data sponsor yang tersedia untuk tim.";
-    }
+    description.textContent =
+        role === "ADMIN"
+            ? "Kelola seluruh data prospek sponsor dan monitoring kerja sama."
+            : "Lihat dan kelola data sponsor yang tersedia untuk tim.";
 }
 
 
@@ -524,106 +452,36 @@ function updateInterfaceByRole() {
 
 async function loadObjectives() {
 
-    try {
+    const {
+        data,
+        error
+    } = await db
+        .from("objectives")
+        .select("id,name,slug")
+        .order("name");
 
-        const {
-            data,
-            error
-        } =
-            await db
-                .from("objectives")
-                .select(
-                    "id,name,slug"
-                )
-                .order(
-                    "name",
-                    {
-                        ascending: true
-                    }
-                );
-
-        if (error) {
-            throw error;
-        }
-
-        objectives =
-            data || [];
-
-        console.log(
-            "Objectives loaded:",
-            objectives
-        );
-
-        /*
-         * HTML sudah mempunyai checkbox objective.
-         * Kita sinkronkan label/value berdasarkan
-         * data objectives dari Supabase.
-         */
-
-        syncObjectiveInputs();
-
-    } catch (error) {
+    if (error) {
 
         console.error(
             "Objectives error:",
             error
         );
 
-        objectives =
-            [];
+        objectives = [];
 
         showToast(
             "Objective gagal dimuat.",
             "error"
         );
-    }
-}
 
-
-/* =========================================================
-   SYNC OBJECTIVE INPUTS
-   ========================================================= */
-
-function syncObjectiveInputs() {
-
-    const inputs =
-        document.querySelectorAll(
-            'input[name="objectives"]'
-        );
-
-    if (!inputs.length) {
         return;
     }
 
-    inputs.forEach(
-        input => {
+    objectives = data || [];
 
-            const slug =
-                String(
-                    input.value ||
-                    ""
-                )
-                    .trim()
-                    .toLowerCase();
-
-            const found =
-                objectives.find(
-                    objective =>
-                        String(
-                            objective.slug ||
-                            ""
-                        )
-                            .toLowerCase() ===
-                        slug
-                );
-
-            if (found) {
-
-                input.value =
-                    found.slug;
-
-            }
-        }
+    console.log(
+        "Objectives loaded:",
+        objectives
     );
 }
 
@@ -644,23 +502,31 @@ async function loadSponsors() {
         const {
             data,
             error
-        } =
-            await db
-                .from("companies")
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                );
+        } = await db
+            .from("companies")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
 
         if (error) {
             throw error;
         }
 
-        sponsors =
-            data || [];
+        sponsors = data || [];
+
+        /*
+         * IMPORTANT:
+         * Jangan gunakan nested relation Supabase
+         * karena database memiliki lebih dari satu
+         * relationship antara sponsor_projects
+         * dan sponsor_project_objectives.
+         *
+         * Kita ambil datanya secara manual.
+         */
 
         await loadSponsorObjectives();
 
@@ -675,8 +541,7 @@ async function loadSponsors() {
             error
         );
 
-        sponsors =
-            [];
+        sponsors = [];
 
         renderSponsors();
 
@@ -687,9 +552,7 @@ async function loadSponsors() {
 
     } finally {
 
-        setLoading(
-            false
-        );
+        setLoading(false);
     }
 }
 
@@ -700,96 +563,119 @@ async function loadSponsors() {
 
 async function loadSponsorObjectives() {
 
-    sponsors.forEach(
-        sponsor => {
-            sponsor.objectives = [];
-        }
-    );
-
     if (!sponsors.length) {
         return;
     }
 
-    try {
+    const companyIds =
+        sponsors.map(
+            sponsor => sponsor.id
+        );
 
-        const companyIds =
-            sponsors.map(
-                sponsor =>
-                    sponsor.id
-            );
+    /*
+     * STEP 1
+     * Ambil project berdasarkan company.
+     */
 
-        /*
-         * STEP 1
-         * Ambil project berdasarkan company.
-         *
-         * Sengaja tidak memakai nested relationship
-         * karena schema Supabase mempunyai lebih dari
-         * satu relationship antara tabel terkait.
-         */
+    const {
+        data: projects,
+        error: projectError
+    } = await db
+        .from("sponsor_projects")
+        .select(
+            "id,company_id,status"
+        )
+        .in(
+            "company_id",
+            companyIds
+        );
 
-        const {
-            data: projects,
-            error: projectError
-        } =
-            await db
-                .from("sponsor_projects")
-                .select(
-                    "id,company_id"
-                )
-                .in(
-                    "company_id",
-                    companyIds
-                );
+    if (projectError) {
 
-        if (projectError) {
-            throw projectError;
-        }
+        console.error(
+            "Sponsor projects error:",
+            projectError
+        );
 
-        if (!projects?.length) {
-            return;
-        }
+        sponsors.forEach(
+            sponsor => {
+                sponsor.objectives = [];
+            }
+        );
 
-        const projectIds =
-            projects.map(
-                project =>
-                    project.id
-            );
+        return;
+    }
 
-        /*
-         * STEP 2
-         * Ambil hubungan project → objective.
-         */
+    if (!projects?.length) {
 
-        const {
-            data: relations,
-            error: relationError
-        } =
-            await db
-                .from(
-                    "sponsor_project_objectives"
-                )
-                .select(
-                    "sponsor_project_id,objective_id"
-                )
-                .in(
-                    "sponsor_project_id",
-                    projectIds
-                );
+        sponsors.forEach(
+            sponsor => {
+                sponsor.objectives = [];
+            }
+        );
 
-        if (relationError) {
-            throw relationError;
-        }
+        return;
+    }
 
-        if (!relations?.length) {
-            return;
-        }
+    const projectIds =
+        projects.map(
+            project => project.id
+        );
 
-        /*
-         * STEP 3
-         * Ambil objective berdasarkan ID.
-         */
+    /*
+     * STEP 2
+     * Ambil junction table secara langsung.
+     *
+     * TIDAK menggunakan nested select.
+     */
 
-        const objectiveIds = [
+    const {
+        data: relations,
+        error: relationError
+    } = await db
+        .from("sponsor_project_objectives")
+        .select(
+            "sponsor_project_id,objective_id"
+        )
+        .in(
+            "sponsor_project_id",
+            projectIds
+        );
+
+    if (relationError) {
+
+        console.error(
+            "Sponsor objective relations error:",
+            relationError
+        );
+
+        sponsors.forEach(
+            sponsor => {
+                sponsor.objectives = [];
+            }
+        );
+
+        return;
+    }
+
+    if (!relations?.length) {
+
+        sponsors.forEach(
+            sponsor => {
+                sponsor.objectives = [];
+            }
+        );
+
+        return;
+    }
+
+    /*
+     * STEP 3
+     * Ambil objective berdasarkan ID.
+     */
+
+    const objectiveIds =
+        [
             ...new Set(
                 relations.map(
                     relation =>
@@ -798,147 +684,139 @@ async function loadSponsorObjectives() {
             )
         ];
 
-        const {
-            data: objectiveRows,
-            error: objectiveError
-        } =
-            await db
-                .from("objectives")
-                .select(
-                    "id,name,slug"
-                )
-                .in(
-                    "id",
-                    objectiveIds
-                );
-
-        if (objectiveError) {
-            throw objectiveError;
-        }
-
-        /*
-         * STEP 4
-         * Buat lookup.
-         */
-
-        const objectiveMap =
-            new Map();
-
-        (objectiveRows || [])
-            .forEach(
-                objective => {
-
-                    objectiveMap.set(
-                        objective.id,
-                        objective
-                    );
-                }
-            );
-
-        const projectCompanyMap =
-            new Map();
-
-        projects.forEach(
-            project => {
-
-                projectCompanyMap.set(
-                    project.id,
-                    project.company_id
-                );
-            }
+    const {
+        data: objectiveRows,
+        error: objectiveError
+    } = await db
+        .from("objectives")
+        .select(
+            "id,name,slug"
+        )
+        .in(
+            "id",
+            objectiveIds
         );
 
-        /*
-         * STEP 5
-         * Hubungkan objective ke sponsor.
-         */
-
-        relations.forEach(
-            relation => {
-
-                const companyId =
-                    projectCompanyMap.get(
-                        relation.sponsor_project_id
-                    );
-
-                const objective =
-                    objectiveMap.get(
-                        relation.objective_id
-                    );
-
-                if (
-                    !companyId ||
-                    !objective
-                ) {
-                    return;
-                }
-
-                const sponsor =
-                    sponsors.find(
-                        item =>
-                            item.id ===
-                            companyId
-                    );
-
-                if (!sponsor) {
-                    return;
-                }
-
-                sponsor.objectives.push(
-                    objective
-                );
-            }
-        );
-
-        /*
-         * STEP 6
-         * Remove duplicate objectives.
-         */
-
-        sponsors.forEach(
-            sponsor => {
-
-                const unique =
-                    new Map();
-
-                sponsor.objectives.forEach(
-                    objective => {
-
-                        unique.set(
-                            objective.id,
-                            objective
-                        );
-                    }
-                );
-
-                sponsor.objectives =
-                    [...unique.values()];
-            }
-        );
-
-        console.log(
-            "Sponsor objectives loaded:",
-            sponsors
-        );
-
-    } catch (error) {
+    if (objectiveError) {
 
         console.error(
-            "Sponsor objectives error:",
-            error
+            "Objective relation lookup error:",
+            objectiveError
         );
-
-        /*
-         * Jangan bikin sponsor gagal ditampilkan
-         * hanya karena objective gagal dibaca.
-         */
 
         sponsors.forEach(
             sponsor => {
                 sponsor.objectives = [];
             }
         );
+
+        return;
     }
+
+    /*
+     * STEP 4
+     * Mapping objective ke sponsor.
+     */
+
+    const objectiveMap =
+        new Map();
+
+    (objectiveRows || []).forEach(
+        objective => {
+
+            objectiveMap.set(
+                objective.id,
+                objective
+            );
+        }
+    );
+
+
+    const projectToCompany =
+        new Map();
+
+    projects.forEach(
+        project => {
+
+            projectToCompany.set(
+                project.id,
+                project.company_id
+            );
+        }
+    );
+
+
+    const sponsorMap =
+        new Map();
+
+    sponsors.forEach(
+        sponsor => {
+
+            sponsor.objectives = [];
+
+            sponsorMap.set(
+                sponsor.id,
+                sponsor
+            );
+        }
+    );
+
+
+    relations.forEach(
+        relation => {
+
+            const companyId =
+                projectToCompany.get(
+                    relation.sponsor_project_id
+                );
+
+            const sponsor =
+                sponsorMap.get(
+                    companyId
+                );
+
+            const objective =
+                objectiveMap.get(
+                    relation.objective_id
+                );
+
+            if (
+                sponsor &&
+                objective
+            ) {
+
+                sponsor.objectives.push(
+                    objective
+                );
+            }
+        }
+    );
+
+
+    /*
+     * Remove duplicate objectives.
+     */
+
+    sponsors.forEach(
+        sponsor => {
+
+            const unique =
+                new Map();
+
+            sponsor.objectives.forEach(
+                objective => {
+
+                    unique.set(
+                        objective.id,
+                        objective
+                    );
+                }
+            );
+
+            sponsor.objectives =
+                [...unique.values()];
+        }
+    );
 }
 
 
@@ -967,30 +845,38 @@ function renderSponsors() {
         $("statusFilter")?.value ||
         "ALL";
 
+
     const filtered =
         sponsors.filter(
             sponsor => {
 
-                const name =
+                const matchesSearch =
+                    !search ||
                     String(
-                        sponsor.name ||
-                        ""
-                    ).toLowerCase();
+                        sponsor.name || ""
+                    )
+                        .toLowerCase()
+                        .includes(search) ||
 
-                const contact =
                     String(
                         sponsor.contact_name ||
                         ""
-                    ).toLowerCase();
+                    )
+                        .toLowerCase()
+                        .includes(search) ||
 
-                const matchesSearch =
-                    !search ||
-                    name.includes(search) ||
-                    contact.includes(search);
+                    String(
+                        sponsor.contact_email ||
+                        ""
+                    )
+                        .toLowerCase()
+                        .includes(search);
+
 
                 const matchesStatus =
                     status === "ALL" ||
                     sponsor.status === status;
+
 
                 return (
                     matchesSearch &&
@@ -998,6 +884,7 @@ function renderSponsors() {
                 );
             }
         );
+
 
     if (!filtered.length) {
 
@@ -1012,7 +899,8 @@ function renderSponsors() {
                     </strong>
 
                     <span>
-                        Tidak ditemukan sponsor yang sesuai.
+                        Tidak ditemukan sponsor
+                        yang sesuai.
                     </span>
                 </td>
             </tr>
@@ -1021,6 +909,7 @@ function renderSponsors() {
         return;
     }
 
+
     tbody.innerHTML =
         filtered
             .map(
@@ -1028,7 +917,6 @@ function renderSponsors() {
 
                     const objectiveHTML =
                         sponsor.objectives?.length
-
                             ? sponsor.objectives
                                 .map(
                                     objective => `
@@ -1040,8 +928,8 @@ function renderSponsors() {
                                     `
                                 )
                                 .join("")
-
                             : `<span>-</span>`;
+
 
                     return `
                         <tr
@@ -1085,7 +973,6 @@ function renderSponsors() {
 
                                 ${
                                     sponsor.contact_email
-
                                         ? `
                                             <a
                                                 href="mailto:${escapeHTML(
@@ -1097,7 +984,6 @@ function renderSponsors() {
                                                 )}
                                             </a>
                                         `
-
                                         : "-"
                                 }
 
@@ -1124,9 +1010,7 @@ function renderSponsors() {
                             <td>
 
                                 <div class="objective-tags">
-
                                     ${objectiveHTML}
-
                                 </div>
 
                             </td>
@@ -1200,9 +1084,7 @@ function renderSponsors() {
    ASSIGNED NAME
    ========================================================= */
 
-function getAssignedName(
-    userId
-) {
+function getAssignedName(userId) {
 
     if (!userId) {
         return "-";
@@ -1235,6 +1117,7 @@ function updateStatistics() {
         sponsors.length
     );
 
+
     setText(
         "statProspect",
         sponsors.filter(
@@ -1244,6 +1127,7 @@ function updateStatistics() {
         ).length
     );
 
+
     setText(
         "statNegotiation",
         sponsors.filter(
@@ -1252,6 +1136,7 @@ function updateStatistics() {
                 "NEGOTIATION"
         ).length
     );
+
 
     setText(
         "statDeal",
@@ -1265,7 +1150,7 @@ function updateStatistics() {
 
 
 /* =========================================================
-   MODAL
+   SPONSOR MODAL
    ========================================================= */
 
 function openSponsorModal(
@@ -1283,7 +1168,6 @@ function openSponsorModal(
 
     $("sponsorForm")?.reset();
 
-    syncObjectiveInputs();
 
     if (sponsor) {
 
@@ -1292,47 +1176,61 @@ function openSponsorModal(
             "EDIT SPONSOR"
         );
 
+
         $("sponsorId").value =
             sponsor.id || "";
+
 
         $("companyName").value =
             sponsor.name || "";
 
+
         $("contactName").value =
             sponsor.contact_name || "";
+
 
         $("contactEmail").value =
             sponsor.contact_email || "";
 
+
         $("contactPhone").value =
             sponsor.contact_phone || "";
 
-        $("sponsorStatus").value =
-            sponsor.status || "PROSPECT";
 
-        /*
-         * Di database:
-         * contact_position = posisi kontak perusahaan
-         *
-         * Jadi field internalPic yang lama sebenarnya
-         * menyimpan contact_position.
-         */
+        $("sponsorStatus").value =
+            sponsor.status ||
+            "PROSPECT";
+
 
         $("internalPic").value =
-            sponsor.contact_position || "";
+            sponsor.contact_position ||
+            "";
+
 
         $("sponsorNotes").value =
-            sponsor.description || "";
+            sponsor.description ||
+            "";
+
+
+        /*
+         * Objective DB:
+         * brand-awareness
+         *
+         * HTML:
+         * BRAND_AWARENESS
+         *
+         * Normalisasi supaya keduanya cocok.
+         */
 
         const selectedSlugs =
             (sponsor.objectives || [])
                 .map(
                     objective =>
-                        String(
-                            objective.slug ||
-                            ""
-                        ).toLowerCase()
+                        normalizeObjectiveSlug(
+                            objective.slug
+                        )
                 );
+
 
         document
             .querySelectorAll(
@@ -1341,12 +1239,14 @@ function openSponsorModal(
             .forEach(
                 input => {
 
+                    const inputSlug =
+                        normalizeObjectiveSlug(
+                            input.value
+                        );
+
                     input.checked =
                         selectedSlugs.includes(
-                            String(
-                                input.value ||
-                                ""
-                            ).toLowerCase()
+                            inputSlug
                         );
                 }
             );
@@ -1358,11 +1258,13 @@ function openSponsorModal(
             "TAMBAH SPONSOR"
         );
 
-        $("sponsorId").value =
-            "";
+
+        $("sponsorId").value = "";
+
 
         $("sponsorStatus").value =
             "PROSPECT";
+
 
         document
             .querySelectorAll(
@@ -1370,11 +1272,11 @@ function openSponsorModal(
             )
             .forEach(
                 input => {
-                    input.checked =
-                        false;
+                    input.checked = false;
                 }
             );
     }
+
 
     modal.setAttribute(
         "aria-hidden",
@@ -1417,6 +1319,7 @@ function openDetailModal(
     const content =
         $("detailContent");
 
+
     if (
         !modal ||
         !content ||
@@ -1425,12 +1328,13 @@ function openDetailModal(
         return;
     }
 
+
     selectedSponsorId =
         sponsor.id;
 
+
     const objectivesHTML =
         sponsor.objectives?.length
-
             ? sponsor.objectives
                 .map(
                     objective => `
@@ -1442,13 +1346,12 @@ function openDetailModal(
                     `
                 )
                 .join("")
-
             : "-";
+
 
     content.innerHTML = `
 
         <div class="detail-grid">
-
 
             <div class="detail-item">
 
@@ -1523,7 +1426,6 @@ function openDetailModal(
 
                     ${
                         sponsor.contact_email
-
                             ? `
                                 <a
                                     href="mailto:${escapeHTML(
@@ -1535,7 +1437,6 @@ function openDetailModal(
                                     )}
                                 </a>
                             `
-
                             : "-"
                     }
 
@@ -1615,7 +1516,6 @@ function openDetailModal(
 
                     ${
                         sponsor.website
-
                             ? `
                                 <a
                                     href="${escapeHTML(
@@ -1629,7 +1529,6 @@ function openDetailModal(
                                     )}
                                 </a>
                             `
-
                             : "-"
                     }
 
@@ -1669,9 +1568,9 @@ function openDetailModal(
 
             </div>
 
-
         </div>
     `;
+
 
     show(modal);
 }
@@ -1710,10 +1609,9 @@ function getSelectedObjectives() {
     ]
         .map(
             input =>
-                String(
-                    input.value ||
-                    ""
-                ).trim()
+                normalizeObjectiveSlug(
+                    input.value
+                )
         )
         .filter(Boolean);
 }
@@ -1731,52 +1629,39 @@ async function saveSponsor(
 
     hideSponsorError();
 
+
     const id =
-        $("sponsorId")
-            ?.value
-            ?.trim() ||
-        "";
+        $("sponsorId")?.value?.trim();
+
 
     const name =
-        $("companyName")
-            ?.value
-            ?.trim() ||
-        "";
+        $("companyName")?.value?.trim();
+
 
     const contactName =
-        $("contactName")
-            ?.value
-            ?.trim() ||
-        "";
+        $("contactName")?.value?.trim();
+
 
     const contactEmail =
-        $("contactEmail")
-            ?.value
-            ?.trim() ||
-        "";
+        $("contactEmail")?.value?.trim();
+
 
     const contactPhone =
-        $("contactPhone")
-            ?.value
-            ?.trim() ||
-        "";
+        $("contactPhone")?.value?.trim();
+
 
     const status =
-        $("sponsorStatus")
-            ?.value ||
+        $("sponsorStatus")?.value ||
         "PROSPECT";
 
-    const contactPosition =
-        $("internalPic")
-            ?.value
-            ?.trim() ||
-        "";
+
+    const internalPic =
+        $("internalPic")?.value?.trim();
+
 
     const notes =
-        $("sponsorNotes")
-            ?.value
-            ?.trim() ||
-        "";
+        $("sponsorNotes")?.value?.trim();
+
 
     const selectedObjectives =
         getSelectedObjectives();
@@ -1784,7 +1669,7 @@ async function saveSponsor(
 
     /* =====================================================
        VALIDATION
-    ===================================================== */
+       ===================================================== */
 
     if (!name) {
 
@@ -1827,8 +1712,7 @@ async function saveSponsor(
 
 
     /*
-     * Pastikan status benar-benar sesuai ENUM/check
-     * database.
+     * Safety check status.
      */
 
     const allowedStatuses = [
@@ -1838,6 +1722,7 @@ async function saveSponsor(
         "DEAL",
         "REJECTED"
     ];
+
 
     if (
         !allowedStatuses.includes(
@@ -1865,7 +1750,7 @@ async function saveSponsor(
 
         /* =================================================
            COMPANY PAYLOAD
-        ================================================= */
+           ================================================= */
 
         const companyPayload = {
 
@@ -1881,12 +1766,12 @@ async function saveSponsor(
                 contactPhone,
 
             contact_position:
-                contactPosition,
+                internalPic || null,
 
             status,
 
             description:
-                notes,
+                notes || null,
 
             assigned_to:
                 currentUser?.id ||
@@ -1902,133 +1787,110 @@ async function saveSponsor(
 
         /* =================================================
            UPDATE COMPANY
-        ================================================= */
+           ================================================= */
 
         if (id) {
 
             const {
                 data,
                 error
-            } =
-                await db
-                    .from("companies")
-                    .update(
-                        companyPayload
-                    )
-                    .eq(
-                        "id",
-                        id
-                    )
-                    .select("*")
-                    .single();
+            } = await db
+                .from("companies")
+                .update(
+                    companyPayload
+                )
+                .eq(
+                    "id",
+                    id
+                )
+                .select()
+                .single();
+
 
             if (error) {
                 throw error;
             }
 
-            company =
-                data;
 
-        }
+            company = data;
 
 
-        /* =================================================
-           INSERT COMPANY
-        ================================================= */
+        } else {
 
-        else {
+            /* =============================================
+               INSERT COMPANY
+               ============================================= */
 
             const {
                 data,
                 error
-            } =
-                await db
-                    .from("companies")
-                    .insert({
+            } = await db
+                .from("companies")
+                .insert({
+                    ...companyPayload,
 
-                        ...companyPayload,
+                    created_at:
+                        new Date().toISOString()
+                })
+                .select()
+                .single();
 
-                        created_at:
-                            new Date()
-                                .toISOString()
-                    })
-                    .select("*")
-                    .single();
 
             if (error) {
                 throw error;
             }
 
-            company =
-                data;
+
+            company = data;
         }
 
 
-        if (!company?.id) {
+        if (!company) {
 
             throw new Error(
-                "Data perusahaan berhasil diproses tetapi ID perusahaan tidak ditemukan."
+                "Data perusahaan tidak berhasil disimpan."
             );
         }
 
 
         /* =================================================
            SPONSOR PROJECT
-        ================================================= */
+           ================================================= */
 
         let project = null;
 
 
-        /*
-         * Untuk EDIT:
-         * Cari project berdasarkan company_id.
-         */
-
-        const {
-            data: existingProjects,
-            error: existingProjectError
-        } =
-            await db
-                .from("sponsor_projects")
-                .select(
-                    "id,company_id,status"
-                )
-                .eq(
-                    "company_id",
-                    company.id
-                )
-                .limit(1);
-
-        if (existingProjectError) {
-            throw existingProjectError;
-        }
-
-
-        if (
-            existingProjects &&
-            existingProjects.length
-        ) {
-
-            project =
-                existingProjects[0];
-
-        }
-
-
-        /* =================================================
-           UPDATE PROJECT
-        ================================================= */
-
-        if (project) {
+        if (id) {
 
             const {
                 data,
                 error
-            } =
-                await db
-                    .from(
-                        "sponsor_projects"
-                    )
+            } = await db
+                .from("sponsor_projects")
+                .select("*")
+                .eq(
+                    "company_id",
+                    company.id
+                )
+                .limit(1)
+                .maybeSingle();
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            project = data;
+
+
+            if (project) {
+
+                const {
+                    error:
+                    updateProjectError
+                } = await db
+                    .from("sponsor_projects")
                     .update({
 
                         owner_id:
@@ -2037,82 +1899,75 @@ async function saveSponsor(
 
                         status,
 
-                        notes,
+                        notes:
+                            notes || null,
 
                         updated_at:
-                            new Date()
-                                .toISOString()
+                            new Date().toISOString()
+
                     })
                     .eq(
                         "id",
                         project.id
-                    )
-                    .select(
-                        "id,company_id,status"
-                    )
-                    .single();
+                    );
 
-            if (error) {
-                throw error;
+
+                if (
+                    updateProjectError
+                ) {
+                    throw updateProjectError;
+                }
             }
-
-            project =
-                data;
         }
 
 
         /* =================================================
-           INSERT PROJECT
-        ================================================= */
+           CREATE PROJECT
+           ================================================= */
 
-        else {
+        if (!project) {
 
             const {
                 data,
                 error
-            } =
-                await db
-                    .from(
-                        "sponsor_projects"
-                    )
-                    .insert({
+            } = await db
+                .from("sponsor_projects")
+                .insert({
 
-                        company_id:
-                            company.id,
+                    company_id:
+                        company.id,
 
-                        owner_id:
-                            currentUser?.id ||
-                            null,
+                    owner_id:
+                        currentUser?.id ||
+                        null,
 
-                        title:
-                            `Sponsor — ${name}`,
+                    title:
+                        `Sponsor — ${name}`,
 
-                        status,
+                    status,
 
-                        progress:
-                            0,
+                    progress: 0,
 
-                        notes,
+                    notes:
+                        notes || null,
 
-                        created_at:
-                            new Date()
-                                .toISOString(),
+                    created_at:
+                        new Date().toISOString(),
 
-                        updated_at:
-                            new Date()
-                                .toISOString()
-                    })
-                    .select(
-                        "id,company_id,status"
-                    )
-                    .single();
+                    updated_at:
+                        new Date().toISOString()
+
+                })
+                .select()
+                .single();
+
 
             if (error) {
                 throw error;
             }
 
-            project =
-                data;
+
+            project = data;
         }
 
 
@@ -2125,8 +1980,8 @@ async function saveSponsor(
 
 
         /* =================================================
-           OBJECTIVES
-        ================================================= */
+           SAVE OBJECTIVES
+           ================================================= */
 
         await saveProjectObjectives(
             project.id,
@@ -2136,21 +1991,13 @@ async function saveSponsor(
 
         /* =================================================
            ACTIVITY
-        ================================================= */
+           ================================================= */
 
-        /*
-         * Activity tidak boleh menggagalkan save sponsor.
-         *
-         * Karena activity_type di database adalah ENUM
-         * dengan value yang belum kita pastikan, logging
-         * dibuat aman/non-blocking.
-         */
-
-        await logActivitySafely(
+        await logActivity(
             company.id,
             id
-                ? "UPDATE_SPONSOR"
-                : "CREATE_SPONSOR",
+                ? "UPDATE"
+                : "CREATE",
             id
                 ? `Memperbarui data sponsor ${name}`
                 : `Menambahkan sponsor ${name}`
@@ -2158,10 +2005,11 @@ async function saveSponsor(
 
 
         /* =================================================
-           SUCCESS
-        ================================================= */
+           UI
+           ================================================= */
 
         closeSponsorModal();
+
 
         showToast(
             id
@@ -2182,46 +2030,15 @@ async function saveSponsor(
             error
         );
 
-        let message =
-            error?.message ||
-            "Gagal menyimpan data sponsor.";
-
-
-        /*
-         * Error database dibuat sedikit lebih manusiawi.
-         */
-
-        if (
-            error?.code ===
-            "23514"
-        ) {
-
-            message =
-                "Data ditolak database karena constraint tidak sesuai.";
-
-        }
-
-
-        if (
-            error?.code ===
-            "23505"
-        ) {
-
-            message =
-                "Data tersebut sudah ada di database.";
-
-        }
-
 
         showSponsorError(
-            message
+            error?.message ||
+            "Gagal menyimpan data sponsor."
         );
 
     } finally {
 
-        setLoading(
-            false
-        );
+        setLoading(false);
     }
 }
 
@@ -2238,27 +2055,27 @@ async function saveProjectObjectives(
     if (!projectId) {
 
         throw new Error(
-            "Project sponsor tidak memiliki ID."
+            "Project sponsor tidak valid."
         );
     }
 
 
     /*
-     * Hapus objective lama.
+     * Hapus relasi lama.
      */
 
     const {
         error: deleteError
-    } =
-        await db
-            .from(
-                "sponsor_project_objectives"
-            )
-            .delete()
-            .eq(
-                "sponsor_project_id",
-                projectId
-            );
+    } = await db
+        .from(
+            "sponsor_project_objectives"
+        )
+        .delete()
+        .eq(
+            "sponsor_project_id",
+            projectId
+        );
+
 
     if (deleteError) {
         throw deleteError;
@@ -2266,25 +2083,36 @@ async function saveProjectObjectives(
 
 
     /*
-     * Ambil objective berdasarkan slug.
+     * Ambil objective dari slug.
      */
+
+    const normalizedSlugs =
+        selectedSlugs
+            .map(
+                slug =>
+                    normalizeObjectiveSlug(
+                        slug
+                    )
+            )
+            .filter(Boolean);
+
 
     const {
         data: objectiveRows,
-        error: objectiveError
-    } =
-        await db
-            .from("objectives")
-            .select(
-                "id,name,slug"
-            )
-            .in(
-                "slug",
-                selectedSlugs
-            );
+        error
+    } = await db
+        .from("objectives")
+        .select(
+            "id,slug,name"
+        )
+        .in(
+            "slug",
+            normalizedSlugs
+        );
 
-    if (objectiveError) {
-        throw objectiveError;
+
+    if (error) {
+        throw error;
     }
 
 
@@ -2304,33 +2132,33 @@ async function saveProjectObjectives(
      */
 
     const foundSlugs =
-        new Set(
-            objectiveRows.map(
-                objective =>
+        objectiveRows.map(
+            objective =>
+                normalizeObjectiveSlug(
                     objective.slug
-            )
+                )
         );
 
 
-    const missingSlugs =
-        selectedSlugs.filter(
+    const missing =
+        normalizedSlugs.filter(
             slug =>
-                !foundSlugs.has(
+                !foundSlugs.includes(
                     slug
                 )
         );
 
 
-    if (missingSlugs.length) {
+    if (missing.length) {
 
         throw new Error(
-            `Objective tidak ditemukan: ${missingSlugs.join(", ")}`
+            `Objective tidak ditemukan: ${missing.join(", ")}`
         );
     }
 
 
     /*
-     * Buat rows relationship.
+     * Insert junction rows.
      */
 
     const rows =
@@ -2342,18 +2170,19 @@ async function saveProjectObjectives(
 
                 objective_id:
                     objective.id
+
             })
         );
 
 
     const {
         error: insertError
-    } =
-        await db
-            .from(
-                "sponsor_project_objectives"
-            )
-            .insert(rows);
+    } = await db
+        .from(
+            "sponsor_project_objectives"
+        )
+        .insert(rows);
+
 
     if (insertError) {
         throw insertError;
@@ -2375,13 +2204,14 @@ async function deleteSponsor(
                 item.id === id
         );
 
+
     if (!sponsor) {
         return;
     }
 
 
     const confirmed =
-        window.confirm(
+        confirm(
             `Hapus sponsor "${sponsor.name}"?\n\nData sponsor akan dihapus dari database.`
         );
 
@@ -2400,22 +2230,22 @@ async function deleteSponsor(
     try {
 
         /*
-         * Ambil project.
+         * Cari project.
          */
 
         const {
             data: projects,
             error: projectError
-        } =
-            await db
-                .from(
-                    "sponsor_projects"
-                )
-                .select("id")
-                .eq(
-                    "company_id",
-                    id
-                );
+        } = await db
+            .from(
+                "sponsor_projects"
+            )
+            .select("id")
+            .eq(
+                "company_id",
+                id
+            );
+
 
         if (projectError) {
             throw projectError;
@@ -2431,29 +2261,27 @@ async function deleteSponsor(
 
 
         /*
-         * Hapus objective relation.
+         * Hapus objective relations.
          */
 
         if (projectIds.length) {
 
             const {
                 error:
-                    objectiveDeleteError
-            } =
-                await db
-                    .from(
-                        "sponsor_project_objectives"
-                    )
-                    .delete()
-                    .in(
-                        "sponsor_project_id",
-                        projectIds
-                    );
+                objectiveError
+            } = await db
+                .from(
+                    "sponsor_project_objectives"
+                )
+                .delete()
+                .in(
+                    "sponsor_project_id",
+                    projectIds
+                );
 
-            if (
-                objectiveDeleteError
-            ) {
-                throw objectiveDeleteError;
+
+            if (objectiveError) {
+                throw objectiveError;
             }
 
 
@@ -2463,17 +2291,17 @@ async function deleteSponsor(
 
             const {
                 error:
-                    projectDeleteError
-            } =
-                await db
-                    .from(
-                        "sponsor_projects"
-                    )
-                    .delete()
-                    .in(
-                        "id",
-                        projectIds
-                    );
+                projectDeleteError
+            } = await db
+                .from(
+                    "sponsor_projects"
+                )
+                .delete()
+                .in(
+                    "id",
+                    projectIds
+                );
+
 
             if (
                 projectDeleteError
@@ -2489,14 +2317,14 @@ async function deleteSponsor(
 
         const {
             error
-        } =
-            await db
-                .from("companies")
-                .delete()
-                .eq(
-                    "id",
-                    id
-                );
+        } = await db
+            .from("companies")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
 
         if (error) {
             throw error;
@@ -2504,12 +2332,12 @@ async function deleteSponsor(
 
 
         /*
-         * Activity aman/non-blocking.
+         * Activity.
          */
 
-        await logActivitySafely(
+        await logActivity(
             null,
-            "DELETE_SPONSOR",
+            "DELETE",
             `Menghapus sponsor ${sponsor.name}`
         );
 
@@ -2531,49 +2359,100 @@ async function deleteSponsor(
             error
         );
 
+
         showToast(
             error?.message ||
             "Gagal menghapus sponsor.",
             "error"
         );
 
+
     } finally {
 
-        setLoading(
-            false
-        );
+        setLoading(false);
     }
 }
 
 
 /* =========================================================
-   ACTIVITY — SAFE LOGGER
+   ACTIVITY LOG
    ========================================================= */
 
-async function logActivitySafely(
+async function logActivity(
     companyId,
     type,
     description
 ) {
 
+    if (!currentUser) {
+        return;
+    }
+
+
     /*
-     * Sengaja tidak melakukan INSERT.
+     * Database enum activity_type sebelumnya
+     * menolak UPDATE_SPONSOR.
      *
-     * Schema activity_type yang sekarang merupakan ENUM
-     * dan belum diketahui value validnya.
-     *
-     * Logging tidak boleh membuat transaksi sponsor
-     * gagal.
+     * Gunakan nilai sederhana:
+     * CREATE / UPDATE / DELETE
      */
 
-    console.log(
-        "Activity:",
-        {
-            companyId,
+    const allowedTypes = [
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+    ];
+
+
+    if (
+        !allowedTypes.includes(
+            type
+        )
+    ) {
+
+        console.warn(
+            "Invalid activity type:",
+            type
+        );
+
+        return;
+    }
+
+
+    const {
+        error
+    } = await db
+        .from("activities")
+        .insert({
+
+            company_id:
+                companyId,
+
+            user_id:
+                currentUser.id,
+
             type,
-            description
-        }
-    );
+
+            description,
+
+            created_at:
+                new Date().toISOString()
+
+        });
+
+
+    if (error) {
+
+        /*
+         * Activity gagal TIDAK boleh
+         * membuat proses sponsor gagal.
+         */
+
+        console.warn(
+            "Activity log skipped:",
+            error
+        );
+    }
 }
 
 
@@ -2586,161 +2465,95 @@ async function loadActivities() {
     const container =
         $("activityList");
 
+
     if (!container) {
         return;
     }
 
 
-    try {
+    /*
+     * Jangan nested relation companies.
+     *
+     * Sama seperti objective:
+     * ambil activities langsung.
+     */
 
-        /*
-         * Jangan menggunakan:
-         *
-         * companies(name)
-         *
-         * karena relationship FK activities → companies
-         * pada schema saat ini belum bisa di-embed oleh
-         * PostgREST.
-         */
-
-        const {
-            data,
-            error
-        } =
-            await db
-                .from("activities")
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(10);
+    const {
+        data,
+        error
+    } = await db
+        .from("activities")
+        .select("*")
+        .order(
+            "created_at",
+            {
+                ascending: false
+            }
+        )
+        .limit(10);
 
 
-        if (error) {
-
-            console.error(
-                "Activity error:",
-                error
-            );
-
-            container.innerHTML = `
-                <div class="empty-activity">
-                    Belum ada aktivitas.
-                </div>
-            `;
-
-            return;
-        }
-
-
-        if (
-            !data ||
-            !data.length
-        ) {
-
-            container.innerHTML = `
-                <div class="empty-activity">
-                    Belum ada aktivitas.
-                </div>
-            `;
-
-            return;
-        }
-
-
-        container.innerHTML =
-            data
-                .map(
-                    activity => `
-
-                        <div class="activity-item">
-
-                            <div class="activity-dot"></div>
-
-                            <div class="activity-content">
-
-                                <strong>
-                                    ${escapeHTML(
-                                        activity.description ||
-                                        "Aktivitas"
-                                    )}
-                                </strong>
-
-                                <span>
-                                    ${formatDate(
-                                        activity.created_at
-                                    )}
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    `
-                )
-                .join("");
-
-
-    } catch (error) {
+    if (error) {
 
         console.error(
-            "Load activities fatal error:",
+            "Activity error:",
             error
         );
+
 
         container.innerHTML = `
             <div class="empty-activity">
                 Belum ada aktivitas.
             </div>
         `;
+
+        return;
     }
-}
 
 
-/* =========================================================
-   REFRESH
-   ========================================================= */
+    if (!data?.length) {
 
-async function refreshDatabase() {
+        container.innerHTML = `
+            <div class="empty-activity">
+                Belum ada aktivitas.
+            </div>
+        `;
 
-    setLoading(
-        true,
-        "Memperbarui database..."
-    );
-
-    try {
-
-        await loadObjectives();
-
-        await loadSponsors();
-
-        await loadActivities();
-
-        showToast(
-            "Database diperbarui."
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Refresh error:",
-            error
-        );
-
-        showToast(
-            "Gagal memperbarui database.",
-            "error"
-        );
-
-    } finally {
-
-        setLoading(
-            false
-        );
+        return;
     }
+
+
+    container.innerHTML =
+        data
+            .map(
+                activity => `
+
+                    <div class="activity-item">
+
+                        <div class="activity-dot"></div>
+
+                        <div class="activity-content">
+
+                            <strong>
+                                ${escapeHTML(
+                                    activity.description ||
+                                    "Aktivitas"
+                                )}
+                            </strong>
+
+                            <span>
+                                ${formatDate(
+                                    activity.created_at
+                                )}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                `
+            )
+            .join("");
 }
 
 
@@ -2750,10 +2563,9 @@ async function refreshDatabase() {
 
 function setupEvents() {
 
-
     /* =====================================================
        LOGIN
-    ===================================================== */
+       ===================================================== */
 
     $("loginForm")
         ?.addEventListener(
@@ -2762,11 +2574,12 @@ function setupEvents() {
 
                 event.preventDefault();
 
+
                 const email =
                     $("loginEmail")
                         ?.value
-                        ?.trim() ||
-                    "";
+                        ?.trim();
+
 
                 const password =
                     $("loginPassword")
@@ -2797,7 +2610,7 @@ function setupEvents() {
 
     /* =====================================================
        LOGOUT
-    ===================================================== */
+       ===================================================== */
 
     $("logoutButton")
         ?.addEventListener(
@@ -2808,34 +2621,42 @@ function setupEvents() {
 
     /* =====================================================
        REFRESH
-    ===================================================== */
+       ===================================================== */
 
     $("refreshButton")
         ?.addEventListener(
             "click",
-            refreshDatabase
+            async () => {
+
+                await loadObjectives();
+
+                await loadSponsors();
+
+                await loadActivities();
+
+                showToast(
+                    "Database diperbarui."
+                );
+            }
         );
 
 
     /* =====================================================
-       ADD SPONSOR
-    ===================================================== */
+       ADD
+       ===================================================== */
 
     $("addSponsorButton")
         ?.addEventListener(
             "click",
             () => {
-
-                syncObjectiveInputs();
-
                 openSponsorModal();
             }
         );
 
 
     /* =====================================================
-       SPONSOR FORM
-    ===================================================== */
+       FORM
+       ===================================================== */
 
     $("sponsorForm")
         ?.addEventListener(
@@ -2846,7 +2667,7 @@ function setupEvents() {
 
     /* =====================================================
        SEARCH
-    ===================================================== */
+       ===================================================== */
 
     $("searchInput")
         ?.addEventListener(
@@ -2856,8 +2677,8 @@ function setupEvents() {
 
 
     /* =====================================================
-       STATUS FILTER
-    ===================================================== */
+       FILTER
+       ===================================================== */
 
     $("statusFilter")
         ?.addEventListener(
@@ -2868,7 +2689,7 @@ function setupEvents() {
 
     /* =====================================================
        TABLE ACTIONS
-    ===================================================== */
+       ===================================================== */
 
     $("sponsorTableBody")
         ?.addEventListener(
@@ -2879,6 +2700,7 @@ function setupEvents() {
                     event.target.closest(
                         "[data-action]"
                     );
+
 
                 if (!button) {
                     return;
@@ -2906,41 +2728,32 @@ function setupEvents() {
 
 
                 if (
-                    action ===
-                    "view"
+                    action === "view"
                 ) {
 
                     openDetailModal(
                         sponsor
                     );
-
-                    return;
                 }
 
 
                 if (
-                    action ===
-                    "edit"
+                    action === "edit"
                 ) {
 
                     openSponsorModal(
                         sponsor
                     );
-
-                    return;
                 }
 
 
                 if (
-                    action ===
-                    "delete"
+                    action === "delete"
                 ) {
 
                     deleteSponsor(
                         id
                     );
-
-                    return;
                 }
             }
         );
@@ -2948,7 +2761,7 @@ function setupEvents() {
 
     /* =====================================================
        CLOSE SPONSOR MODAL
-    ===================================================== */
+       ===================================================== */
 
     document
         .querySelectorAll(
@@ -2967,7 +2780,7 @@ function setupEvents() {
 
     /* =====================================================
        CLOSE DETAIL
-    ===================================================== */
+       ===================================================== */
 
     document
         .querySelectorAll(
@@ -2986,7 +2799,7 @@ function setupEvents() {
 
     /* =====================================================
        EDIT FROM DETAIL
-    ===================================================== */
+       ===================================================== */
 
     $("editSponsorFromDetail")
         ?.addEventListener(
@@ -3017,7 +2830,7 @@ function setupEvents() {
 
     /* =====================================================
        ESCAPE
-    ===================================================== */
+       ===================================================== */
 
     document.addEventListener(
         "keydown",
@@ -3030,6 +2843,7 @@ function setupEvents() {
                 return;
             }
 
+
             closeSponsorModal();
 
             closeDetailModal();
@@ -3039,70 +2853,7 @@ function setupEvents() {
 
 
 /* =========================================================
-   AUTH STATE
-   ========================================================= */
-
-function setupAuthListener() {
-
-    db.auth.onAuthStateChange(
-        async (
-            event,
-            session
-        ) => {
-
-            console.log(
-                "Auth event:",
-                event
-            );
-
-
-            if (
-                event ===
-                "SIGNED_OUT"
-            ) {
-
-                currentUser =
-                    null;
-
-                currentProfile =
-                    null;
-
-                sponsors =
-                    [];
-
-                objectives =
-                    [];
-
-                hide(
-                    $("app")
-                );
-
-                show(
-                    $("loginScreen")
-                );
-
-                return;
-            }
-
-
-            if (
-                (
-                    event ===
-                    "SIGNED_IN"
-                ) &&
-                session?.user
-            ) {
-
-                currentUser =
-                    session.user;
-            }
-        }
-    );
-}
-
-
-/* =========================================================
-   INITIALIZE APP
+   AUTH INITIALIZATION
    ========================================================= */
 
 async function initializeApp() {
@@ -3114,45 +2865,34 @@ async function initializeApp() {
 
     setupEvents();
 
-    setupAuthListener();
+
+    const {
+        data: {
+            session
+        }
+    } =
+        await db.auth.getSession();
+
+
+    if (!session) {
+
+        show(
+            $("loginScreen")
+        );
+
+        hide(
+            $("app")
+        );
+
+        return;
+    }
+
+
+    currentUser =
+        session.user;
 
 
     try {
-
-        const {
-            data,
-            error
-        } =
-            await db.auth
-                .getSession();
-
-
-        if (error) {
-            throw error;
-        }
-
-
-        const session =
-            data?.session;
-
-
-        if (!session) {
-
-            show(
-                $("loginScreen")
-            );
-
-            hide(
-                $("app")
-            );
-
-            return;
-        }
-
-
-        currentUser =
-            session.user;
-
 
         setLoading(
             true,
@@ -3176,14 +2916,7 @@ async function initializeApp() {
         );
 
 
-        try {
-
-            await db.auth
-                .signOut();
-
-        } catch (_) {
-            // ignore
-        }
+        await db.auth.signOut();
 
 
         show(
@@ -3203,28 +2936,73 @@ async function initializeApp() {
 
     } finally {
 
-        setLoading(
-            false
-        );
+        setLoading(false);
     }
 }
+
+
+/* =========================================================
+   AUTH STATE LISTENER
+   ========================================================= */
+
+db.auth.onAuthStateChange(
+    async (
+        event,
+        session
+    ) => {
+
+        console.log(
+            "Auth event:",
+            event
+        );
+
+
+        if (
+            event ===
+            "SIGNED_OUT"
+        ) {
+
+            currentUser = null;
+
+            currentProfile = null;
+
+            sponsors = [];
+
+            objectives = [];
+
+
+            hide(
+                $("app")
+            );
+
+            show(
+                $("loginScreen")
+            );
+
+
+            return;
+        }
+
+
+        if (
+            event ===
+            "SIGNED_IN" &&
+            session?.user
+        ) {
+
+            currentUser =
+                session.user;
+        }
+    }
+);
 
 
 /* =========================================================
    START
    ========================================================= */
 
-if (
-    document.readyState ===
-    "loading"
-) {
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeApp
-    );
-
-} else {
-
-    initializeApp();
-}
+document.addEventListener(
+    "DOMContentLoaded",
+    initializeApp
+);
+```
