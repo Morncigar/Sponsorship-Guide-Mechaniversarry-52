@@ -1,58 +1,193 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Mechaniversary 52 — Sponsor Database</title>
+    <meta
+        name="description"
+        content="Database Sponsor — Mechanical Engineering ITENAS"
+    >
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>DATABASE SPONSOR — MESIN '26</title>
+
+    <!-- =====================================================
+         GOOGLE FONTS
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
     <link
         href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap"
         rel="stylesheet"
     >
 
-    <link rel="stylesheet" href="style.css">
+    <!-- =====================================================
+         CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 </head>
 
 <body>
 
     <!-- =====================================================
-         APP
+         LOGIN SCREEN
     ====================================================== -->
 
-    <div id="app">
+    <section
+        id="loginScreen"
+        class="screen login-screen"
+    >
 
-        <!-- ================= HEADER ================= -->
+        <div class="login-card">
+
+            <div class="login-label">
+                MECHANICAL ENGINEERING ITENAS
+            </div>
+
+            <h1>
+                SPONSOR<br>
+                <span>DATABASE</span>
+            </h1>
+
+            <p>
+                Sistem database dan monitoring sponsor
+                untuk kebutuhan kerja sama kegiatan.
+            </p>
+
+            <form id="loginForm">
+
+                <div class="form-group">
+
+                    <label for="loginEmail">
+                        EMAIL
+                    </label>
+
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        name="email"
+                        placeholder="email@contoh.com"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="loginPassword">
+                        PASSWORD
+                    </label>
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        name="password"
+                        placeholder="Masukkan password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-full"
+                    id="loginButton"
+                >
+                    MASUK
+                </button>
+
+                <div
+                    id="loginError"
+                    class="form-error hidden"
+                ></div>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MAIN APPLICATION
+    ====================================================== -->
+
+    <div
+        id="app"
+        class="hidden"
+    >
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
 
         <header class="topbar">
 
             <div class="brand">
-                <div class="brand-mark">M52</div>
+
+                <div class="brand-mark">
+                    M'26
+                </div>
 
                 <div class="brand-text">
-                    <strong>MECHANIVERSARY</strong>
-                    <span>SPONSOR DATABASE</span>
+
+                    <strong>
+                        SPONSOR DATABASE
+                    </strong>
+
+                    <span>
+                        MECHANICAL ENGINEERING ITENAS
+                    </span>
+
                 </div>
+
             </div>
+
 
             <div class="header-right">
 
-                <div id="userInfo" class="user-info">
-                    <span id="userName">Guest</span>
-                    <span id="userRole" class="role-badge">USER</span>
+                <div class="user-info">
+
+                    <span id="currentUserEmail">
+                        -
+                    </span>
+
+                    <span
+                        id="currentUserRole"
+                        class="role-badge"
+                    >
+                        USER
+                    </span>
+
                 </div>
 
                 <button
-                    id="logoutBtn"
-                    class="btn btn-outline hidden"
                     type="button"
+                    id="logoutButton"
+                    class="btn btn-outline"
                 >
-                    Keluar
+                    KELUAR
                 </button>
 
             </div>
@@ -60,124 +195,53 @@
         </header>
 
 
-        <!-- ================= LOGIN ================= -->
+        <!-- =================================================
+             MAIN
+        ================================================== -->
 
-        <section
-            id="loginScreen"
-            class="screen login-screen"
-        >
+        <main class="main-app">
 
-            <div class="login-card">
-
-                <div class="login-label">
-                    INTERNAL SYSTEM / M52
-                </div>
-
-                <h1>
-                    Sponsor<br>
-                    <span>Database.</span>
-                </h1>
-
-                <p>
-                    Kelola, cari, dan pantau seluruh database
-                    calon partner Mechaniversary 52.
-                </p>
-
-                <form id="loginForm">
-
-                    <div class="form-group">
-                        <label for="loginEmail">
-                            Email
-                        </label>
-
-                        <input
-                            id="loginEmail"
-                            name="email"
-                            type="email"
-                            placeholder="nama@email.com"
-                            autocomplete="email"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="loginPassword">
-                            Password
-                        </label>
-
-                        <input
-                            id="loginPassword"
-                            name="password"
-                            type="password"
-                            placeholder="••••••••"
-                            autocomplete="current-password"
-                            required
-                        >
-                    </div>
-
-                    <button
-                        id="loginBtn"
-                        class="btn btn-primary btn-full"
-                        type="submit"
-                    >
-                        Masuk ke Database
-                    </button>
-
-                    <p
-                        id="loginError"
-                        class="form-error hidden"
-                    ></p>
-
-                </form>
-
-            </div>
-
-        </section>
-
-
-        <!-- ================= MAIN APP ================= -->
-
-        <main
-            id="mainApp"
-            class="main-app hidden"
-        >
-
-            <!-- ================= DASHBOARD ================= -->
+            <!-- =============================================
+                 DASHBOARD HEADER
+            ============================================== -->
 
             <section class="dashboard-header">
 
                 <div>
+
                     <div class="eyebrow">
-                        MECHANIVERSARY 52
+                        SPONSOR MANAGEMENT SYSTEM
                     </div>
 
                     <h1>
-                        Sponsor<br>
-                        <span>Command Center</span>
+                        DATABASE<br>
+                        <span>SPONSOR.</span>
                     </h1>
 
-                    <p>
-                        Satu database untuk seluruh proses
-                        partnership.
+                    <p id="dashboardDescription">
+                        Kelola seluruh data prospek sponsor
+                        dalam satu tempat.
                     </p>
+
                 </div>
+
 
                 <div class="dashboard-actions">
 
                     <button
-                        id="refreshBtn"
-                        class="btn btn-outline"
                         type="button"
+                        id="refreshButton"
+                        class="btn btn-outline"
                     >
-                        ↻ Refresh
+                        ↻ REFRESH
                     </button>
 
                     <button
-                        id="addSponsorBtn"
-                        class="btn btn-primary"
                         type="button"
+                        id="addSponsorButton"
+                        class="btn btn-primary"
                     >
-                        + Tambah Sponsor
+                        + TAMBAH SPONSOR
                     </button>
 
                 </div>
@@ -185,92 +249,115 @@
             </section>
 
 
-            <!-- ================= STATISTICS ================= -->
+            <!-- =============================================
+                 STATISTICS
+            ============================================== -->
 
-            <section class="stats-grid">
+            <section
+                class="stats-grid"
+                id="statsGrid"
+            >
 
                 <div class="stat-card">
+
                     <span class="stat-label">
                         TOTAL SPONSOR
                     </span>
 
-                    <strong id="totalSponsors">
+                    <strong id="statTotal">
                         0
                     </strong>
+
                 </div>
 
+
                 <div class="stat-card">
+
                     <span class="stat-label">
                         PROSPEK
                     </span>
 
-                    <strong id="prospectSponsors">
+                    <strong id="statProspect">
                         0
                     </strong>
+
                 </div>
 
+
                 <div class="stat-card">
+
                     <span class="stat-label">
-                        ONGOING
+                        NEGOSIASI
                     </span>
 
-                    <strong id="ongoingSponsors">
+                    <strong id="statNegotiation">
                         0
                     </strong>
+
                 </div>
 
+
                 <div class="stat-card">
+
                     <span class="stat-label">
                         DEAL
                     </span>
 
-                    <strong id="dealSponsors">
+                    <strong id="statDeal">
                         0
                     </strong>
+
                 </div>
 
             </section>
 
 
-            <!-- ================= DATABASE ================= -->
+            <!-- =============================================
+                 DATABASE
+            ============================================== -->
 
             <section class="database-section">
 
                 <div class="section-heading">
 
                     <div>
+
                         <div class="eyebrow">
-                            DATABASE
+                            LIVE DATABASE
                         </div>
 
                         <h2>
-                            Sponsor Pipeline
+                            DAFTAR SPONSOR
                         </h2>
+
                     </div>
+
 
                     <div class="database-controls">
 
                         <input
-                            id="searchInput"
                             type="search"
+                            id="searchInput"
                             placeholder="Cari perusahaan..."
+                            autocomplete="off"
                         >
 
                         <select id="statusFilter">
-                            <option value="">
+
+                            <option value="ALL">
                                 Semua Status
                             </option>
 
                             <option value="PROSPECT">
-                                Prospect
+                                Prospek
                             </option>
 
                             <option value="CONTACTED">
-                                Contacted
+                                Sudah Dihubungi
                             </option>
 
                             <option value="NEGOTIATION">
-                                Negotiation
+                                Negosiasi
                             </option>
 
                             <option value="DEAL">
@@ -278,8 +365,9 @@
                             </option>
 
                             <option value="REJECTED">
-                                Rejected
+                                Ditolak
                             </option>
+
                         </select>
 
                     </div>
@@ -292,33 +380,61 @@
                     <table class="sponsor-table">
 
                         <thead>
+
                             <tr>
-                                <th>PERUSAHAAN</th>
-                                <th>CONTACT</th>
-                                <th>EMAIL</th>
-                                <th>OBJECTIVE</th>
-                                <th>STATUS</th>
-                                <th>OWNER</th>
-                                <th></th>
+
+                                <th>
+                                    PERUSAHAAN
+                                </th>
+
+                                <th>
+                                    KONTAK
+                                </th>
+
+                                <th>
+                                    EMAIL
+                                </th>
+
+                                <th>
+                                    STATUS
+                                </th>
+
+                                <th>
+                                    OBJECTIVE
+                                </th>
+
+                                <th>
+                                    PIC
+                                </th>
+
+                                <th>
+                                    AKSI
+                                </th>
+
                             </tr>
+
                         </thead>
 
                         <tbody id="sponsorTableBody">
 
-                            <tr id="emptyState">
-                                <td colspan="7">
-                                    <div class="empty-state">
-                                        <strong>
-                                            Belum ada data sponsor
-                                        </strong>
+                            <tr>
 
-                                        <span>
-                                            Tambahkan sponsor pertama
-                                            untuk mulai membangun
-                                            pipeline.
-                                        </span>
-                                    </div>
+                                <td
+                                    colspan="7"
+                                    class="empty-state"
+                                >
+
+                                    <strong>
+                                        Belum ada data sponsor
+                                    </strong>
+
+                                    <span>
+                                        Tambahkan sponsor pertama
+                                        untuk memulai database.
+                                    </span>
+
                                 </td>
+
                             </tr>
 
                         </tbody>
@@ -330,28 +446,33 @@
             </section>
 
 
-            <!-- ================= USER ACTIVITY ================= -->
+            <!-- =============================================
+                 ACTIVITY
+            ============================================== -->
 
-            <section
-                id="activitySection"
-                class="activity-section"
-            >
+            <section class="activity-section">
 
                 <div class="section-heading">
 
                     <div>
+
                         <div class="eyebrow">
-                            ACTIVITY
+                            RECENT ACTIVITY
                         </div>
 
                         <h2>
-                            Aktivitas Terbaru
+                            AKTIVITAS
                         </h2>
+
                     </div>
 
                 </div>
 
-                <div id="activityList" class="activity-list">
+
+                <div
+                    id="activityList"
+                    class="activity-list"
+                >
 
                     <div class="empty-activity">
                         Belum ada aktivitas.
@@ -367,7 +488,7 @@
 
 
     <!-- =====================================================
-         SPONSOR MODAL
+         ADD / EDIT SPONSOR MODAL
     ====================================================== -->
 
     <div
@@ -376,31 +497,37 @@
         aria-hidden="true"
     >
 
-        <div class="modal-backdrop"></div>
+        <div
+            class="modal-backdrop"
+            data-close-modal
+        ></div>
+
 
         <div
             class="modal-card"
             role="dialog"
             aria-modal="true"
-            aria-labelledby="modalTitle"
+            aria-labelledby="sponsorModalTitle"
         >
 
             <div class="modal-header">
 
                 <div>
+
                     <div class="eyebrow">
-                        SPONSOR DATABASE
+                        SPONSOR RECORD
                     </div>
 
-                    <h2 id="modalTitle">
-                        Tambah Sponsor
+                    <h2 id="sponsorModalTitle">
+                        TAMBAH SPONSOR
                     </h2>
+
                 </div>
 
                 <button
-                    id="closeModalBtn"
-                    class="modal-close"
                     type="button"
+                    class="modal-close"
+                    data-close-modal
                     aria-label="Tutup"
                 >
                     ×
@@ -414,63 +541,69 @@
                 <!-- Hidden ID untuk edit -->
 
                 <input
-                    id="sponsorId"
                     type="hidden"
+                    id="sponsorId"
                 >
 
 
-                <!-- COMPANY -->
-
                 <div class="form-grid">
 
-                    <div class="form-group form-group-full">
+                    <!-- =====================================
+                         COMPANY
+                    ====================================== -->
+
+                    <div class="form-group">
 
                         <label for="companyName">
-                            Nama Perusahaan *
+                            NAMA PERUSAHAAN *
                         </label>
 
                         <input
+                            type="text"
                             id="companyName"
                             name="company_name"
-                            type="text"
-                            placeholder="Contoh: Honda"
+                            placeholder="Contoh: PT Astra Honda Motor"
                             required
                         >
 
                     </div>
 
 
-                    <!-- CONTACT -->
+                    <!-- =====================================
+                         CONTACT NAME
+                    ====================================== -->
 
                     <div class="form-group">
 
                         <label for="contactName">
-                            Nama Contact *
+                            NAMA KONTAK *
                         </label>
 
                         <input
+                            type="text"
                             id="contactName"
                             name="contact_name"
-                            type="text"
-                            placeholder="Nama PIC"
+                            placeholder="Nama PIC perusahaan"
                             required
                         >
 
                     </div>
 
 
-                    <!-- EMAIL -->
+                    <!-- =====================================
+                         EMAIL
+                    ====================================== -->
 
                     <div class="form-group">
 
                         <label for="contactEmail">
-                            Email *
+                            EMAIL *
                         </label>
 
                         <input
+                            type="email"
                             id="contactEmail"
                             name="email"
-                            type="email"
                             placeholder="pic@company.com"
                             required
                         >
@@ -478,48 +611,51 @@
                     </div>
 
 
-                    <!-- PHONE -->
+                    <!-- =====================================
+                         PHONE
+                    ====================================== -->
 
                     <div class="form-group">
 
                         <label for="contactPhone">
-                            Nomor Kontak
+                            NOMOR TELEPON
                         </label>
 
                         <input
+                            type="tel"
                             id="contactPhone"
                             name="phone"
-                            type="tel"
                             placeholder="08xxxxxxxxxx"
                         >
 
                     </div>
 
 
-                    <!-- STATUS -->
+                    <!-- =====================================
+                         STATUS
+                    ====================================== -->
 
                     <div class="form-group">
 
                         <label for="sponsorStatus">
-                            Status *
+                            STATUS
                         </label>
 
                         <select
                             id="sponsorStatus"
                             name="status"
-                            required
                         >
 
                             <option value="PROSPECT">
-                                Prospect
+                                Prospek
                             </option>
 
                             <option value="CONTACTED">
-                                Contacted
+                                Sudah Dihubungi
                             </option>
 
                             <option value="NEGOTIATION">
-                                Negotiation
+                                Negosiasi
                             </option>
 
                             <option value="DEAL">
@@ -527,315 +663,297 @@
                             </option>
 
                             <option value="REJECTED">
-                                Rejected
+                                Ditolak
                             </option>
 
                         </select>
 
                     </div>
 
-                </div>
 
-
-                <!-- ================= OBJECTIVES ================= -->
-
-                <div class="form-group objective-group">
-
-                    <div class="label-row">
-
-                        <label>
-                            Sponsor Objective *
-                        </label>
-
-                        <span class="helper-text">
-                            Bisa pilih lebih dari satu
-                        </span>
-
-                    </div>
-
-
-                    <div
-                        id="objectiveOptions"
-                        class="objective-grid"
-                    >
-
-                        <label class="objective-option">
-
-                            <input
-                                type="checkbox"
-                                name="objectives"
-                                value="BRAND_AWARENESS"
-                            >
-
-                            <span>
-                                <strong>
-                                    Brand Awareness
-                                </strong>
-
-                                <small>
-                                    Meningkatkan awareness
-                                    terhadap brand
-                                </small>
-                            </span>
-
-                        </label>
-
-
-                        <label class="objective-option">
-
-                            <input
-                                type="checkbox"
-                                name="objectives"
-                                value="MARKET_ACCESS"
-                            >
-
-                            <span>
-                                <strong>
-                                    Market Access
-                                </strong>
-
-                                <small>
-                                    Akses ke audience &
-                                    komunitas
-                                </small>
-                            </span>
-
-                        </label>
-
-
-                        <label class="objective-option">
-
-                            <input
-                                type="checkbox"
-                                name="objectives"
-                                value="PRODUCT_TRIAL"
-                            >
-
-                            <span>
-                                <strong>
-                                    Product Trial
-                                </strong>
-
-                                <small>
-                                    Memberikan kesempatan
-                                    audience mencoba produk
-                                </small>
-                            </span>
-
-                        </label>
-
-
-                        <label class="objective-option">
-
-                            <input
-                                type="checkbox"
-                                name="objectives"
-                                value="CONTENT"
-                            >
-
-                            <span>
-                                <strong>
-                                    Content & UGC
-                                </strong>
-
-                                <small>
-                                    Mendapatkan exposure,
-                                    content, dan UGC
-                                </small>
-                            </span>
-
-                        </label>
-
-
-                        <label class="objective-option">
-
-                            <input
-                                type="checkbox"
-                                name="objectives"
-                                value="PRODUCT_FEEDBACK"
-                            >
-
-                            <span>
-                                <strong>
-                                    Product Feedback
-                                </strong>
-
-                                <small>
-                                    Consumer feedback &
-                                    product testing
-                                </small>
-                            </span>
-
-                        </label>
-
-
-                        <label class="objective-option">
-
-                            <input
-                                type="checkbox"
-                                name="objectives"
-                                value="BRAND_LEGACY"
-                            >
-
-                            <span>
-                                <strong>
-                                    Brand Legacy
-                                </strong>
-
-                                <small>
-                                    Membangun association
-                                    jangka panjang
-                                </small>
-                            </span>
-
-                        </label>
-
-                    </div>
-
-                    <p
-                        id="objectiveError"
-                        class="form-error hidden"
-                    >
-                        Pilih minimal satu objective.
-                    </p>
-
-                </div>
-
-
-                <!-- ================= CATEGORY ================= -->
-
-                <div class="form-grid">
+                    <!-- =====================================
+                         PIC INTERNAL
+                    ====================================== -->
 
                     <div class="form-group">
 
-                        <label for="industry">
-                            Industri
+                        <label for="internalPic">
+                            PIC INTERNAL
                         </label>
 
-                        <select
-                            id="industry"
-                            name="industry"
+                        <input
+                            type="text"
+                            id="internalPic"
+                            name="pic"
+                            placeholder="Nama anggota / divisi"
                         >
-
-                            <option value="">
-                                Pilih industri
-                            </option>
-
-                            <option value="AUTOMOTIVE">
-                                Automotive
-                            </option>
-
-                            <option value="BANKING">
-                                Banking / Finance
-                            </option>
-
-                            <option value="FMCG">
-                                FMCG
-                            </option>
-
-                            <option value="FOOD_BEVERAGE">
-                                Food & Beverage
-                            </option>
-
-                            <option value="TECHNOLOGY">
-                                Technology
-                            </option>
-
-                            <option value="FASHION">
-                                Fashion
-                            </option>
-
-                            <option value="EDUCATION">
-                                Education
-                            </option>
-
-                            <option value="OTHER">
-                                Other
-                            </option>
-
-                        </select>
 
                     </div>
 
 
-                    <div class="form-group">
+                    <!-- =====================================
+                         OBJECTIVES
+                    ====================================== -->
 
-                        <label for="priority">
-                            Prioritas
+                    <div class="form-group form-group-full objective-group">
+
+                        <div class="label-row">
+
+                            <label>
+                                SPONSOR OBJECTIVE *
+                            </label>
+
+                            <span class="helper-text">
+                                Bisa pilih lebih dari satu
+                            </span>
+
+                        </div>
+
+
+                        <div class="objective-grid">
+
+                            <label class="objective-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="objectives"
+                                    value="BRAND_AWARENESS"
+                                >
+
+                                <span>
+
+                                    <strong>
+                                        Brand Awareness
+                                    </strong>
+
+                                    <small>
+                                        Meningkatkan exposure dan
+                                        pengenalan brand.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="objective-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="objectives"
+                                    value="PRODUCT_PROMOTION"
+                                >
+
+                                <span>
+
+                                    <strong>
+                                        Product Promotion
+                                    </strong>
+
+                                    <small>
+                                        Promosi produk atau layanan
+                                        kepada peserta.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="objective-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="objectives"
+                                    value="SALES"
+                                >
+
+                                <span>
+
+                                    <strong>
+                                        Sales
+                                    </strong>
+
+                                    <small>
+                                        Mendorong penjualan atau
+                                        conversion.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="objective-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="objectives"
+                                    value="COMMUNITY"
+                                >
+
+                                <span>
+
+                                    <strong>
+                                        Community
+                                    </strong>
+
+                                    <small>
+                                        Membangun hubungan dengan
+                                        komunitas mahasiswa.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="objective-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="objectives"
+                                    value="RECRUITMENT"
+                                >
+
+                                <span>
+
+                                    <strong>
+                                        Recruitment
+                                    </strong>
+
+                                    <small>
+                                        Employer branding dan
+                                        pencarian talent.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="objective-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="objectives"
+                                    value="CSR"
+                                >
+
+                                <span>
+
+                                    <strong>
+                                        CSR
+                                    </strong>
+
+                                    <small>
+                                        Aktivasi sosial dan
+                                        kontribusi perusahaan.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="objective-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="objectives"
+                                    value="EVENT_ACTIVATION"
+                                >
+
+                                <span>
+
+                                    <strong>
+                                        Event Activation
+                                    </strong>
+
+                                    <small>
+                                        Aktivasi brand secara
+                                        langsung di acara.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+                            <label class="objective-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="objectives"
+                                    value="PARTNERSHIP"
+                                >
+
+                                <span>
+
+                                    <strong>
+                                        Partnership
+                                    </strong>
+
+                                    <small>
+                                        Kerja sama jangka panjang
+                                        dengan organisasi.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         NOTES
+                    ====================================== -->
+
+                    <div class="form-group form-group-full">
+
+                        <label for="sponsorNotes">
+                            CATATAN
                         </label>
 
-                        <select
-                            id="priority"
-                            name="priority"
-                        >
-
-                            <option value="LOW">
-                                Low
-                            </option>
-
-                            <option
-                                value="MEDIUM"
-                                selected
-                            >
-                                Medium
-                            </option>
-
-                            <option value="HIGH">
-                                High
-                            </option>
-
-                        </select>
+                        <textarea
+                            id="sponsorNotes"
+                            name="notes"
+                            placeholder="Catatan mengenai sponsor, kebutuhan, follow-up, dan sebagainya..."
+                        ></textarea>
 
                     </div>
 
                 </div>
 
 
-                <!-- ================= NOTES ================= -->
+                <div
+                    id="sponsorFormError"
+                    class="form-error hidden"
+                ></div>
 
-                <div class="form-group">
-
-                    <label for="notes">
-                        Catatan
-                    </label>
-
-                    <textarea
-                        id="notes"
-                        name="notes"
-                        rows="4"
-                        placeholder="Catatan mengenai perusahaan, kebutuhan sponsor, hasil komunikasi, dll."
-                    ></textarea>
-
-                </div>
-
-
-                <!-- ================= FORM ACTION ================= -->
 
                 <div class="modal-footer">
 
                     <button
-                        id="cancelModalBtn"
-                        class="btn btn-outline"
                         type="button"
+                        class="btn btn-outline"
+                        data-close-modal
                     >
-                        Batal
+                        BATAL
                     </button>
 
                     <button
-                        id="saveSponsorBtn"
-                        class="btn btn-primary"
                         type="submit"
+                        class="btn btn-primary"
+                        id="saveSponsorButton"
                     >
-                        Simpan Sponsor
+                        SIMPAN SPONSOR
                     </button>
 
                 </div>
-
-
-                <p
-                    id="sponsorFormError"
-                    class="form-error hidden"
-                ></p>
 
             </form>
 
@@ -845,7 +963,7 @@
 
 
     <!-- =====================================================
-         DETAIL MODAL
+         SPONSOR DETAIL MODAL
     ====================================================== -->
 
     <div
@@ -854,30 +972,38 @@
         aria-hidden="true"
     >
 
-        <div class="modal-backdrop"></div>
+        <div
+            class="modal-backdrop"
+            data-close-detail
+        ></div>
+
 
         <div
             class="modal-card detail-card"
             role="dialog"
             aria-modal="true"
+            aria-labelledby="detailModalTitle"
         >
 
             <div class="modal-header">
 
                 <div>
+
                     <div class="eyebrow">
                         SPONSOR PROFILE
                     </div>
 
-                    <h2 id="detailCompanyName">
-                        —
+                    <h2 id="detailModalTitle">
+                        DETAIL SPONSOR
                     </h2>
+
                 </div>
 
                 <button
-                    id="closeDetailBtn"
-                    class="modal-close"
                     type="button"
+                    class="modal-close"
+                    data-close-detail
+                    aria-label="Tutup"
                 >
                     ×
                 </button>
@@ -885,67 +1011,12 @@
             </div>
 
 
-            <div class="detail-content">
+            <div
+                id="detailContent"
+                class="detail-content"
+            >
 
-                <div class="detail-row">
-                    <span>Contact</span>
-                    <strong id="detailContact">
-                        —
-                    </strong>
-                </div>
-
-                <div class="detail-row">
-                    <span>Email</span>
-                    <strong id="detailEmail">
-                        —
-                    </strong>
-                </div>
-
-                <div class="detail-row">
-                    <span>Nomor</span>
-                    <strong id="detailPhone">
-                        —
-                    </strong>
-                </div>
-
-                <div class="detail-row">
-                    <span>Industri</span>
-                    <strong id="detailIndustry">
-                        —
-                    </strong>
-                </div>
-
-                <div class="detail-row">
-                    <span>Status</span>
-                    <strong id="detailStatus">
-                        —
-                    </strong>
-                </div>
-
-                <div class="detail-block">
-
-                    <span>
-                        Sponsor Objective
-                    </span>
-
-                    <div
-                        id="detailObjectives"
-                        class="objective-tags"
-                    ></div>
-
-                </div>
-
-                <div class="detail-block">
-
-                    <span>
-                        Catatan
-                    </span>
-
-                    <p id="detailNotes">
-                        —
-                    </p>
-
-                </div>
+                <!-- Diisi oleh JavaScript -->
 
             </div>
 
@@ -953,19 +1024,19 @@
             <div class="modal-footer">
 
                 <button
-                    id="editSponsorBtn"
-                    class="btn btn-primary"
                     type="button"
+                    class="btn btn-outline"
+                    data-close-detail
                 >
-                    Edit Sponsor
+                    TUTUP
                 </button>
 
                 <button
-                    id="deleteSponsorBtn"
-                    class="btn btn-danger"
                     type="button"
+                    class="btn btn-primary"
+                    id="editSponsorFromDetail"
                 >
-                    Hapus
+                    EDIT SPONSOR
                 </button>
 
             </div>
@@ -984,9 +1055,7 @@
         class="toast hidden"
         role="status"
         aria-live="polite"
-    >
-        <span id="toastMessage"></span>
-    </div>
+    ></div>
 
 
     <!-- =====================================================
@@ -1003,7 +1072,7 @@
             <div class="loading-spinner"></div>
 
             <span id="loadingText">
-                Memproses...
+                Memuat...
             </span>
 
         </div>
@@ -1011,15 +1080,23 @@
     </div>
 
 
-<!-- =====================================================
-     SCRIPT
-====================================================== -->
+    <!-- =====================================================
+         SUPABASE CLIENT
+         
+         WAJIB DIMUAT SEBELUM script.js
+    ====================================================== -->
 
-<!-- Supabase JavaScript Client -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"
+    ></script>
 
-<!-- Application JavaScript -->
-<script src="script.js"></script>
+
+    <!-- =====================================================
+         APPLICATION JAVASCRIPT
+    ====================================================== -->
+
+    <script src="script.js"></script>
 
 </body>
 </html>
+```
