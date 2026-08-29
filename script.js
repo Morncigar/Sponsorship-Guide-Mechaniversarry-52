@@ -13,69 +13,20 @@ const db = window.supabase.createClient(
     SUPABASE_PUBLISHABLE_KEY
 );
 
+
 /* =========================================================
    STATE
    ========================================================= */
 
 let currentUser = null;
 let currentProfile = null;
+
 let sponsors = [];
 let objectives = [];
+
 let selectedSponsorId = null;
 
-let toastTimer = null;
-
-
-/* =========================================================
-   OBJECTIVE MASTER
-   =========================================================
-   HARUS SAMA DENGAN slug DI DATABASE objectives
-   ========================================================= */
-
-const OBJECTIVE_MASTER = [
-    {
-        name: "Brand Awareness",
-        slug: "brand-awareness",
-        description:
-            "Meningkatkan exposure dan pengenalan brand."
-    },
-    {
-        name: "Community Engagement",
-        slug: "community-engagement",
-        description:
-            "Membangun hubungan dengan komunitas mahasiswa."
-    },
-    {
-        name: "Content / UGC",
-        slug: "content-ugc",
-        description:
-            "Mendapatkan konten, UGC, dan exposure digital."
-    },
-    {
-        name: "Customer Acquisition",
-        slug: "customer-acquisition",
-        description:
-            "Mendapatkan pelanggan atau konsumen baru."
-    },
-    {
-        name: "Lead Generation",
-        slug: "lead-generation",
-        description:
-            "Mendapatkan leads atau calon pelanggan."
-    },
-    {
-        name: "Product Launch",
-        slug: "product-launch",
-        description:
-            "Memperkenalkan produk baru kepada audience."
-    },
-    {
-        name: "Product Trial",
-        slug: "product-trial",
-        description:
-            "Memberikan kesempatan audience mencoba produk."
-    }
-];
+let toastTimer;
 
 
 /* =========================================================
@@ -85,25 +36,21 @@ const OBJECTIVE_MASTER = [
 const $ = (id) => document.getElementById(id);
 
 
-function show(element) {
-    if (element) {
-        element.classList.remove("hidden");
-    }
+function show(el) {
+    if (el) el.classList.remove("hidden");
 }
 
 
-function hide(element) {
-    if (element) {
-        element.classList.add("hidden");
-    }
+function hide(el) {
+    if (el) el.classList.add("hidden");
 }
 
 
 function setText(id, value = "") {
-    const element = $(id);
+    const el = $(id);
 
-    if (element) {
-        element.textContent = value ?? "";
+    if (el) {
+        el.textContent = value ?? "";
     }
 }
 
@@ -119,25 +66,19 @@ function escapeHTML(value = "") {
 
 
 function formatDate(date) {
-    if (!date) {
-        return "-";
-    }
 
-    const parsed = new Date(date);
-
-    if (Number.isNaN(parsed.getTime())) {
-        return "-";
-    }
+    if (!date) return "-";
 
     return new Intl.DateTimeFormat("id-ID", {
         day: "2-digit",
         month: "short",
         year: "numeric"
-    }).format(parsed);
+    }).format(new Date(date));
 }
 
 
 function formatStatus(status) {
+
     const map = {
         PROSPECT: "Prospek",
         CONTACTED: "Sudah Dihubungi",
@@ -151,7 +92,31 @@ function formatStatus(status) {
 
 
 function statusClass(status) {
+
     return String(status || "")
+        .toLowerCase()
+        .replaceAll("_", "-");
+}
+
+
+/*
+ * HTML checkbox menggunakan:
+ *
+ * BRAND_AWARENESS
+ * PRODUCT_TRIAL
+ *
+ * Database menggunakan:
+ *
+ * brand-awareness
+ * product-trial
+ *
+ * Fungsi ini menjembatani keduanya.
+ */
+
+function normalizeObjectiveSlug(value) {
+
+    return String(value || "")
+        .trim()
         .toLowerCase()
         .replaceAll("_", "-");
 }
@@ -162,13 +127,13 @@ function statusClass(status) {
    ========================================================= */
 
 function showToast(message, type = "success") {
+
     const toast = $("toast");
 
-    if (!toast) {
-        return;
-    }
+    if (!toast) return;
 
     toast.textContent = message;
+
     toast.dataset.type = type;
 
     show(toast);
@@ -186,11 +151,10 @@ function showToast(message, type = "success") {
    ========================================================= */
 
 function setLoading(active, text = "Memuat...") {
+
     const overlay = $("loadingOverlay");
 
-    if (!overlay) {
-        return;
-    }
+    if (!overlay) return;
 
     setText("loadingText", text);
 
@@ -203,71 +167,46 @@ function setLoading(active, text = "Memuat...") {
 
 
 /* =========================================================
-   ERROR
+   LOGIN ERROR
    ========================================================= */
 
 function showLoginError(message) {
-    const element = $("loginError");
 
-    if (!element) {
-        return;
-    }
+    const el = $("loginError");
 
-    element.textContent = message;
-    show(element);
+    if (!el) return;
+
+    el.textContent = message;
+
+    show(el);
 }
 
 
 function hideLoginError() {
+
     hide($("loginError"));
 }
 
 
+/* =========================================================
+   SPONSOR ERROR
+   ========================================================= */
+
 function showSponsorError(message) {
-    const element = $("sponsorFormError");
 
-    if (!element) {
-        return;
-    }
+    const el = $("sponsorFormError");
 
-    element.textContent = message;
-    show(element);
+    if (!el) return;
+
+    el.textContent = message;
+
+    show(el);
 }
 
 
 function hideSponsorError() {
+
     hide($("sponsorFormError"));
-}
-
-
-/* =========================================================
-   SUPABASE ERROR FORMATTER
-   ========================================================= */
-
-function getSupabaseErrorMessage(error, fallback = "Terjadi kesalahan.") {
-    if (!error) {
-        return fallback;
-    }
-
-    console.error("Supabase error:", error);
-
-    if (error.code === "42501") {
-        return "Akses database ditolak. Cek RLS / policy tabel Supabase.";
-    }
-
-    if (error.code === "23505") {
-        return "Data sudah ada dan tidak boleh duplikat.";
-    }
-
-    if (error.code === "23503") {
-        return "Data terkait masih digunakan oleh tabel lain.";
-    }
-
-    if (error.message) {
-        return error.message;
-    }
-
-    return fallback;
 }
 
 
@@ -276,21 +215,18 @@ function getSupabaseErrorMessage(error, fallback = "Terjadi kesalahan.") {
    ========================================================= */
 
 async function login(email, password) {
+
     hideLoginError();
 
-    setLoading(
-        true,
-        "Memverifikasi akun..."
-    );
+    setLoading(true, "Memverifikasi akun...");
 
     try {
-        const {
-            data,
-            error
-        } = await db.auth.signInWithPassword({
-            email,
-            password
-        });
+
+        const { data, error } =
+            await db.auth.signInWithPassword({
+                email,
+                password
+            });
 
         if (error) {
             throw error;
@@ -305,6 +241,7 @@ async function login(email, password) {
         await showMainApp();
 
     } catch (error) {
+
         console.error(
             "Login error:",
             error
@@ -314,13 +251,11 @@ async function login(email, password) {
             error.message ===
             "Invalid login credentials"
                 ? "Email atau password salah."
-                : getSupabaseErrorMessage(
-                    error,
-                    "Gagal login."
-                )
+                : error.message
         );
 
     } finally {
+
         setLoading(false);
     }
 }
@@ -331,32 +266,34 @@ async function login(email, password) {
    ========================================================= */
 
 async function logout() {
-    setLoading(
-        true,
-        "Keluar..."
-    );
+
+    setLoading(true, "Keluar...");
 
     try {
-        const {
-            error
-        } = await db.auth.signOut();
+
+        const { error } =
+            await db.auth.signOut();
 
         if (error) {
             throw error;
         }
 
         currentUser = null;
+
         currentProfile = null;
+
         sponsors = [];
+
         objectives = [];
-        selectedSponsorId = null;
 
         hide($("app"));
+
         show($("loginScreen"));
 
         $("loginForm")?.reset();
 
     } catch (error) {
+
         console.error(
             "Logout error:",
             error
@@ -368,6 +305,7 @@ async function logout() {
         );
 
     } finally {
+
         setLoading(false);
     }
 }
@@ -378,16 +316,16 @@ async function logout() {
    ========================================================= */
 
 async function loadUserProfile(userId) {
-    const {
-        data,
-        error
-    } = await db
-        .from("profiles")
-        .select("*")
-        .eq("id", userId)
-        .maybeSingle();
+
+    const { data, error } =
+        await db
+            .from("profiles")
+            .select("*")
+            .eq("id", userId)
+            .maybeSingle();
 
     if (error) {
+
         console.error(
             "Profile error:",
             error
@@ -399,6 +337,7 @@ async function loadUserProfile(userId) {
     }
 
     if (!data) {
+
         throw new Error(
             "Profil akun belum tersedia di tabel profiles."
         );
@@ -415,8 +354,7 @@ async function loadUserProfile(userId) {
 
     setText(
         "currentUserRole",
-        data.role ||
-        "USER"
+        data.role || "USER"
     );
 }
 
@@ -426,22 +364,28 @@ async function loadUserProfile(userId) {
    ========================================================= */
 
 async function showMainApp() {
+
     hide($("loginScreen"));
+
     show($("app"));
 
     updateInterfaceByRole();
 
     await loadObjectives();
+
     await loadSponsors();
+
     await loadActivities();
 }
 
 
 function updateInterfaceByRole() {
-    const role = String(
-        currentProfile?.role ||
-        "USER"
-    ).toUpperCase();
+
+    const role =
+        String(
+            currentProfile?.role ||
+            "USER"
+        ).toUpperCase();
 
     setText(
         "currentUserRole",
@@ -451,14 +395,13 @@ function updateInterfaceByRole() {
     const description =
         $("dashboardDescription");
 
-    if (!description) {
-        return;
-    }
+    if (description) {
 
-    description.textContent =
-        role === "ADMIN"
-            ? "Kelola seluruh data prospek sponsor dan monitoring kerja sama."
-            : "Lihat dan kelola data sponsor yang tersedia untuk tim.";
+        description.textContent =
+            role === "ADMIN"
+                ? "Kelola seluruh data prospek sponsor dan monitoring kerja sama."
+                : "Lihat dan kelola data sponsor yang tersedia untuk tim.";
+    }
 }
 
 
@@ -467,36 +410,26 @@ function updateInterfaceByRole() {
    ========================================================= */
 
 async function loadObjectives() {
-    const {
-        data,
-        error
-    } = await db
-        .from("objectives")
-        .select("id,name,slug")
-        .order("name");
+
+    const { data, error } =
+        await db
+            .from("objectives")
+            .select("id,name,slug")
+            .order("name");
 
     if (error) {
+
         console.error(
             "Objectives error:",
             error
         );
 
-        /*
-         * Tetap gunakan master objective.
-         * Jadi aplikasi tidak berhenti hanya karena
-         * query objectives bermasalah.
-         */
-
-        objectives = [
-            ...OBJECTIVE_MASTER
-        ];
+        objectives = [];
 
         return;
     }
 
-    objectives = data?.length
-        ? data
-        : [...OBJECTIVE_MASTER];
+    objectives = data || [];
 
     console.log(
         "Objectives loaded:",
@@ -506,50 +439,28 @@ async function loadObjectives() {
 
 
 /* =========================================================
-   OBJECTIVE HELPERS
-   ========================================================= */
-
-function getObjectiveBySlug(slug) {
-    return objectives.find(
-        objective =>
-            objective.slug === slug
-    ) || OBJECTIVE_MASTER.find(
-        objective =>
-            objective.slug === slug
-    );
-}
-
-
-function getObjectiveName(slug) {
-    const objective =
-        getObjectiveBySlug(slug);
-
-    return objective
-        ? objective.name
-        : slug;
-}
-
-
-/* =========================================================
-   SPONSORS
+   LOAD SPONSORS
    ========================================================= */
 
 async function loadSponsors() {
+
     setLoading(
         true,
         "Memuat database sponsor..."
     );
 
     try {
-        const {
-            data,
-            error
-        } = await db
-            .from("companies")
-            .select("*")
-            .order("created_at", {
-                ascending: false
-            });
+
+        const { data, error } =
+            await db
+                .from("companies")
+                .select("*")
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
 
         if (error) {
             throw error;
@@ -560,9 +471,11 @@ async function loadSponsors() {
         await loadSponsorObjectives();
 
         renderSponsors();
+
         updateStatistics();
 
     } catch (error) {
+
         console.error(
             "Load sponsors error:",
             error
@@ -571,36 +484,24 @@ async function loadSponsors() {
         sponsors = [];
 
         renderSponsors();
-        updateStatistics();
 
         showToast(
-            getSupabaseErrorMessage(
-                error,
-                "Database sponsor tidak dapat dimuat."
-            ),
+            "Database sponsor tidak dapat dimuat.",
             "error"
         );
 
     } finally {
+
         setLoading(false);
     }
 }
 
 
 /* =========================================================
-   LOAD OBJECTIVES FOR ALL SPONSORS
+   LOAD OBJECTIVES FOR SPONSORS
    ========================================================= */
 
 async function loadSponsorObjectives() {
-    /*
-     * Reset objectives dahulu.
-     */
-
-    sponsors.forEach(
-        sponsor => {
-            sponsor.objectives = [];
-        }
-    );
 
     if (!sponsors.length) {
         return;
@@ -611,39 +512,51 @@ async function loadSponsorObjectives() {
             sponsor => sponsor.id
         );
 
-    const {
-        data,
-        error
-    } = await db
-        .from("sponsor_projects")
-        .select(`
-            id,
-            company_id,
-            status,
-            sponsor_project_objectives (
-                objective_id,
-                objectives (
-                    id,
-                    name,
-                    slug
+
+    const { data, error } =
+        await db
+            .from("sponsor_projects")
+            .select(`
+                id,
+                company_id,
+                status,
+                sponsor_project_objectives (
+                    objective_id,
+                    objectives (
+                        id,
+                        name,
+                        slug
+                    )
                 )
-            )
-        `)
-        .in(
-            "company_id",
-            companyIds
-        );
+            `)
+            .in(
+                "company_id",
+                companyIds
+            );
+
 
     if (error) {
+
         console.error(
             "Sponsor objectives error:",
             error
         );
 
+        sponsors.forEach(
+            sponsor => {
+                sponsor.objectives = [];
+            }
+        );
+
         return;
     }
 
+
     for (const sponsor of sponsors) {
+
+        sponsor.objectives = [];
+
+
         const projects =
             (data || []).filter(
                 project =>
@@ -651,33 +564,54 @@ async function loadSponsorObjectives() {
                     sponsor.id
             );
 
-        const objectiveMap =
-            new Map();
 
         for (const project of projects) {
+
             const relations =
-                project
-                    .sponsor_project_objectives ||
+                project.sponsor_project_objectives ||
                 [];
 
+
             for (const relation of relations) {
-                const objective =
-                    relation.objectives;
 
-                if (!objective) {
-                    continue;
+                if (relation.objectives) {
+
+                    sponsor.objectives.push(
+                        relation.objectives
+                    );
                 }
+            }
+        }
 
-                objectiveMap.set(
+
+        /*
+         * Hilangkan objective duplikat
+         */
+
+        const unique =
+            new Map();
+
+
+        sponsor.objectives.forEach(
+            objective => {
+
+                unique.set(
                     objective.id,
                     objective
                 );
             }
-        }
+        );
+
 
         sponsor.objectives =
-            [...objectiveMap.values()];
+            [...unique.values()];
     }
+
+
+    console.log(
+        "Sponsors with objectives:",
+        sponsors
+    );
 }
 
 
@@ -686,12 +620,12 @@ async function loadSponsorObjectives() {
    ========================================================= */
 
 function renderSponsors() {
+
     const tbody =
         $("sponsorTableBody");
 
-    if (!tbody) {
-        return;
-    }
+    if (!tbody) return;
+
 
     const search =
         (
@@ -701,13 +635,16 @@ function renderSponsors() {
             .trim()
             .toLowerCase();
 
+
     const status =
         $("statusFilter")?.value ||
         "ALL";
 
+
     const filtered =
         sponsors.filter(
             sponsor => {
+
                 const matchesSearch =
                     !search ||
                     String(
@@ -715,22 +652,19 @@ function renderSponsors() {
                     )
                         .toLowerCase()
                         .includes(search) ||
+
                     String(
                         sponsor.contact_name ||
                         ""
                     )
                         .toLowerCase()
-                        .includes(search) ||
-                    String(
-                        sponsor.contact_email ||
-                        ""
-                    )
-                        .toLowerCase()
                         .includes(search);
+
 
                 const matchesStatus =
                     status === "ALL" ||
                     sponsor.status === status;
+
 
                 return (
                     matchesSearch &&
@@ -739,7 +673,9 @@ function renderSponsors() {
             }
         );
 
+
     if (!filtered.length) {
+
         tbody.innerHTML = `
             <tr>
                 <td
@@ -760,6 +696,7 @@ function renderSponsors() {
         return;
     }
 
+
     tbody.innerHTML =
         filtered
             .map(
@@ -767,19 +704,21 @@ function renderSponsors() {
 
                     const objectiveHTML =
                         sponsor.objectives?.length
+
                             ? sponsor.objectives
                                 .map(
-                                    objective =>
-                                        `
+                                    objective => `
                                         <span class="objective-tag">
                                             ${escapeHTML(
                                                 objective.name
                                             )}
                                         </span>
-                                        `
+                                    `
                                 )
                                 .join("")
+
                             : `<span>-</span>`;
+
 
                     return `
                         <tr
@@ -808,6 +747,7 @@ function renderSponsors() {
                                 }
                             </td>
 
+
                             <td>
                                 ${escapeHTML(
                                     sponsor.contact_name ||
@@ -815,9 +755,11 @@ function renderSponsors() {
                                 )}
                             </td>
 
+
                             <td>
                                 ${
                                     sponsor.contact_email
+
                                         ? `
                                             <a
                                                 href="mailto:${escapeHTML(
@@ -829,11 +771,14 @@ function renderSponsors() {
                                                 )}
                                             </a>
                                         `
+
                                         : "-"
                                 }
                             </td>
 
+
                             <td>
+
                                 <span
                                     class="status-badge ${statusClass(
                                         sponsor.status
@@ -845,23 +790,139 @@ function renderSponsors() {
                                         )
                                     )}
                                 </span>
+
                             </td>
 
+
                             <td>
+
                                 <div class="objective-tags">
+
                                     ${objectiveHTML}
+
                                 </div>
+
                             </td>
 
+
                             <td>
+
                                 ${escapeHTML(
                                     sponsor.assigned_to
                                         ? getAssignedName(
                                             sponsor.assigned_to
                                         )
-                                        : "-"
+                                        : sponsor.contact_position ||
+                                          "-"
                                 )}
+
                             </td>
 
+
                             <td>
-                                <div cl
+
+                                <div class="table-actions">
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-small btn-outline"
+                                        data-action="view"
+                                        data-id="${escapeHTML(
+                                            sponsor.id
+                                        )}"
+                                    >
+                                        LIHAT
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-small btn-outline"
+                                        data-action="edit"
+                                        data-id="${escapeHTML(
+                                            sponsor.id
+                                        )}"
+                                    >
+                                        EDIT
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-small btn-danger"
+                                        data-action="delete"
+                                        data-id="${escapeHTML(
+                                            sponsor.id
+                                        )}"
+                                    >
+                                        HAPUS
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    `;
+                }
+            )
+            .join("");
+}
+
+
+/* =========================================================
+   ASSIGNED NAME
+   ========================================================= */
+
+function getAssignedName(userId) {
+
+    if (!userId) {
+        return "-";
+    }
+
+
+    if (
+        currentProfile &&
+        currentProfile.id === userId
+    ) {
+
+        return (
+            currentProfile.full_name ||
+            currentProfile.email ||
+            "Saya"
+        );
+    }
+
+
+    return "Tim";
+}
+
+
+/* =========================================================
+   STATISTICS
+   ========================================================= */
+
+function updateStatistics() {
+
+    setText(
+        "statTotal",
+        sponsors.length
+    );
+
+
+    setText(
+        "statProspect",
+        sponsors.filter(
+            sponsor =>
+                sponsor.status ===
+                "PROSPECT"
+        ).length
+    );
+
+
+    setText(
+        "statNegotiation",
+        sponsors.filter(
+            sponsor =>
+                sponsor.status ===
+  
