@@ -14,18 +14,29 @@
         content="Database Sponsor — Mechanical Engineering ITENAS"
     >
 
-    <title>DATABASE SPONSOR — MESIN</title>
+    <title>DATABASE SPONSOR — MECHANICAL ENGINEERING ITENAS</title>
 
-    <!-- GOOGLE FONTS -->
+    <!-- =====================================================
+         GOOGLE FONTS
+    ====================================================== -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
     <link
         href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap"
         rel="stylesheet"
     >
 
-    <!-- CSS -->
+    <!-- =====================================================
+         STYLESHEET
+    ====================================================== -->
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -35,7 +46,10 @@
          LOGIN SCREEN
     ====================================================== -->
 
-    <section id="loginScreen" class="screen login-screen">
+    <section
+        id="loginScreen"
+        class="screen login-screen"
+    >
 
         <div class="login-card">
 
@@ -56,6 +70,7 @@
             <form id="loginForm">
 
                 <div class="form-group">
+
                     <label for="loginEmail">
                         EMAIL
                     </label>
@@ -68,9 +83,11 @@
                         autocomplete="email"
                         required
                     >
+
                 </div>
 
                 <div class="form-group">
+
                     <label for="loginPassword">
                         PASSWORD
                     </label>
@@ -83,6 +100,7 @@
                         autocomplete="current-password"
                         required
                     >
+
                 </div>
 
                 <button
@@ -96,6 +114,7 @@
                 <div
                     id="loginError"
                     class="form-error hidden"
+                    role="alert"
                 ></div>
 
             </form>
@@ -109,17 +128,18 @@
          MAIN APPLICATION
     ====================================================== -->
 
-    <div id="app" class="hidden">
+    <div
+        id="app"
+        class="hidden"
+    >
 
-        <!-- TOPBAR -->
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
 
         <header class="topbar">
 
             <div class="brand">
-
-                <div class="brand-mark">
-                    M
-                </div>
 
                 <div class="brand-text">
 
@@ -134,6 +154,7 @@
                 </div>
 
             </div>
+
 
             <div class="header-right">
 
@@ -165,11 +186,15 @@
         </header>
 
 
-        <!-- MAIN -->
+        <!-- =================================================
+             MAIN CONTENT
+        ================================================== -->
 
         <main class="main-app">
 
-            <!-- DASHBOARD HEADER -->
+            <!-- =================================================
+                 DASHBOARD HEADER
+            ================================================== -->
 
             <section class="dashboard-header">
 
@@ -190,6 +215,7 @@
                     </p>
 
                 </div>
+
 
                 <div class="dashboard-actions">
 
@@ -214,7 +240,9 @@
             </section>
 
 
-            <!-- STATISTICS -->
+            <!-- =================================================
+                 STATISTICS
+            ================================================== -->
 
             <section
                 class="stats-grid"
@@ -233,6 +261,7 @@
 
                 </div>
 
+
                 <div class="stat-card">
 
                     <span class="stat-label">
@@ -245,6 +274,7 @@
 
                 </div>
 
+
                 <div class="stat-card">
 
                     <span class="stat-label">
@@ -256,6 +286,7 @@
                     </strong>
 
                 </div>
+
 
                 <div class="stat-card">
 
@@ -272,7 +303,9 @@
             </section>
 
 
-            <!-- DATABASE -->
+            <!-- =================================================
+                 SPONSOR DATABASE
+            ================================================== -->
 
             <section class="database-section">
 
@@ -289,6 +322,7 @@
                         </h2>
 
                     </div>
+
 
                     <div class="database-controls">
 
@@ -339,13 +373,35 @@
                         <thead>
 
                             <tr>
-                                <th>PERUSAHAAN</th>
-                                <th>KONTAK</th>
-                                <th>EMAIL</th>
-                                <th>STATUS</th>
-                                <th>OBJECTIVE</th>
-                                <th>PIC</th>
-                                <th>AKSI</th>
+
+                                <th>
+                                    PERUSAHAAN
+                                </th>
+
+                                <th>
+                                    KONTAK
+                                </th>
+
+                                <th>
+                                    EMAIL
+                                </th>
+
+                                <th>
+                                    STATUS
+                                </th>
+
+                                <th>
+                                    OBJECTIVE
+                                </th>
+
+                                <th>
+                                    PIC
+                                </th>
+
+                                <th>
+                                    AKSI
+                                </th>
+
                             </tr>
 
                         </thead>
@@ -381,7 +437,9 @@
             </section>
 
 
-            <!-- ACTIVITY -->
+            <!-- =================================================
+                 RECENT ACTIVITY
+            ================================================== -->
 
             <section class="activity-section">
 
@@ -400,6 +458,7 @@
                     </div>
 
                 </div>
+
 
                 <div
                     id="activityList"
@@ -433,6 +492,7 @@
             class="modal-backdrop"
             data-close-modal
         ></div>
+
 
         <div
             class="modal-card"
@@ -474,6 +534,7 @@
                     id="sponsorId"
                 >
 
+
                 <div class="form-grid">
 
                     <!-- COMPANY -->
@@ -495,7 +556,7 @@
                     </div>
 
 
-                    <!-- CONTACT -->
+                    <!-- CONTACT NAME -->
 
                     <div class="form-group">
 
@@ -607,7 +668,9 @@
                     </div>
 
 
-                    <!-- OBJECTIVES -->
+                    <!-- =================================================
+                         OBJECTIVES
+                    ================================================== -->
 
                     <div class="form-group form-group-full objective-group">
 
@@ -626,15 +689,18 @@
 
                         <div class="objective-grid">
 
+                            <!-- BRAND AWARENESS -->
+
                             <label class="objective-option">
 
                                 <input
                                     type="checkbox"
                                     name="objectives"
-                                    value="BRAND_AWARENESS"
+                                    value="brand-awareness"
                                 >
 
                                 <span>
+
                                     <strong>
                                         Brand Awareness
                                     </strong>
@@ -643,108 +709,50 @@
                                         Meningkatkan exposure dan
                                         pengenalan brand.
                                     </small>
+
                                 </span>
 
                             </label>
 
+
+                            <!-- COMMUNITY ENGAGEMENT -->
 
                             <label class="objective-option">
 
                                 <input
                                     type="checkbox"
                                     name="objectives"
-                                    value="PRODUCT_PROMOTION"
+                                    value="community-engagement"
                                 >
 
                                 <span>
+
                                     <strong>
-                                        Product Promotion
-                                    </strong>
-
-                                    <small>
-                                        Promosi produk atau layanan
-                                        kepada peserta.
-                                    </small>
-                                </span>
-
-                            </label>
-
-
-                            <label class="objective-option">
-
-                                <input
-                                    type="checkbox"
-                                    name="objectives"
-                                    value="SALES"
-                                >
-
-                                <span>
-                                    <strong>
-                                        Sales
-                                    </strong>
-
-                                    <small>
-                                        Mendorong penjualan atau
-                                        conversion.
-                                    </small>
-                                </span>
-
-                            </label>
-
-
-                            <label class="objective-option">
-
-                                <input
-                                    type="checkbox"
-                                    name="objectives"
-                                    value="COMMUNITY"
-                                >
-
-                                <span>
-                                    <strong>
-                                        Community
+                                        Community Engagement
                                     </strong>
 
                                     <small>
                                         Membangun hubungan dengan
                                         komunitas mahasiswa.
                                     </small>
+
                                 </span>
 
                             </label>
 
+
+                            <!-- CONTENT / UGC -->
 
                             <label class="objective-option">
 
                                 <input
                                     type="checkbox"
                                     name="objectives"
-                                    value="RECRUITMENT"
+                                    value="content-ugc"
                                 >
 
                                 <span>
-                                    <strong>
-                                        Recruitment
-                                    </strong>
 
-                                    <small>
-                                        Employer branding dan
-                                        pencarian talent.
-                                    </small>
-                                </span>
-
-                            </label>
-
-
-                            <label class="objective-option">
-
-                                <input
-                                    type="checkbox"
-                                    name="objectives"
-                                    value="CONTENT_UGC"
-                                >
-
-                                <span>
                                     <strong>
                                         Content / UGC
                                     </strong>
@@ -753,20 +761,24 @@
                                         Mendapatkan konten dan
                                         user-generated content.
                                     </small>
+
                                 </span>
 
                             </label>
 
+
+                            <!-- CUSTOMER ACQUISITION -->
 
                             <label class="objective-option">
 
                                 <input
                                     type="checkbox"
                                     name="objectives"
-                                    value="CUSTOMER_ACQUISITION"
+                                    value="customer-acquisition"
                                 >
 
                                 <span>
+
                                     <strong>
                                         Customer Acquisition
                                     </strong>
@@ -775,20 +787,24 @@
                                         Mendapatkan pelanggan atau
                                         pengguna baru.
                                     </small>
+
                                 </span>
 
                             </label>
 
+
+                            <!-- LEAD GENERATION -->
 
                             <label class="objective-option">
 
                                 <input
                                     type="checkbox"
                                     name="objectives"
-                                    value="LEAD_GENERATION"
+                                    value="lead-generation"
                                 >
 
                                 <span>
+
                                     <strong>
                                         Lead Generation
                                     </strong>
@@ -797,20 +813,24 @@
                                         Mendapatkan leads atau
                                         calon pelanggan.
                                     </small>
+
                                 </span>
 
                             </label>
 
+
+                            <!-- PRODUCT LAUNCH -->
 
                             <label class="objective-option">
 
                                 <input
                                     type="checkbox"
                                     name="objectives"
-                                    value="PRODUCT_LAUNCH"
+                                    value="product-launch"
                                 >
 
                                 <span>
+
                                     <strong>
                                         Product Launch
                                     </strong>
@@ -819,20 +839,24 @@
                                         Memperkenalkan produk atau
                                         layanan baru.
                                     </small>
+
                                 </span>
 
                             </label>
 
+
+                            <!-- PRODUCT TRIAL -->
 
                             <label class="objective-option">
 
                                 <input
                                     type="checkbox"
                                     name="objectives"
-                                    value="PRODUCT_TRIAL"
+                                    value="product-trial"
                                 >
 
                                 <span>
+
                                     <strong>
                                         Product Trial
                                     </strong>
@@ -841,6 +865,7 @@
                                         Memberikan kesempatan peserta
                                         mencoba produk.
                                     </small>
+
                                 </span>
 
                             </label>
@@ -872,6 +897,7 @@
                 <div
                     id="sponsorFormError"
                     class="form-error hidden"
+                    role="alert"
                 ></div>
 
 
@@ -917,6 +943,7 @@
             data-close-detail
         ></div>
 
+
         <div
             class="modal-card detail-card"
             role="dialog"
@@ -953,7 +980,9 @@
             <div
                 id="detailContent"
                 class="detail-content"
-            ></div>
+            >
+                <!-- Diisi oleh JavaScript -->
+            </div>
 
 
             <div class="modal-footer">
@@ -981,7 +1010,9 @@
     </div>
 
 
-    <!-- TOAST -->
+    <!-- =====================================================
+         TOAST
+    ====================================================== -->
 
     <div
         id="toast"
@@ -991,7 +1022,9 @@
     ></div>
 
 
-    <!-- LOADING -->
+    <!-- =====================================================
+         LOADING
+    ====================================================== -->
 
     <div
         id="loadingOverlay"
@@ -1011,13 +1044,19 @@
     </div>
 
 
-    <!-- SUPABASE -->
+    <!-- =====================================================
+         SUPABASE
+         HARUS DIMUAT SEBELUM script.js
+    ====================================================== -->
 
     <script
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"
     ></script>
 
-    <!-- APPLICATION JS -->
+
+    <!-- =====================================================
+         APPLICATION JAVASCRIPT
+    ====================================================== -->
 
     <script src="script.js"></script>
 
