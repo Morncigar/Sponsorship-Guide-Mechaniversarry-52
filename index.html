@@ -1,7 +1,8 @@
-```html
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -11,16 +12,19 @@
 
     <meta
         name="description"
-        content="Database Sponsor — Mechanical Engineering ITENAS"
+        content="Sponsor Database — Mechanical Engineering ITENAS"
     >
 
-    <title>DATABASE SPONSOR — MECHANICAL ENGINEERING ITENAS</title>
+    <title>SPONSOR DATABASE — MECHANICAL ENGINEERING ITENAS</title>
 
     <!-- =====================================================
          GOOGLE FONTS
     ====================================================== -->
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
     <link
         rel="preconnect"
@@ -34,13 +38,19 @@
     >
 
     <!-- =====================================================
-         STYLESHEET
+         CSS
     ====================================================== -->
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
 </head>
 
+
 <body>
+
 
     <!-- =====================================================
          LOGIN SCREEN
@@ -57,15 +67,18 @@
                 MECHANICAL ENGINEERING ITENAS
             </div>
 
+
             <h1>
                 SPONSOR<br>
                 <span>DATABASE</span>
             </h1>
 
+
             <p>
                 Sistem database dan monitoring sponsor
                 untuk kebutuhan kerja sama kegiatan.
             </p>
+
 
             <form id="loginForm">
 
@@ -86,6 +99,7 @@
 
                 </div>
 
+
                 <div class="form-group">
 
                     <label for="loginPassword">
@@ -103,6 +117,7 @@
 
                 </div>
 
+
                 <button
                     type="submit"
                     class="btn btn-primary btn-full"
@@ -110,6 +125,7 @@
                 >
                     MASUK
                 </button>
+
 
                 <div
                     id="loginError"
@@ -124,6 +140,7 @@
     </section>
 
 
+
     <!-- =====================================================
          MAIN APPLICATION
     ====================================================== -->
@@ -133,6 +150,7 @@
         class="hidden"
     >
 
+
         <!-- =================================================
              TOPBAR
         ================================================== -->
@@ -140,6 +158,11 @@
         <header class="topbar">
 
             <div class="brand">
+
+                <div class="brand-mark">
+                    SD
+                </div>
+
 
                 <div class="brand-text">
 
@@ -164,6 +187,7 @@
                         -
                     </span>
 
+
                     <span
                         id="currentUserRole"
                         class="role-badge"
@@ -172,6 +196,7 @@
                     </span>
 
                 </div>
+
 
                 <button
                     type="button"
@@ -186,15 +211,17 @@
         </header>
 
 
+
         <!-- =================================================
-             MAIN CONTENT
+             MAIN
         ================================================== -->
 
         <main class="main-app">
 
-            <!-- =================================================
+
+            <!-- =============================================
                  DASHBOARD HEADER
-            ================================================== -->
+            ============================================== -->
 
             <section class="dashboard-header">
 
@@ -204,10 +231,12 @@
                         SPONSOR MANAGEMENT SYSTEM
                     </div>
 
+
                     <h1>
                         DATABASE<br>
                         <span>SPONSOR.</span>
                     </h1>
+
 
                     <p id="dashboardDescription">
                         Kelola seluruh data prospek sponsor
@@ -227,6 +256,7 @@
                         ↻ REFRESH
                     </button>
 
+
                     <button
                         type="button"
                         id="addSponsorButton"
@@ -240,13 +270,14 @@
             </section>
 
 
-            <!-- =================================================
+
+            <!-- =============================================
                  STATISTICS
-            ================================================== -->
+            ============================================== -->
 
             <section
-                class="stats-grid"
                 id="statsGrid"
+                class="stats-grid"
             >
 
                 <div class="stat-card">
@@ -303,11 +334,13 @@
             </section>
 
 
-            <!-- =================================================
-                 SPONSOR DATABASE
-            ================================================== -->
+
+            <!-- =============================================
+                 DATABASE
+            ============================================== -->
 
             <section class="database-section">
+
 
                 <div class="section-heading">
 
@@ -316,6 +349,7 @@
                         <div class="eyebrow">
                             LIVE DATABASE
                         </div>
+
 
                         <h2>
                             DAFTAR SPONSOR
@@ -332,6 +366,7 @@
                             placeholder="Cari perusahaan..."
                             autocomplete="off"
                         >
+
 
                         <select id="statusFilter">
 
@@ -364,6 +399,7 @@
                     </div>
 
                 </div>
+
 
 
                 <div class="table-wrapper">
@@ -406,6 +442,7 @@
 
                         </thead>
 
+
                         <tbody id="sponsorTableBody">
 
                             <tr>
@@ -437,9 +474,10 @@
             </section>
 
 
-            <!-- =================================================
-                 RECENT ACTIVITY
-            ================================================== -->
+
+            <!-- =============================================
+                 ACTIVITY
+            ============================================== -->
 
             <section class="activity-section">
 
@@ -450,6 +488,7 @@
                         <div class="eyebrow">
                             RECENT ACTIVITY
                         </div>
+
 
                         <h2>
                             AKTIVITAS
@@ -478,6 +517,7 @@
     </div>
 
 
+
     <!-- =====================================================
          ADD / EDIT SPONSOR MODAL
     ====================================================== -->
@@ -501,6 +541,7 @@
             aria-labelledby="sponsorModalTitle"
         >
 
+
             <div class="modal-header">
 
                 <div>
@@ -509,11 +550,13 @@
                         SPONSOR RECORD
                     </div>
 
+
                     <h2 id="sponsorModalTitle">
                         TAMBAH SPONSOR
                     </h2>
 
                 </div>
+
 
                 <button
                     type="button"
@@ -527,6 +570,7 @@
             </div>
 
 
+
             <form id="sponsorForm">
 
                 <input
@@ -536,6 +580,7 @@
 
 
                 <div class="form-grid">
+
 
                     <!-- COMPANY -->
 
@@ -554,6 +599,7 @@
                         >
 
                     </div>
+
 
 
                     <!-- CONTACT NAME -->
@@ -575,6 +621,7 @@
                     </div>
 
 
+
                     <!-- EMAIL -->
 
                     <div class="form-group">
@@ -594,6 +641,7 @@
                     </div>
 
 
+
                     <!-- PHONE -->
 
                     <div class="form-group">
@@ -610,6 +658,7 @@
                         >
 
                     </div>
+
 
 
                     <!-- STATUS -->
@@ -650,6 +699,7 @@
                     </div>
 
 
+
                     <!-- INTERNAL PIC -->
 
                     <div class="form-group">
@@ -668,9 +718,8 @@
                     </div>
 
 
-                    <!-- =================================================
-                         OBJECTIVES
-                    ================================================== -->
+
+                    <!-- OBJECTIVES -->
 
                     <div class="form-group form-group-full objective-group">
 
@@ -689,7 +738,6 @@
 
                         <div class="objective-grid">
 
-                            <!-- BRAND AWARENESS -->
 
                             <label class="objective-option">
 
@@ -715,7 +763,6 @@
                             </label>
 
 
-                            <!-- COMMUNITY ENGAGEMENT -->
 
                             <label class="objective-option">
 
@@ -741,7 +788,6 @@
                             </label>
 
 
-                            <!-- CONTENT / UGC -->
 
                             <label class="objective-option">
 
@@ -767,7 +813,6 @@
                             </label>
 
 
-                            <!-- CUSTOMER ACQUISITION -->
 
                             <label class="objective-option">
 
@@ -793,7 +838,6 @@
                             </label>
 
 
-                            <!-- LEAD GENERATION -->
 
                             <label class="objective-option">
 
@@ -819,7 +863,6 @@
                             </label>
 
 
-                            <!-- PRODUCT LAUNCH -->
 
                             <label class="objective-option">
 
@@ -845,7 +888,6 @@
                             </label>
 
 
-                            <!-- PRODUCT TRIAL -->
 
                             <label class="objective-option">
 
@@ -870,9 +912,85 @@
 
                             </label>
 
+
+
+                            <label class="objective-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="objectives"
+                                    value="product-promotion"
+                                >
+
+                                <span>
+
+                                    <strong>
+                                        Product Promotion
+                                    </strong>
+
+                                    <small>
+                                        Promosi produk atau layanan
+                                        kepada peserta.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+
+                            <label class="objective-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="objectives"
+                                    value="sales"
+                                >
+
+                                <span>
+
+                                    <strong>
+                                        Sales
+                                    </strong>
+
+                                    <small>
+                                        Mendorong penjualan atau
+                                        conversion.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
+
+
+                            <label class="objective-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="objectives"
+                                    value="recruitment"
+                                >
+
+                                <span>
+
+                                    <strong>
+                                        Recruitment
+                                    </strong>
+
+                                    <small>
+                                        Employer branding dan
+                                        pencarian talent.
+                                    </small>
+
+                                </span>
+
+                            </label>
+
                         </div>
 
                     </div>
+
 
 
                     <!-- NOTES -->
@@ -894,11 +1012,13 @@
                 </div>
 
 
+
                 <div
                     id="sponsorFormError"
                     class="form-error hidden"
                     role="alert"
                 ></div>
+
 
 
                 <div class="modal-footer">
@@ -910,6 +1030,7 @@
                     >
                         BATAL
                     </button>
+
 
                     <button
                         type="submit"
@@ -926,6 +1047,7 @@
         </div>
 
     </div>
+
 
 
     <!-- =====================================================
@@ -951,6 +1073,7 @@
             aria-labelledby="detailModalTitle"
         >
 
+
             <div class="modal-header">
 
                 <div>
@@ -959,11 +1082,13 @@
                         SPONSOR PROFILE
                     </div>
 
+
                     <h2 id="detailModalTitle">
                         DETAIL SPONSOR
                     </h2>
 
                 </div>
+
 
                 <button
                     type="button"
@@ -977,12 +1102,12 @@
             </div>
 
 
+
             <div
                 id="detailContent"
                 class="detail-content"
-            >
-                <!-- Diisi oleh JavaScript -->
-            </div>
+            ></div>
+
 
 
             <div class="modal-footer">
@@ -994,6 +1119,7 @@
                 >
                     TUTUP
                 </button>
+
 
                 <button
                     type="button"
@@ -1010,6 +1136,7 @@
     </div>
 
 
+
     <!-- =====================================================
          TOAST
     ====================================================== -->
@@ -1022,8 +1149,9 @@
     ></div>
 
 
+
     <!-- =====================================================
-         LOADING
+         LOADING OVERLAY
     ====================================================== -->
 
     <div
@@ -1044,9 +1172,9 @@
     </div>
 
 
+
     <!-- =====================================================
-         SUPABASE
-         HARUS DIMUAT SEBELUM script.js
+         SUPABASE CLIENT
     ====================================================== -->
 
     <script
@@ -1054,12 +1182,14 @@
     ></script>
 
 
+
     <!-- =====================================================
          APPLICATION JAVASCRIPT
     ====================================================== -->
 
-    <script src="script.js"></script>
+    <script src="./script.js"></script>
+
 
 </body>
+
 </html>
-```
