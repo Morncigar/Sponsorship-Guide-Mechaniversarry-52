@@ -455,7 +455,32 @@ function openCompanyDetail(id) {
 
     $("#detailIndustry").textContent = comp.category || "OTHER";
     $("#detailName").textContent = comp.name;
-    $("#detailStatus").textContent = comp.status;
+    
+    // Quick Status Dropdown Sync
+    const statusSelect = $("#detailStatusSelect");
+    if (statusSelect) {
+        statusSelect.value = comp.status;
+        statusSelect.onchange = async () => {
+            const newStatus = statusSelect.value;
+            
+            await supabaseClient.from("companies").update({ status: newStatus }).eq("id", comp.id);
+            if (proj) {
+                await supabaseClient.from("sponsor_projects").update({ status: newStatus }).eq("id", proj.id);
+            }
+
+            await supabaseClient.from("activities").insert({
+                company_id: comp.id,
+                user_id: state.user?.id || null,
+                type: "OTHER",
+                description: `Mengubah status ${comp.name} menjadi ${newStatus}`
+            });
+
+            showToast(`Status diubah ke ${newStatus}!`, "success");
+            await loadAllData();
+            renderEverything();
+        };
+    }
+
     $("#detailValue").textContent = formatCurrency(proj ? proj.target_value : 0);
     $("#detailProgress").textContent = proj ? proj.progress + "%" : "0%";
     $("#detailNotes").textContent = comp.description || "Tidak ada catatan.";
@@ -580,7 +605,6 @@ function renderTasks() {
     });
 }
 
-/* ================= RELATIONAL SAVE LOGIC ================= */
 async function saveCompany(e) {
     e.preventDefault();
     const id = $("#companyId").value;
