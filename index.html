@@ -43,7 +43,6 @@
                 <button id="loginButton" class="primary-button btn-full" type="submit">MASUK SISTEM →</button>
                 <div id="loginError" class="login-error" role="alert"></div>
             </form>
-
             <div style="margin-top: 16px; font-family: var(--font-mono); font-size: 9px; color: #555; text-align: center; border-top: 1px dashed #ccc; padding-top: 12px;">
                 M52 MECHANICAL ENGINEERING PARTNERSHIP SYSTEM
             </div>
@@ -101,10 +100,10 @@
                     <article class="stat-card stat-accent">
                         <div class="stat-label">PIPELINE VALUE</div>
                         <div id="statPipeline" class="stat-value">Rp 0</div>
-                        <div class="stat-description">potensi nominal aktif</div>
+                        <div class="stat-description">potensi proyek aktif</div>
                     </article>
                     <article class="stat-card">
-                        <div class="stat-label">SECURED / CLOSED</div>
+                        <div class="stat-label">SECURED / DEAL</div>
                         <div id="statSecured" class="stat-value">Rp 0</div>
                         <div class="stat-description">dana berhasil dikunci</div>
                     </article>
@@ -148,35 +147,21 @@
                         <h1>SPONSOR <span>DATABASE</span></h1>
                     </div>
                     <div style="display:flex; gap:8px;">
-                        <button id="exportCsvButton" class="secondary-button" type="button">EXPORT CSV</button>
                         <button id="addCompanyButton" class="primary-button" type="button">+ TAMBAH SPONSOR</button>
                     </div>
                 </header>
                 <div class="crm-toolbar">
                     <div class="search-wrapper">
                         <span>PENCARIAN CEPAT</span>
-                        <input id="companySearch" type="search" placeholder="Nama perusahaan, PIC, atau industri...">
+                        <input id="companySearch" type="search" placeholder="Nama perusahaan, PIC...">
                     </div>
                     <select id="companyStatusFilter" class="filter-select">
                         <option value="ALL">SEMUA STATUS</option>
                         <option value="PROSPECT">PROSPECT</option>
                         <option value="CONTACTED">CONTACTED</option>
-                        <option value="MEETING">MEETING</option>
-                        <option value="PROPOSAL">PROPOSAL</option>
                         <option value="NEGOTIATION">NEGOTIATION</option>
-                        <option value="CLOSED">CLOSED</option>
-                        <option value="LOST">LOST</option>
-                    </select>
-                    <select id="companyIndustryFilter" class="filter-select">
-                        <option value="ALL">SEMUA INDUSTRI</option>
-                        <option value="BANKING">BANKING</option>
-                        <option value="AUTOMOTIVE">AUTOMOTIVE</option>
-                        <option value="LUBRICANT">LUBRICANT</option>
-                        <option value="MODIFICATION">MODIFICATION</option>
-                        <option value="TECHNOLOGY">TECHNOLOGY</option>
-                        <option value="FMCG">FMCG</option>
-                        <option value="EDUCATION">EDUCATION</option>
-                        <option value="OTHER">OTHER</option>
+                        <option value="DEAL">DEAL</option>
+                        <option value="REJECTED">REJECTED</option>
                     </select>
                 </div>
                 <div id="companyGrid" class="company-grid">
@@ -210,9 +195,9 @@
                 </header>
                 <div class="task-toolbar">
                     <button class="task-filter active" data-task-filter="ALL" type="button">SEMUA</button>
-                    <button class="task-filter" data-task-filter="OPEN" type="button">PENDING</button>
-                    <button class="task-filter" data-task-filter="OVERDUE" type="button">TERLAMBAT</button>
-                    <button class="task-filter" data-task-filter="COMPLETED" type="button">SELESAI</button>
+                    <button class="task-filter" data-task-filter="TODO" type="button">TODO</button>
+                    <button class="task-filter" data-task-filter="IN_PROGRESS" type="button">IN PROGRESS</button>
+                    <button class="task-filter" data-task-filter="DONE" type="button">DONE</button>
                 </div>
                 <div id="taskList" class="task-list"><div class="kanban-empty">Memuat daftar tugas...</div></div>
             </div>
@@ -257,67 +242,33 @@
                     <input id="companyName" type="text" placeholder="e.g. Pertamina Lubricants" required>
                 </div>
                 <div class="input-group">
-                    <label for="companyIndustry">Industri</label>
-                    <select id="companyIndustry">
-                        <option value="BANKING">BANKING</option>
-                        <option value="AUTOMOTIVE">AUTOMOTIVE</option>
-                        <option value="LUBRICANT">LUBRICANT</option>
-                        <option value="MODIFICATION">MODIFICATION</option>
-                        <option value="TECHNOLOGY">TECHNOLOGY</option>
-                        <option value="FMCG">FMCG</option>
-                        <option value="EDUCATION">EDUCATION</option>
-                        <option value="OTHER">OTHER</option>
-                    </select>
+                    <label for="companyIndustry">Kategori / Industri</label>
+                    <input id="companyIndustry" type="text" placeholder="e.g. Automotive">
                 </div>
                 <div class="input-group">
                     <label for="companyStatus">Status Pipeline</label>
                     <select id="companyStatus">
                         <option value="PROSPECT">PROSPECT</option>
                         <option value="CONTACTED">CONTACTED</option>
-                        <option value="MEETING">MEETING</option>
-                        <option value="PROPOSAL">PROPOSAL</option>
                         <option value="NEGOTIATION">NEGOTIATION</option>
-                        <option value="CLOSED">CLOSED</option>
-                        <option value="LOST">LOST</option>
+                        <option value="DEAL">DEAL</option>
+                        <option value="REJECTED">REJECTED</option>
                     </select>
                 </div>
                 <div class="input-group">
-                    <label for="companyObjective">Objektif Sponsor</label>
-                    <select id="companyObjective">
-                        <option value="AWARENESS">BRAND AWARENESS</option>
-                        <option value="PRODUCT_TRIAL">PRODUCT TRIAL</option>
-                        <option value="LEADS">LEAD GENERATION</option>
-                        <option value="ACQUISITION">CUSTOMER ACQUISITION</option>
-                        <option value="CONTENT">CONTENT CREATION</option>
-                        <option value="COMMUNITY">COMMUNITY ACCESS</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="companyValue">Potensi Nilai (IDR)</label>
+                    <label for="companyValue">Target Nilai Deal (IDR)</label>
                     <input id="companyValue" type="number" min="0" step="100000" placeholder="15000000">
                 </div>
                 <div class="input-group">
-                    <label for="companyContact">Nama PIC / Kontak</label>
-                    <input id="companyContact" type="text" placeholder="Nama PIC Korporat">
+                    <label for="companyContact">Nama PIC Korporat</label>
+                    <input id="companyContact" type="text" placeholder="Nama PIC">
                 </div>
                 <div class="input-group">
                     <label for="companyPhone">No WhatsApp PIC</label>
                     <input id="companyPhone" type="tel" placeholder="628123456789">
                 </div>
                 <div class="input-group full">
-                    <label for="companyNextAction">Tindak Lanjut Berikutnya (Next Action)</label>
-                    <input id="companyNextAction" type="text" placeholder="Kirim penyesuaian proposal kustom">
-                </div>
-                <div class="input-group">
-                    <label for="companyNextDate">Tanggal Tindak Lanjut</label>
-                    <input id="companyNextDate" type="date">
-                </div>
-                <div class="input-group">
-                    <label for="companyInternalPic">Panitia Penanggung Jawab</label>
-                    <input id="companyInternalPic" type="text" placeholder="Nama Anggota Panitia">
-                </div>
-                <div class="input-group full">
-                    <label for="companyNotes">Catatan Internal</label>
+                    <label for="companyNotes">Deskripsi / Notes</label>
                     <textarea id="companyNotes" rows="3" placeholder="Detail respon atau kendala..."></textarea>
                 </div>
             </div>
@@ -330,12 +281,12 @@
     </div>
 </div>
 
-<!-- MODAL DETAIL & WHATSAPP PITCH -->
+<!-- MODAL DETAIL -->
 <div id="detailModal" class="modal hidden" aria-hidden="true">
     <div class="modal-card">
         <header class="modal-header">
             <div>
-                <div id="detailIndustry" class="eyebrow" style="margin:0 0 4px 0;">INDUSTRI</div>
+                <div id="detailIndustry" class="eyebrow" style="margin:0 0 4px 0;">KATEGORI</div>
                 <h2 id="detailName">NAMA PERUSAHAAN</h2>
             </div>
             <button class="modal-close" data-close-modal type="button">×</button>
@@ -347,12 +298,12 @@
                     <strong id="detailStatus" style="font-size:11px;">—</strong>
                 </div>
                 <div style="background:#f4f4f4; border:2px solid var(--black); padding:8px;">
-                    <span style="font-family:var(--font-mono); font-size:7px; display:block;">POTENSI NILAI</span>
+                    <span style="font-family:var(--font-mono); font-size:7px; display:block;">TARGET NILAI</span>
                     <strong id="detailValue" style="font-size:11px; color:var(--red);">Rp 0</strong>
                 </div>
                 <div style="background:#f4f4f4; border:2px solid var(--black); padding:8px;">
-                    <span style="font-family:var(--font-mono); font-size:7px; display:block;">PENANGGUNG JAWAB</span>
-                    <strong id="detailPIC" style="font-size:11px;">—</strong>
+                    <span style="font-family:var(--font-mono); font-size:7px; display:block;">PROGRESS PROJECT</span>
+                    <strong id="detailProgress" style="font-size:11px;">0%</strong>
                 </div>
             </div>
 
@@ -362,24 +313,8 @@
                 </a>
             </div>
 
-            <div style="margin-bottom:16px;">
-                <span class="eyebrow">RIWAYAT AKTIVITAS & PROGRESS</span>
-                <div id="activityTimeline" style="max-height:150px; overflow-y:auto; border:2px solid var(--black); padding:8px; background:#fafafa; margin-top:6px;"></div>
-                <form id="activityForm" style="display:flex; gap:6px; margin-top:8px;">
-                    <select id="activityType" style="width:120px;">
-                        <option value="CHAT_WA">CHAT WA</option>
-                        <option value="CALL">TELEPON</option>
-                        <option value="MEETING">MEETING</option>
-                        <option value="PROPOSAL">KIRIM PROPOSAL</option>
-                        <option value="OTHER">LAINNYA</option>
-                    </select>
-                    <input id="activityDescription" type="text" placeholder="Catat progress follow up..." required style="flex:1;">
-                    <button class="primary-button" type="submit">CATAT</button>
-                </form>
-            </div>
-
             <div>
-                <span class="eyebrow">CATATAN & OBJEKTIF KORPORAT</span>
+                <span class="eyebrow">CATATAN PERUSAHAAN</span>
                 <div id="detailNotes" style="font-family:var(--font-mono); font-size:10px; background:#f9f9f9; border:2px solid var(--black); padding:10px; margin-top:4px;">—</div>
             </div>
         </div>
@@ -400,11 +335,19 @@
         <form id="taskForm">
             <div class="input-group">
                 <label for="taskTitle">Judul Tugas *</label>
-                <input id="taskTitle" type="text" placeholder="Follow up revisi proposal ke PT..." required>
+                <input id="taskTitle" type="text" placeholder="Follow up revisi proposal..." required>
             </div>
             <div class="input-group">
-                <label for="taskCompany">Terkait Perusahaan</label>
-                <select id="taskCompany"><option value="">-- Pilih Perusahaan --</option></select>
+                <label for="taskProject">Terkait Proyek Sponsor *</label>
+                <select id="taskProject" required><option value="">-- Pilih Proyek --</option></select>
+            </div>
+            <div class="input-group">
+                <label for="taskPriority">Prioritas</label>
+                <select id="taskPriority">
+                    <option value="MEDIUM">MEDIUM</option>
+                    <option value="HIGH">HIGH</option>
+                    <option value="LOW">LOW</option>
+                </select>
             </div>
             <div class="input-group">
                 <label for="taskDueDate">Tenggat Waktu (Due Date)</label>
