@@ -1,5 +1,5 @@
 /* =========================================================
-   M52 — PARTNERSHIP OS (FINAL + DASHBOARD MONEY FIX)
+   M52 — PARTNERSHIP OS (ULTIMATE FINAL RELATIONAL SCRIPT)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -267,11 +267,9 @@ function renderEverything() {
 function renderDashboard() {
     const activeStat = state.companies.filter(c => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(c.status));
     
-    // DIPERBAIKI: Pipeline hanya menghitung yang belum deal
     const activeProjects = state.projects.filter(p => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(p.status));
     const pipelineVal = activeProjects.reduce((acc, p) => acc + Number(p.target_value || 0), 0);
     
-    // Secured menghitung yang sudah DEAL
     const securedProjects = state.projects.filter(p => p.status === "DEAL");
     const securedVal = securedProjects.reduce((acc, p) => acc + Number(p.target_value || 0), 0);
     
@@ -494,7 +492,7 @@ function renderTasks() {
     });
 }
 
-/* ================= RELATIONAL SAVE LOGIC + MULTI CHIPS ================= */
+/* ================= RELATIONAL SAVE LOGIC + AUTO STATUS SYNC ================= */
 async function saveCompany(e) {
     e.preventDefault();
     const id = $("#companyId").value;
@@ -535,7 +533,7 @@ async function saveCompany(e) {
         company_id: compId,
         title: `Sponsorship - ${compPayload.name}`,
         target_value: Number($("#companyValue").value || 0),
-        status: safeStatus,
+        status: safeStatus, // STATUS DI TABEL PROYEK SEKARANG OTOMATIS IKUT PILIHAN FORM
         owner_id: state.user.id
     };
 
