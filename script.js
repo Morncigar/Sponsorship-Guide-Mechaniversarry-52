@@ -1,5 +1,5 @@
 /* =========================================================
-   PARTNERSHIP OS — HMM ITENAS (PRODUCTION READY SCRIPT)
+   PARTNERSHIP OS — HMM ITENAS (ULTIMATE DEBUG SCRIPT)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -108,12 +108,13 @@ async function loadProfile() {
         
         if (!data) {
             const defaultName = state.user.email.split("@")[0];
-            const { data: newProfile } = await supabaseClient.from("profiles").upsert({
+            const { data: newProfile, error: insErr } = await supabaseClient.from("profiles").upsert({
                 id: state.user.id,
                 full_name: defaultName,
                 role: "USER"
             }).select().maybeSingle();
             
+            if (insErr) console.error("Profile Upsert Error:", insErr);
             state.profile = newProfile || { role: "USER", full_name: defaultName };
         } else {
             state.profile = data;
@@ -161,6 +162,11 @@ async function loadAllData() {
             supabaseClient.from("tasks").select("*").order("due_date", { ascending: true }),
             supabaseClient.from("activities").select("*").order("created_at", { ascending: false }).limit(20)
         ]);
+
+        if (compsRes.error) console.error("Load Companies Error:", compsRes.error);
+        if (projsRes.error) console.error("Load Projects Error:", projsRes.error);
+        if (tsksRes.error) console.error("Load Tasks Error:", tsksRes.error);
+        if (actsRes.error) console.error("Load Activities Error:", actsRes.error);
 
         state.companies = compsRes.data || [];
         state.projects = projsRes.data || [];
@@ -389,10 +395,11 @@ function renderPriorityTasks() {
             const taskId = cb.dataset.toggleTask;
             const taskObj = state.tasks.find(t => t.id === taskId);
             
-            await supabaseClient.from("tasks").update({ 
+            const { error: taskErr } = await supabaseClient.from("tasks").update({ 
                 status: "DONE",
                 assigned_to: state.user?.id || null
             }).eq("id", taskId);
+            if (taskErr) console.error("Toggle Task Error:", taskErr);
 
             let compId = null;
             if (taskObj && taskObj.sponsor_project_id) {
@@ -400,12 +407,13 @@ function renderPriorityTasks() {
                 if (proj) compId = proj.company_id;
             }
 
-            await supabaseClient.from("activities").insert({
+            const { error: actErr } = await supabaseClient.from("activities").insert({
                 company_id: compId || null,
                 user_id: state.user?.id || null,
                 type: "OTHER",
                 description: `Menyelesaikan task: "${taskObj?.title || 'Task'}"`
             });
+            if (actErr) console.error("Activity Insert Error (Task):", actErr);
 
             showToast("Tugas diselesaikan!", "success");
             await loadAllData();
@@ -482,17 +490,21 @@ function openCompanyDetail(id) {
         statusSelect.onchange = async () => {
             const newStatus = statusSelect.value;
             
-            await supabaseClient.from("companies").update({ status: newStatus }).eq("id", comp.id);
+            const { error: compUpErr } = await supabaseClient.from("companies").update({ status: newStatus }).eq("id", comp.id);
+            if (compUpErr) console.error("Detail Status Update Company Error:", compUpErr);
+
             if (proj && proj.id) {
-                await supabaseClient.from("sponsor_projects").update({ status: newStatus }).eq("id", proj.id);
+                const { error: projUpErr } = await supabaseClient.from("sponsor_projects").update({ status: newStatus }).eq("id", proj.id);
+                if (projUpErr) console.error("Detail Status Update Project Error:", projUpErr);
             }
 
-            await supabaseClient.from("activities").insert({
+            const { error: actUpErr } = await supabaseClient.from("activities").insert({
                 company_id: comp.id || null,
                 user_id: state.user?.id || null,
                 type: "OTHER",
                 description: `Mengubah status ${comp.name} menjadi ${newStatus}`
             });
+            if (actUpErr) console.error("Detail Status Insert Activity Error:", actUpErr);
 
             showToast(`Status diubah ke ${newStatus}!`, "success");
             await loadAllData();
@@ -533,7 +545,8 @@ async function deleteCompany(id) {
     await supabaseClient.from("sponsor_projects").delete().eq("company_id", id);
     await supabaseClient.from("activities").delete().eq("company_id", id);
     
-    await supabaseClient.from("companies").delete().eq("id", id);
+    const { error: delErr } = await supabaseClient.from("companies").delete().eq("id", id);
+    if (delErr) console.error("Delete Company Error:", delErr);
     
     showToast("Sponsor dihapus.", "success");
     closeModal("#detailModal");
@@ -600,14 +613,14 @@ function renderTasks() {
             const taskId = sel.dataset.taskId;
             const taskObj = state.tasks.find(t => t.id === taskId);
 
-            const { error } = await supabaseClient.from("tasks").update({ 
+            const { error: tskUpErr } = await supabaseClient.from("tasks").update({ 
                 status: newStatus,
                 assigned_to: state.user?.id || null 
             }).eq("id", taskId);
 
-            if (error) {
-                showToast("Gagal update status!", "normal");
-                console.error(error);
+            if (tskUpErr) {
+                console.error("Task Status Update Error:", tskUpErr);
+                showToast("Gagal update status task!", "normal");
                 return;
             }
 
@@ -617,12 +630,13 @@ function renderTasks() {
                 if (proj) compId = proj.company_id;
             }
 
-            await supabaseClient.from("activities").insert({
+            const { error: actTskErr } = await supabaseClient.from("activities").insert({
                 company_id: compId || null,
                 user_id: state.user?.id || null,
                 type: "OTHER",
                 description: `Mengubah status task "${taskObj?.title || 'Task'}" menjadi ${newStatus}`
             });
+            if (actTskErr) console.error("Activity Insert Error (Task Change):", actTskErr);
 
             showToast(`Status diubah ke ${newStatus}!`, "success");
             await loadAllData();
@@ -661,6 +675,7 @@ async function saveCompany(e) {
             .upload(filePath, file);
 
         if (uploadError) {
+            console.error("Storage Upload Error:", uploadError);
             showToast("Gagal mengupload logo: " + uploadError.message, "normal");
             return;
         }
@@ -702,7 +717,7 @@ async function saveCompany(e) {
         compId = data.id;
     }
 
-    // --- UPSERT SPONSOR PROJECT (Menggunakan onConflict company_id) ---
+    // --- UPSERT SPONSOR PROJECT ---
     const projPayload = {
         company_id: compId,
         title: `Sponsorship - ${compPayload.name}`,
@@ -718,14 +733,15 @@ async function saveCompany(e) {
     if (projError) {
         console.error("Project Upsert Error:", projError);
     }
-    // -----------------------------------------------------------------
+    // -----------------------------
 
-    await supabaseClient.from("activities").insert({
+    const { error: actSaveErr } = await supabaseClient.from("activities").insert({
         company_id: compId || null,
         user_id: state.user?.id || null,
         type: "OTHER",
         description: id ? `Memperbarui data sponsor ${compPayload.name}` : `Menambahkan prospek sponsor baru ${compPayload.name}`
     });
+    if (actSaveErr) console.error("Activity Insert Error (Save Company):", actSaveErr);
 
     showToast("Data Tersimpan!", "success");
     closeModal("#companyModal");
@@ -750,6 +766,7 @@ async function saveTask(e) {
 
     const { error } = await supabaseClient.from("tasks").insert(payload);
     if (error) {
+        console.error("Task Insert Error:", error);
         $("#taskFormError").textContent = error.message;
         return;
     }
@@ -760,12 +777,13 @@ async function saveTask(e) {
         if (proj) compId = proj.company_id;
     }
 
-    await supabaseClient.from("activities").insert({
+    const { error: actTaskErr } = await supabaseClient.from("activities").insert({
         company_id: compId || null,
         user_id: state.user?.id || null,
         type: "OTHER",
         description: `Membuat task baru: "${taskTitle}"`
     });
+    if (actTaskErr) console.error("Activity Insert Error (Task Save):", actTaskErr);
 
     showToast("Task Dibuat!", "success");
     closeModal("#taskModal");
