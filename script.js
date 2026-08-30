@@ -1,5 +1,5 @@
 /* =========================================================
-   PARTNERSHIP OS — HMM ITENAS (ULTIMATE DATABASE ALIGNED SCRIPT)
+   PARTNERSHIP OS — HMM ITENAS (ULTIMATE FULL SCRIPT)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -124,14 +124,14 @@ function isAdmin() {
     return String(state.profile?.role || "").toUpperCase() === "ADMIN";
 }
 
-/* ================= REAL-TIME LIVE SYNC ================= */
+/* ================= REAL-TIME LIVE SYNC (FIXED ORDER) ================= */
 function setupRealtimeSubscriptions() {
-    supabaseClient.channel('db-changes')
-        .on('postgres_changes', { event: '*', schema: 'public' }, async () => {
-            await loadAllData();
-            renderEverything();
-        })
-        .subscribe();
+    const channel = supabaseClient.channel('db-changes');
+    channel.on('postgres_changes', { event: '*', schema: 'public' }, async () => {
+        await loadAllData();
+        renderEverything();
+    });
+    channel.subscribe();
 }
 
 /* ================= MULTI-TABLE FETCHING ================= */
@@ -530,7 +530,6 @@ async function saveCompany(e) {
         compId = data.id;
     }
 
-    // KOLOM TARGET_VALUE DAN STATUS ADA DI SPONSOR_PROJECTS, KITA SIMPAN DISINI SECARA AKURAT
     const projPayload = {
         company_id: compId,
         title: `Sponsorship - ${compPayload.name}`,
