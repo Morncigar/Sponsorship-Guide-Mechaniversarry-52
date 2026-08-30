@@ -1,5 +1,5 @@
 /* =========================================================
-   PARTNERSHIP OS — HMM ITENAS (FULL SCRIPT + AUTO ACTIVITY LOGGER)
+   PARTNERSHIP OS — HMM ITENAS (FINAL STABLE SCRIPT)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -18,6 +18,8 @@ const state = {
     companyFilter: "ALL",
     taskFilter: "ALL"
 };
+
+let activeRealtimeChannel = null;
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
@@ -124,14 +126,17 @@ function isAdmin() {
     return String(state.profile?.role || "").toUpperCase() === "ADMIN";
 }
 
-/* ================= REAL-TIME LIVE SYNC ================= */
+/* ================= REAL-TIME LIVE SYNC (CLEANED) ================= */
 function setupRealtimeSubscriptions() {
-    const channel = supabaseClient.channel('db-changes');
-    channel.on('postgres_changes', { event: '*', schema: 'public' }, async () => {
+    if (activeRealtimeChannel) {
+        supabaseClient.removeChannel(activeRealtimeChannel);
+    }
+    activeRealtimeChannel = supabaseClient.channel('db-changes');
+    activeRealtimeChannel.on('postgres_changes', { event: '*', schema: 'public' }, async () => {
         await loadAllData();
         renderEverything();
     });
-    channel.subscribe();
+    activeRealtimeChannel.subscribe();
 }
 
 /* ================= MULTI-TABLE FETCHING (ISOLATED) ================= */
@@ -376,18 +381,18 @@ function renderPriorityTasks() {
                 assigned_to: state.user?.id || null
             }).eq("id", taskId);
 
-            // Auto log ke activities jika task nyambung ke project/company
+            let compId = null;
             if (taskObj && taskObj.sponsor_project_id) {
                 const proj = state.projects.find(p => p.id === taskObj.sponsor_project_id);
-                if (proj && proj.company_id) {
-                    await supabaseClient.from("activities").insert({
-                        company_id: proj.company_id,
-                        user_id: state.user?.id || null,
-                        type: "OTHER",
-                        description: `Menyelesaikan task: "${taskObj.title}"`
-                    });
-                }
+                if (proj) compId = proj.company_id;
             }
+
+            await supabaseClient.from("activities").insert({
+                company_id: compId,
+                user_id: state.user?.id || null,
+                type: "OTHER",
+                description: `Menyelesaikan task: "${taskObj?.title || 'Task'}"`
+            });
 
             showToast("Tugas diselesaikan!", "success");
             await loadAllData();
@@ -554,18 +559,18 @@ function renderTasks() {
                 return;
             }
 
-            // Auto log ke activities saat status task diubah
+            let compId = null;
             if (taskObj && taskObj.sponsor_project_id) {
                 const proj = state.projects.find(p => p.id === taskObj.sponsor_project_id);
-                if (proj && proj.company_id) {
-                    await supabaseClient.from("activities").insert({
-                        company_id: proj.company_id,
-                        user_id: state.user?.id || null,
-                        type: "OTHER",
-                        description: `Mengubah status task "${taskObj.title}" menjadi ${newStatus}`
-                    });
-                }
+                if (proj) compId = proj.company_id;
             }
+
+            await supabaseClient.from("activities").insert({
+                company_id: compId,
+                user_id: state.user?.id || null,
+                type: "OTHER",
+                description: `Mengubah status task "${taskObj?.title || 'Task'}" menjadi ${newStatus}`
+            });
 
             showToast(`Status diubah ke ${newStatus}!`, "success");
             await loadAllData();
@@ -628,7 +633,6 @@ async function saveCompany(e) {
         await supabaseClient.from("sponsor_projects").insert(projPayload);
     }
 
-    // Auto log aktivitas simpan/tambah sponsor
     await supabaseClient.from("activities").insert({
         company_id: compId,
         user_id: state.user?.id || null,
@@ -663,18 +667,18 @@ async function saveTask(e) {
         return;
     }
 
-    // Auto log jika task terikat ke perusahaan/proyek
+    let compId = null;
     if (projId) {
         const proj = state.projects.find(p => p.id === projId);
-        if (proj && proj.company_id) {
-            await supabaseClient.from("activities").insert({
-                company_id: proj.company_id,
-                user_id: state.user?.id || null,
-                type: "OTHER",
-                description: `Membuat task baru: "${taskTitle}"`
-            });
-        }
+        if (proj) compId = proj.company_id;
     }
+
+    await supabaseClient.from("activities").insert({
+        company_id: compId,
+        user_id: state.user?.id || null,
+        type: "OTHER",
+        description: `Membuat task baru: "${taskTitle}"`
+    });
 
     showToast("Task Dibuat!", "success");
     closeModal("#taskModal");
