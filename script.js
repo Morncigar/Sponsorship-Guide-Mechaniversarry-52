@@ -1,5 +1,5 @@
 /* =========================================================
-   PARTNERSHIP OS — HMM ITENAS (ULTIMATE STABLE SCRIPT)
+   PARTNERSHIP OS — HMM ITENAS (PRODUCTION READY SCRIPT)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -106,7 +106,6 @@ async function loadProfile() {
     try {
         let { data, error } = await supabaseClient.from("profiles").select("*").eq("id", state.user.id).maybeSingle();
         
-        // Auto-upsert profil jika belum terdaftar di tabel profiles untuk cegah foreign key error
         if (!data) {
             const defaultName = state.user.email.split("@")[0];
             const { data: newProfile } = await supabaseClient.from("profiles").upsert({
@@ -477,7 +476,6 @@ function openCompanyDetail(id) {
     $("#detailIndustry").textContent = comp.category || "OTHER";
     $("#detailName").textContent = comp.name;
     
-    // Quick Status Dropdown Sync
     const statusSelect = $("#detailStatusSelect");
     if (statusSelect) {
         statusSelect.value = comp.status;
@@ -529,7 +527,6 @@ function openCompanyDetail(id) {
 async function deleteCompany(id) {
     if (!confirm("Hapus perusahaan ini? (Akan menghapus project dan task terkait juga)")) return;
     
-    // Hapus relasi anak secara eksplisit jika cascade belum aktif penuh di DB
     await supabaseClient.from("tasks").delete().in("sponsor_project_id", 
         state.projects.filter(p => p.company_id === id).map(p => p.id)
     );
@@ -705,28 +702,28 @@ async function saveCompany(e) {
         compId = data.id;
     }
 
+    // --- UPSERT SPONSOR PROJECT (Menggunakan onConflict company_id) ---
     const projPayload = {
         company_id: compId,
         title: `Sponsorship - ${compPayload.name}`,
         target_value: targetVal,
-        status: safeStatus, 
+        status: safeStatus,
         owner_id: state.user?.id || null
     };
 
-    const existingProj = state.projects.find(p => String(p.company_id) === String(compId));
-    if (existingProj && existingProj.id) {
-        const { error: updateProjErr } = await supabaseClient.from("sponsor_projects").update(projPayload).eq("id", existingProj.id);
-        if (updateProjErr) {
-            await supabaseClient.from("sponsor_projects").insert(projPayload);
-        }
-    } else {
-        await supabaseClient.from("sponsor_projects").insert(projPayload);
+    const { error: projError } = await supabaseClient
+        .from("sponsor_projects")
+        .upsert(projPayload, { onConflict: 'company_id' });
+
+    if (projError) {
+        console.error("Project Upsert Error:", projError);
     }
+    // -----------------------------------------------------------------
 
     await supabaseClient.from("activities").insert({
         company_id: compId || null,
         user_id: state.user?.id || null,
-        type: id ? "OTHER" : "PROPOSAL_SENT",
+        type: "OTHER",
         description: id ? `Memperbarui data sponsor ${compPayload.name}` : `Menambahkan prospek sponsor baru ${compPayload.name}`
     });
 
