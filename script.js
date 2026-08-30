@@ -1,5 +1,5 @@
 /* =========================================================
-   M52 — PARTNERSHIP OS (FINAL RELATIONAL + RLS SCRIPT)
+   M52 — PARTNERSHIP OS (FINAL DENGAN MULTI-SELECT CHIPS)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -168,7 +168,6 @@ function bindEvents() {
     $("#loginForm")?.addEventListener("submit", handleLogin);
     $("#logoutButton")?.addEventListener("click", () => supabaseClient.auth.signOut());
     
-    // Form Relasional
     $("#companyForm")?.addEventListener("submit", saveCompany);
     $("#taskForm")?.addEventListener("submit", saveTask);
 
@@ -216,7 +215,6 @@ function renderEverything() {
 function renderDashboard() {
     const activeStat = state.companies.filter(c => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(c.status));
     
-    // Hitung value dari table sponsor_projects
     const activeProjects = state.projects.filter(p => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(p.status));
     const pipelineVal = activeProjects.reduce((acc, p) => acc + Number(p.target_value || 0), 0);
     
@@ -442,13 +440,21 @@ function renderTasks() {
     });
 }
 
-/* ================= RELATIONAL SAVE LOGIC ================= */
+/* ================= RELATIONAL SAVE LOGIC + MULTI CHIPS ================= */
 async function saveCompany(e) {
     e.preventDefault();
     const id = $("#companyId").value;
-    
-    // Status default di database elu cacat, harus maksa ngirim PROSPECT biar gak meledak
     const safeStatus = $("#companyStatus").value || "PROSPECT"; 
+
+    // Tarik nilai dari chips
+    const selectedObjs = Array.from($$(`input[name="objectives"]:checked`)).map(cb => cb.value);
+    const customObj = $("#companyCustomObjective").value.trim();
+    if (customObj) selectedObjs.push(customObj);
+    
+    // Gabungkan jadi teks dan tempel ke depan notes
+    const finalObjectives = selectedObjs.join(", ");
+    const rawNotes = $("#companyNotes").value.trim();
+    const finalDescription = finalObjectives ? `[OBJEKTIF: ${finalObjectives}]\n\n${rawNotes}` : rawNotes;
 
     const compPayload = {
         name: $("#companyName").value.trim(),
@@ -456,17 +462,14 @@ async function saveCompany(e) {
         status: safeStatus, 
         contact_name: $("#companyContact").value.trim(),
         contact_phone: $("#companyPhone").value.trim(),
-        description: $("#companyNotes").value.trim()
+        description: finalDescription
     };
 
     let compId = id;
     if (id) {
-        // Mode Edit: Update aja, gak usah ubah ownership
         await supabaseClient.from("companies").update(compPayload).eq("id", id);
     } else {
-        // Mode Insert: Langsung klaim jadi milik user yang lagi login (Inisiatif)
         compPayload.assigned_to = state.user.id; 
-        
         const { data, error } = await supabaseClient.from("companies").insert(compPayload).select().single();
         if(error) { 
             console.error(error);
@@ -484,7 +487,6 @@ async function saveCompany(e) {
         owner_id: state.user.id
     };
 
-    // Sinkronisasi tabel project (deal value dll)
     const existingProj = state.projects.find(p => p.company_id === compId);
     if(existingProj) {
         await supabaseClient.from("sponsor_projects").update(projPayload).eq("id", existingProj.id);
@@ -522,6 +524,11 @@ async function saveTask(e) {
 
 function openCompanyEditor(comp = null, proj = null) {
     $("#companyForm").reset();
+    
+    // Reset chips
+    $$(`input[name="objectives"]`).forEach(cb => cb.checked = false);
+    $("#companyCustomObjective").value = "";
+
     $("#companyModalTitle").textContent = comp ? "EDIT SPONSOR" : "TAMBAH SPONSOR";
     $("#companyId").value = comp?.id || "";
     if (comp) {
@@ -531,6 +538,7 @@ function openCompanyEditor(comp = null, proj = null) {
         $("#companyValue").value = proj ? proj.target_value : "";
         $("#companyContact").value = comp.contact_name || "";
         $("#companyPhone").value = comp.contact_phone || "";
+        // Biarkan raw description masuk ke sini biar gampang diedit ulang
         $("#companyNotes").value = comp.description || "";
     }
     openModal("#companyModal");
