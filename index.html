@@ -1,2012 +1,431 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="theme-color"
-        content="#041E41"
-    >
-
-    <meta
-        name="description"
-        content="Mechaniversary 52 Sponsorship Partnership Operating System"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>M52 — Partnership OS</title>
-
-    <!-- =====================================================
-         FONTS
-    ====================================================== -->
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <!-- =====================================================
-         STYLES
-    ====================================================== -->
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<!-- =========================================================
-     APP LOADER
-========================================================= -->
-
-<div
-    id="appLoader"
-    class="app-loader"
->
-
-    <div class="loader-mark">
-        M<span>52</span>
+<div id="appLoader">
+    <div class="loader-inner">
+        <div class="loader-mark">M52<span>POWERHOUSE</span></div>
     </div>
-
-    <div class="loader-text">
-        INITIALIZING PARTNERSHIP OS...
-    </div>
-
 </div>
 
-
-<!-- =========================================================
-     LOGIN SCREEN
-========================================================= -->
-
-<section
-    id="loginScreen"
-    class="login-screen hidden"
->
-
-    <div class="login-background-grid"></div>
-
-    <div class="login-decoration">
-        52
-    </div>
-
-
+<!-- LOGIN SCREEN -->
+<section id="loginScreen" class="hidden">
     <div class="login-container">
-
-        <!-- BRAND -->
-
         <div class="login-brand">
-
-            <div class="login-mark">
-                M<span>52</span>
-            </div>
-
+            <div class="login-mark">M52</div>
             <div class="login-brand-text">
-
-                <strong>
-                    MECHANIVERSARY
-                </strong>
-
-                <span>
-                    PARTNERSHIP DIVISION
-                </span>
-
+                <strong>MECHANIVERSARY 52</strong>
+                <span>PARTNERSHIP DIVISION</span>
             </div>
-
         </div>
-
-
-        <!-- LOGIN CONTENT -->
-
         <div class="login-content">
-
-            <div class="eyebrow">
-                INTERNAL SYSTEM / 2026
-            </div>
-
-            <h1>
-                PARTNERSHIP<br>
-                <span>OPERATING SYSTEM</span>
-            </h1>
-
-            <p>
-                Satu sistem untuk mengelola prospect,
-                partnership, follow-up, activation,
-                dan sponsor relationship.
-            </p>
-
-
-            <!-- LOGIN FORM -->
-
-            <form
-                id="loginForm"
-                autocomplete="on"
-            >
-
+            <div class="eyebrow">INTERNAL ACCESS</div>
+            <h1>SYSTEM <span>LOGIN</span></h1>
+            <p>Masukkan akun panitia divisi sponsorship untuk mengakses database terpusat.</p>
+            <form id="loginForm">
                 <div class="input-group">
-
-                    <label for="loginEmail">
-                        EMAIL
-                    </label>
-
-                    <input
-                        id="loginEmail"
-                        name="email"
-                        type="email"
-                        autocomplete="email"
-                        placeholder="email@company.com"
-                        required
-                    >
-
+                    <label for="loginEmail">Email Panitia</label>
+                    <input id="loginEmail" type="email" autocomplete="email" placeholder="nama@itenas.ac.id" required>
                 </div>
-
-
                 <div class="input-group">
-
-                    <label for="loginPassword">
-                        PASSWORD
-                    </label>
-
-                    <input
-                        id="loginPassword"
-                        name="password"
-                        type="password"
-                        autocomplete="current-password"
-                        placeholder="••••••••"
-                        required
-                    >
-
+                    <label for="loginPassword">Password</label>
+                    <input id="loginPassword" type="password" autocomplete="current-password" placeholder="••••••••" required>
                 </div>
-
-
-                <button
-                    id="loginButton"
-                    class="primary-button login-button"
-                    type="submit"
-                >
-
-                    <span>
-                        ENTER SYSTEM
-                    </span>
-
-                    <span>
-                        →
-                    </span>
-
-                </button>
-
-
-                <div
-                    id="loginError"
-                    class="form-error"
-                    role="alert"
-                ></div>
-
+                <button id="loginButton" class="primary-button btn-full" type="submit">MASUK SISTEM →</button>
+                <div id="loginError" class="login-error" role="alert"></div>
             </form>
 
+            <div style="margin-top: 16px; font-family: var(--font-mono); font-size: 9px; color: #555; text-align: center; border-top: 1px dashed #ccc; padding-top: 12px;">
+                M52 MECHANICAL ENGINEERING PARTNERSHIP SYSTEM
+            </div>
         </div>
-
-
-        <!-- FOOTER -->
-
-        <div class="login-footer">
-
-            <span>
-                M52
-            </span>
-
-            <span>
-                MECHANICAL ENGINEERING
-            </span>
-
-            <span>
-                PARTNERSHIP SYSTEM
-            </span>
-
-        </div>
-
     </div>
-
 </section>
 
-
-<!-- =========================================================
-     MAIN APPLICATION
-========================================================= -->
-
-<div
-    id="app"
-    class="app hidden"
->
-
-
-    <!-- =====================================================
-         MOBILE HEADER
-    ====================================================== -->
-
-    <header class="mobile-header">
-
-        <button
-            id="mobileMenuButton"
-            class="icon-button"
-            type="button"
-            aria-label="Open navigation"
-        >
-            ☰
-        </button>
-
-
-        <div class="mobile-logo">
-
-            <strong>
-                M<span>52</span>
-            </strong>
-
-            <small>
-                PARTNERSHIP OS
-            </small>
-
-        </div>
-
-
-        <button
-            id="mobileLogoutButton"
-            class="icon-button"
-            type="button"
-            aria-label="Logout"
-        >
-            ↪
-        </button>
-
-    </header>
-
-
-    <!-- =====================================================
-         SIDEBAR
-    ====================================================== -->
-
-    <aside
-        id="sidebar"
-        class="sidebar"
-    >
-
-        <!-- BRAND -->
-
+<!-- MAIN APP SHELL -->
+<div id="app" class="hidden">
+    <aside id="sidebar">
         <div class="sidebar-brand">
-
-            <div class="sidebar-logo">
-                M<span>52</span>
-            </div>
-
+            <div class="sidebar-logo">M52</div>
             <div class="sidebar-brand-text">
-
-                <strong>
-                    PARTNERSHIP
-                </strong>
-
-                <small>
-                    OPERATING SYSTEM
-                </small>
-
+                <strong>PARTNERSHIP OS</strong>
+                <small>HMM ITENAS 2026</small>
             </div>
-
         </div>
-
-
-        <div class="sidebar-divider"></div>
-
-
-        <!-- NAVIGATION -->
-
-        <nav
-            class="sidebar-navigation"
-            aria-label="Main navigation"
-        >
-
-            <button
-                class="nav-item active"
-                data-page="dashboard"
-                type="button"
-            >
-
-                <span class="nav-number">
-                    01
-                </span>
-
-                <span>
-                    DASHBOARD
-                </span>
-
-            </button>
-
-
-            <button
-                class="nav-item"
-                data-page="crm"
-                type="button"
-            >
-
-                <span class="nav-number">
-                    02
-                </span>
-
-                <span>
-                    SPONSOR CRM
-                </span>
-
-            </button>
-
-
-            <button
-                class="nav-item"
-                data-page="pipeline"
-                type="button"
-            >
-
-                <span class="nav-number">
-                    03
-                </span>
-
-                <span>
-                    PIPELINE
-                </span>
-
-            </button>
-
-
-            <button
-                class="nav-item"
-                data-page="tasks"
-                type="button"
-            >
-
-                <span class="nav-number">
-                    04
-                </span>
-
-                <span>
-                    TASKS
-                </span>
-
-            </button>
-
-
-            <button
-                class="nav-item"
-                data-page="playbook"
-                type="button"
-            >
-
-                <span class="nav-number">
-                    05
-                </span>
-
-                <span>
-                    PLAYBOOK
-                </span>
-
-            </button>
-
+        <nav class="sidebar-navigation">
+            <button class="nav-item active" data-page="dashboard" type="button"><span class="nav-number">01</span><span>DASHBOARD</span></button>
+            <button class="nav-item" data-page="crm" type="button"><span class="nav-number">02</span><span>SPONSOR CRM</span></button>
+            <button class="nav-item" data-page="pipeline" type="button"><span class="nav-number">03</span><span>PIPELINE (KANBAN)</span></button>
+            <button class="nav-item" data-page="tasks" type="button"><span class="nav-number">04</span><span>FOLLOW UP & TASKS</span></button>
+            <button class="nav-item" data-page="playbook" type="button"><span class="nav-number">05</span><span>PLAYBOOK</span></button>
         </nav>
-
-
-        <!-- SIDEBAR USER -->
-
         <div class="sidebar-bottom">
-
-            <div class="sidebar-divider"></div>
-
-
             <div class="user-profile">
-
-                <div
-                    id="userAvatar"
-                    class="user-avatar"
-                >
-                    M
-                </div>
-
-
+                <div id="userAvatar" class="user-avatar">M</div>
                 <div class="user-details">
-
-                    <strong id="userName">
-                        User
-                    </strong>
-
-                    <span id="userEmail">
-                        —
-                    </span>
-
-                    <small id="userRole">
-                        VIEWER
-                    </small>
-
+                    <strong id="userName">User</strong>
+                    <span id="userEmail">—</span>
+                    <small id="userRole">STAFF</small>
                 </div>
-
             </div>
-
-
-            <button
-                id="logoutButton"
-                class="logout-button"
-                type="button"
-            >
-                LOG OUT
-                <span>→</span>
-            </button>
-
+            <button id="logoutButton" class="logout-button" type="button">KELUAR SISTEM <span>→</span></button>
         </div>
-
     </aside>
 
-
-    <!-- =====================================================
-         MAIN CONTENT
-    ====================================================== -->
-
     <main class="main-content">
-
-
-        <!-- =================================================
-             DASHBOARD
-        ================================================== -->
-
-        <section
-            id="page-dashboard"
-            class="page active-page"
-        >
-
-            <header class="page-header">
-
-                <div>
-
-                    <div class="eyebrow">
-                        01 / CONTROL ROOM
-                    </div>
-
-                    <h1>
-                        PARTNERSHIP<br>
-                        <span>DASHBOARD</span>
-                    </h1>
-
-                </div>
-
-
-                <div
-                    id="currentDate"
-                    class="page-date"
-                >
-                    —
-                </div>
-
-            </header>
-
-
-            <!-- KPI -->
-
-            <div class="stats-grid">
-
-
-                <article class="stat-card">
-
-                    <div class="stat-label">
-                        ACTIVE PROSPECTS
-                    </div>
-
-                    <div
-                        id="statProspects"
-                        class="stat-value"
-                    >
-                        0
-                    </div>
-
-                    <div class="stat-description">
-                        companies in pipeline
-                    </div>
-
-                </article>
-
-
-                <article class="stat-card stat-accent">
-
-                    <div class="stat-label">
-                        PIPELINE VALUE
-                    </div>
-
-                    <div
-                        id="statPipeline"
-                        class="stat-value"
-                    >
-                        Rp 0
-                    </div>
-
-                    <div class="stat-description">
-                        active opportunities
-                    </div>
-
-                </article>
-
-
-                <article class="stat-card">
-
-                    <div class="stat-label">
-                        SECURED
-                    </div>
-
-                    <div
-                        id="statSecured"
-                        class="stat-value"
-                    >
-                        Rp 0
-                    </div>
-
-                    <div class="stat-description">
-                        confirmed partnership
-                    </div>
-
-                </article>
-
-
-                <article class="stat-card">
-
-                    <div class="stat-label">
-                        OPEN TASKS
-                    </div>
-
-                    <div
-                        id="statTasks"
-                        class="stat-value"
-                    >
-                        0
-                    </div>
-
-                    <div class="stat-description">
-                        pending execution
-                    </div>
-
-                </article>
-
-            </div>
-
-
-            <!-- DASHBOARD GRID -->
-
-            <div class="dashboard-grid">
-
-
-                <!-- PIPELINE -->
-
-                <article class="panel">
-
-                    <div class="panel-header">
-
-                        <div>
-
-                            <span class="panel-number">
-                                01
-                            </span>
-
-                            <h2>
-                                PIPELINE OVERVIEW
-                            </h2>
-
-                        </div>
-
-
-                        <button
-                            class="panel-action"
-                            data-page-link="pipeline"
-                            type="button"
-                        >
-                            VIEW PIPELINE →
-                        </button>
-
-                    </div>
-
-
-                    <div
-                        id="pipelineBars"
-                        class="pipeline-bars"
-                    >
-
-                        <div class="empty-state">
-                            Loading pipeline...
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <!-- ACTIVITY -->
-
-                <article class="panel">
-
-                    <div class="panel-header">
-
-                        <div>
-
-                            <span class="panel-number">
-                                02
-                            </span>
-
-                            <h2>
-                                RECENT ACTIVITY
-                            </h2>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        id="recentActivities"
-                        class="activity-list"
-                    >
-
-                        <div class="empty-state">
-                            Loading activity...
-                        </div>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-
-            <!-- PRIORITY TASKS -->
-
-            <article class="panel priority-panel">
-
-                <div class="panel-header">
-
+        <!-- DASHBOARD -->
+        <section id="page-dashboard" class="page active-page">
+            <div class="content">
+                <header class="page-header">
                     <div>
-
-                        <span class="panel-number">
-                            03
-                        </span>
-
-                        <h2>
-                            PRIORITY FOLLOW UPS
-                        </h2>
-
+                        <div class="eyebrow">01 / CONTROL ROOM</div>
+                        <h1>OPERATIONAL <span>DASHBOARD</span></h1>
                     </div>
-
-
-                    <button
-                        class="panel-action"
-                        data-page-link="tasks"
-                        type="button"
-                    >
-                        VIEW TASKS →
-                    </button>
-
+                    <div id="currentDate" class="page-date">—</div>
+                </header>
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <div class="stat-label">ACTIVE PROSPECTS</div>
+                        <div id="statProspects" class="stat-value">0</div>
+                        <div class="stat-description">perusahaan dipantau</div>
+                    </article>
+                    <article class="stat-card stat-accent">
+                        <div class="stat-label">PIPELINE VALUE</div>
+                        <div id="statPipeline" class="stat-value">Rp 0</div>
+                        <div class="stat-description">potensi nominal aktif</div>
+                    </article>
+                    <article class="stat-card">
+                        <div class="stat-label">SECURED / CLOSED</div>
+                        <div id="statSecured" class="stat-value">Rp 0</div>
+                        <div class="stat-description">dana berhasil dikunci</div>
+                    </article>
+                    <article class="stat-card">
+                        <div class="stat-label">OPEN TASKS</div>
+                        <div id="statTasks" class="stat-value">0</div>
+                        <div class="stat-description">tugas tindak lanjut</div>
+                    </article>
                 </div>
-
-
-                <div
-                    id="priorityTasks"
-                    class="priority-task-list"
-                >
-
-                    <div class="empty-state">
-                        Loading tasks...
+                <div class="dashboard-grid">
+                    <article class="panel">
+                        <div class="panel-header">
+                            <div><span class="panel-number">01</span><h2>PIPELINE SPREAD</h2></div>
+                            <button class="panel-action" data-page-link="pipeline" type="button">LIHAT KANBAN →</button>
+                        </div>
+                        <div id="pipelineBars" class="pipeline-bars"><div class="kanban-empty">Memuat data pipeline...</div></div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-header">
+                            <div><span class="panel-number">02</span><h2>RECENT ACTIVITY</h2></div>
+                        </div>
+                        <div id="recentActivities" class="activity-list"><div class="kanban-empty">Belum ada aktivitas.</div></div>
+                    </article>
+                </div>
+                <article class="panel">
+                    <div class="panel-header">
+                        <div><span class="panel-number">03</span><h2>PRIORITY FOLLOW UPS</h2></div>
+                        <button class="panel-action" data-page-link="tasks" type="button">LIHAT SEMUA TASKS →</button>
                     </div>
-
-                </div>
-
-            </article>
-
+                    <div id="priorityTasks" class="priority-task-list"><div class="kanban-empty">Tidak ada task mendesak.</div></div>
+                </article>
+            </div>
         </section>
 
-
-        <!-- =================================================
-             CRM
-        ================================================== -->
-
-        <section
-            id="page-crm"
-            class="page"
-        >
-
-            <header class="page-header">
-
-                <div>
-
-                    <div class="eyebrow">
-                        02 / DATABASE
+        <!-- CRM -->
+        <section id="page-crm" class="page">
+            <div class="content">
+                <header class="page-header">
+                    <div>
+                        <div class="eyebrow">02 / DATABASE TERPUSAT</div>
+                        <h1>SPONSOR <span>DATABASE</span></h1>
                     </div>
-
-                    <h1>
-                        SPONSOR<br>
-                        <span>CRM</span>
-                    </h1>
-
+                    <div style="display:flex; gap:8px;">
+                        <button id="exportCsvButton" class="secondary-button" type="button">EXPORT CSV</button>
+                        <button id="addCompanyButton" class="primary-button" type="button">+ TAMBAH SPONSOR</button>
+                    </div>
+                </header>
+                <div class="crm-toolbar">
+                    <div class="search-wrapper">
+                        <span>PENCARIAN CEPAT</span>
+                        <input id="companySearch" type="search" placeholder="Nama perusahaan, PIC, atau industri...">
+                    </div>
+                    <select id="companyStatusFilter" class="filter-select">
+                        <option value="ALL">SEMUA STATUS</option>
+                        <option value="PROSPECT">PROSPECT</option>
+                        <option value="CONTACTED">CONTACTED</option>
+                        <option value="MEETING">MEETING</option>
+                        <option value="PROPOSAL">PROPOSAL</option>
+                        <option value="NEGOTIATION">NEGOTIATION</option>
+                        <option value="CLOSED">CLOSED</option>
+                        <option value="LOST">LOST</option>
+                    </select>
+                    <select id="companyIndustryFilter" class="filter-select">
+                        <option value="ALL">SEMUA INDUSTRI</option>
+                        <option value="BANKING">BANKING</option>
+                        <option value="AUTOMOTIVE">AUTOMOTIVE</option>
+                        <option value="LUBRICANT">LUBRICANT</option>
+                        <option value="MODIFICATION">MODIFICATION</option>
+                        <option value="TECHNOLOGY">TECHNOLOGY</option>
+                        <option value="FMCG">FMCG</option>
+                        <option value="EDUCATION">EDUCATION</option>
+                        <option value="OTHER">OTHER</option>
+                    </select>
                 </div>
-
-
-                <button
-                    id="addCompanyButton"
-                    class="primary-button"
-                    type="button"
-                >
-                    + ADD COMPANY
-                </button>
-
-            </header>
-
-
-            <!-- CRM TOOLBAR -->
-
-            <div class="crm-toolbar">
-
-                <div class="search-wrapper">
-
-                    <span>
-                        SEARCH
-                    </span>
-
-                    <input
-                        id="companySearch"
-                        type="search"
-                        placeholder="Company, PIC, industry..."
-                    >
-
+                <div id="companyGrid" class="company-grid">
+                    <div class="kanban-empty">Memuat data sponsor...</div>
                 </div>
-
-
-                <select
-                    id="companyStatusFilter"
-                    class="filter-select"
-                >
-
-                    <option value="ALL">
-                        ALL STATUS
-                    </option>
-
-                    <option value="PROSPECT">
-                        PROSPECT
-                    </option>
-
-                    <option value="CONTACTED">
-                        CONTACTED
-                    </option>
-
-                    <option value="MEETING">
-                        MEETING
-                    </option>
-
-                    <option value="PROPOSAL">
-                        PROPOSAL
-                    </option>
-
-                    <option value="NEGOTIATION">
-                        NEGOTIATION
-                    </option>
-
-                    <option value="CLOSED">
-                        CLOSED
-                    </option>
-
-                    <option value="LOST">
-                        LOST
-                    </option>
-
-                </select>
-
-
-                <select
-                    id="companyIndustryFilter"
-                    class="filter-select"
-                >
-
-                    <option value="ALL">
-                        ALL INDUSTRIES
-                    </option>
-
-                    <option value="BANKING">
-                        BANKING
-                    </option>
-
-                    <option value="AUTOMOTIVE">
-                        AUTOMOTIVE
-                    </option>
-
-                    <option value="LUBRICANT">
-                        LUBRICANT
-                    </option>
-
-                    <option value="MODIFICATION">
-                        MODIFICATION
-                    </option>
-
-                    <option value="TECHNOLOGY">
-                        TECHNOLOGY
-                    </option>
-
-                    <option value="FMCG">
-                        FMCG
-                    </option>
-
-                    <option value="EDUCATION">
-                        EDUCATION
-                    </option>
-
-                    <option value="OTHER">
-                        OTHER
-                    </option>
-
-                </select>
-
             </div>
-
-
-            <!-- COMPANY GRID -->
-
-            <div
-                id="companyGrid"
-                class="company-grid"
-            >
-
-                <div class="empty-state">
-                    Loading companies...
-                </div>
-
-            </div>
-
         </section>
 
-
-        <!-- =================================================
-             PIPELINE
-        ================================================== -->
-
-        <section
-            id="page-pipeline"
-            class="page"
-        >
-
-            <header class="page-header">
-
-                <div>
-
-                    <div class="eyebrow">
-                        03 / DEAL FLOW
+        <!-- PIPELINE KANBAN -->
+        <section id="page-pipeline" class="page">
+            <div class="content">
+                <header class="page-header">
+                    <div>
+                        <div class="eyebrow">03 / DEAL FLOW PIPELINE</div>
+                        <h1>KANBAN <span>BOARD</span></h1>
                     </div>
-
-                    <h1>
-                        SPONSORSHIP<br>
-                        <span>PIPELINE</span>
-                    </h1>
-
-                </div>
-
-            </header>
-
-
-            <div
-                id="kanban"
-                class="kanban-board"
-            >
-
-                <!-- JS WILL RENDER COLUMNS -->
-
+                </header>
+                <div id="kanban" class="kanban-board"></div>
             </div>
-
         </section>
 
-
-        <!-- =================================================
-             TASKS
-        ================================================== -->
-
-        <section
-            id="page-tasks"
-            class="page"
-        >
-
-            <header class="page-header">
-
-                <div>
-
-                    <div class="eyebrow">
-                        04 / EXECUTION
+        <!-- TASKS -->
+        <section id="page-tasks" class="page">
+            <div class="content">
+                <header class="page-header">
+                    <div>
+                        <div class="eyebrow">04 / EKSEKUSI LAPANGAN</div>
+                        <h1>FOLLOW UP & <span>TASKS</span></h1>
                     </div>
-
-                    <h1>
-                        FOLLOW<br>
-                        <span>UPS</span>
-                    </h1>
-
+                    <button id="addTaskButton" class="primary-button" type="button">+ TAMBAH TASK</button>
+                </header>
+                <div class="task-toolbar">
+                    <button class="task-filter active" data-task-filter="ALL" type="button">SEMUA</button>
+                    <button class="task-filter" data-task-filter="OPEN" type="button">PENDING</button>
+                    <button class="task-filter" data-task-filter="OVERDUE" type="button">TERLAMBAT</button>
+                    <button class="task-filter" data-task-filter="COMPLETED" type="button">SELESAI</button>
                 </div>
-
-
-                <button
-                    id="addTaskButton"
-                    class="primary-button"
-                    type="button"
-                >
-                    + ADD TASK
-                </button>
-
-            </header>
-
-
-            <div class="task-toolbar">
-
-                <button
-                    class="task-filter active"
-                    data-task-filter="ALL"
-                    type="button"
-                >
-                    ALL
-                </button>
-
-                <button
-                    class="task-filter"
-                    data-task-filter="OPEN"
-                    type="button"
-                >
-                    OPEN
-                </button>
-
-                <button
-                    class="task-filter"
-                    data-task-filter="OVERDUE"
-                    type="button"
-                >
-                    OVERDUE
-                </button>
-
-                <button
-                    class="task-filter"
-                    data-task-filter="COMPLETED"
-                    type="button"
-                >
-                    COMPLETED
-                </button>
-
+                <div id="taskList" class="task-list"><div class="kanban-empty">Memuat daftar tugas...</div></div>
             </div>
-
-
-            <div
-                id="taskList"
-                class="task-list"
-            >
-
-                <div class="empty-state">
-                    Loading tasks...
-                </div>
-
-            </div>
-
         </section>
 
-
-        <!-- =================================================
-             PLAYBOOK
-        ================================================== -->
-
-        <section
-            id="page-playbook"
-            class="page"
-        >
-
-            <header class="page-header">
-
-                <div>
-
-                    <div class="eyebrow">
-                        05 / FIELD GUIDE
+        <!-- PLAYBOOK -->
+        <section id="page-playbook" class="page">
+            <div class="content">
+                <header class="page-header">
+                    <div>
+                        <div class="eyebrow">05 / PANDUAN LAPANGAN</div>
+                        <h1>SPONSORSHIP <span>PLAYBOOK</span></h1>
                     </div>
-
-                    <h1>
-                        SPONSORSHIP<br>
-                        <span>PLAYBOOK</span>
-                    </h1>
-
+                </header>
+                <div class="playbook-intro">
+                    <div class="playbook-statement">JANGAN CUMA JUAL LOGO.<br><span>JUAL SOLUSI & VALUE.</span></div>
+                    <p>Pahami objektif korporat sponsor, sesuaikan dengan daya tarik mekanikal & audiens Mechaniversary 52.</p>
                 </div>
-
-            </header>
-
-
-            <div class="playbook-intro">
-
-                <div class="playbook-statement">
-                    DON'T SELL<br>
-                    <span>A PACKAGE.</span>
+                <div class="playbook-grid">
+                    <article class="playbook-card"><span class="playbook-number">01</span><h2>RISET</h2><p>Petakan perusahaan yang relevan dengan karakter kampanye acara.</p></article>
+                    <article class="playbook-card"><span class="playbook-number">02</span><h2>PAHAMI OBJEKTIF</h2><p>Apakah mereka kejar awareness, leads, product trial, atau community access?</p></article>
+                    <article class="playbook-card"><span class="playbook-number">03</span><h2>SINKRONKAN VALUE</h2><p>Gabungkan aset event kita dengan target KPI marketing mereka.</p></article>
+                    <article class="playbook-card"><span class="playbook-number">04</span><h2>EKSEKUSI & LAPORAN</h2><p>Pastikan aktivasi berjalan bersih dan kirimkan post-event report tepat waktu.</p></article>
                 </div>
-
-                <p>
-                    Pahami kebutuhan perusahaan terlebih dahulu.
-                    Kemudian bangun bentuk partnership yang
-                    memberikan value untuk kedua pihak.
-                </p>
-
             </div>
-
-
-            <div class="playbook-grid">
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        01
-                    </span>
-
-                    <h2>
-                        FIND
-                    </h2>
-
-                    <p>
-                        Tentukan perusahaan yang relevan dengan
-                        audience, industri, aktivitas, dan karakter
-                        Mechaniversary 52.
-                    </p>
-
-                </article>
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        02
-                    </span>
-
-                    <h2>
-                        UNDERSTAND
-                    </h2>
-
-                    <p>
-                        Cari tahu objective perusahaan.
-                        Apakah mereka mengejar awareness,
-                        leads, trial, acquisition, content,
-                        atau community access?
-                    </p>
-
-                </article>
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        03
-                    </span>
-
-                    <h2>
-                        MATCH
-                    </h2>
-
-                    <p>
-                        Hubungkan objective sponsor dengan
-                        aset yang kita punya.
-                    </p>
-
-                </article>
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        04
-                    </span>
-
-                    <h2>
-                        PROPOSE
-                    </h2>
-
-                    <p>
-                        Buat penawaran yang menjawab kebutuhan
-                        perusahaan, bukan hanya daftar logo,
-                        booth, dan posting.
-                    </p>
-
-                </article>
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        05
-                    </span>
-
-                    <h2>
-                        NEGOTIATE
-                    </h2>
-
-                    <p>
-                        Bahas budget, deliverables, timeline,
-                        activation, eksposur, dan bentuk
-                        kerja sama.
-                    </p>
-
-                </article>
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        06
-                    </span>
-
-                    <h2>
-                        CLOSE
-                    </h2>
-
-                    <p>
-                        Pastikan seluruh kesepakatan tercatat:
-                        value, PIC, deliverables, timeline,
-                        dan commitment.
-                    </p>
-
-                </article>
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        07
-                    </span>
-
-                    <h2>
-                        ACTIVATE
-                    </h2>
-
-                    <p>
-                        Jalankan partnership sesuai kesepakatan
-                        dan pastikan sponsor mendapatkan
-                        experience yang dijanjikan.
-                    </p>
-
-                </article>
-
-
-                <article class="playbook-card">
-
-                    <span class="playbook-number">
-                        08
-                    </span>
-
-                    <h2>
-                        REPORT
-                    </h2>
-
-                    <p>
-                        Dokumentasikan hasil dan kirimkan
-                        post-event report untuk membangun
-                        relationship jangka panjang.
-                    </p>
-
-                </article>
-
-            </div>
-
         </section>
-
     </main>
-
 </div>
 
-
-<!-- =========================================================
-     COMPANY MODAL
-========================================================= -->
-
-<div
-    id="companyModal"
-    class="modal hidden"
-    aria-hidden="true"
->
-
-    <div
-        class="modal-backdrop"
-        data-close-modal
-    ></div>
-
-
-    <div
-        class="modal-card"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="companyModalTitle"
-    >
-
+<!-- MODAL ADD/EDIT COMPANY -->
+<div id="companyModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card">
         <header class="modal-header">
-
-            <div>
-
-                <div class="eyebrow">
-                    SPONSOR DATABASE
-                </div>
-
-                <h2 id="companyModalTitle">
-                    ADD COMPANY
-                </h2>
-
-            </div>
-
-
-            <button
-                class="modal-close"
-                data-close-modal
-                type="button"
-                aria-label="Close"
-            >
-                ×
-            </button>
-
+            <h2 id="companyModalTitle">TAMBAH SPONSOR</h2>
+            <button class="modal-close" data-close-modal type="button">×</button>
         </header>
-
-
         <form id="companyForm">
-
-            <input
-                id="companyId"
-                type="hidden"
-            >
-
-
+            <input id="companyId" type="hidden">
             <div class="form-grid">
-
-
-                <!-- COMPANY -->
-
                 <div class="input-group full">
-
-                    <label for="companyName">
-                        COMPANY NAME *
-                    </label>
-
-                    <input
-                        id="companyName"
-                        type="text"
-                        placeholder="e.g. blu by BCA Digital"
-                        required
-                    >
-
+                    <label for="companyName">Nama Perusahaan *</label>
+                    <input id="companyName" type="text" placeholder="e.g. Pertamina Lubricants" required>
                 </div>
-
-
-                <!-- INDUSTRY -->
-
                 <div class="input-group">
-
-                    <label for="companyIndustry">
-                        INDUSTRY
-                    </label>
-
+                    <label for="companyIndustry">Industri</label>
                     <select id="companyIndustry">
-
-                        <option value="BANKING">
-                            BANKING
-                        </option>
-
-                        <option value="AUTOMOTIVE">
-                            AUTOMOTIVE
-                        </option>
-
-                        <option value="LUBRICANT">
-                            LUBRICANT
-                        </option>
-
-                        <option value="MODIFICATION">
-                            MODIFICATION
-                        </option>
-
-                        <option value="TECHNOLOGY">
-                            TECHNOLOGY
-                        </option>
-
-                        <option value="FMCG">
-                            FMCG
-                        </option>
-
-                        <option value="EDUCATION">
-                            EDUCATION
-                        </option>
-
-                        <option value="OTHER">
-                            OTHER
-                        </option>
-
+                        <option value="BANKING">BANKING</option>
+                        <option value="AUTOMOTIVE">AUTOMOTIVE</option>
+                        <option value="LUBRICANT">LUBRICANT</option>
+                        <option value="MODIFICATION">MODIFICATION</option>
+                        <option value="TECHNOLOGY">TECHNOLOGY</option>
+                        <option value="FMCG">FMCG</option>
+                        <option value="EDUCATION">EDUCATION</option>
+                        <option value="OTHER">OTHER</option>
                     </select>
-
                 </div>
-
-
-                <!-- STATUS -->
-
                 <div class="input-group">
-
-                    <label for="companyStatus">
-                        PIPELINE STATUS
-                    </label>
-
+                    <label for="companyStatus">Status Pipeline</label>
                     <select id="companyStatus">
-
-                        <option value="PROSPECT">
-                            PROSPECT
-                        </option>
-
-                        <option value="CONTACTED">
-                            CONTACTED
-                        </option>
-
-                        <option value="MEETING">
-                            MEETING
-                        </option>
-
-                        <option value="PROPOSAL">
-                            PROPOSAL
-                        </option>
-
-                        <option value="NEGOTIATION">
-                            NEGOTIATION
-                        </option>
-
-                        <option value="CLOSED">
-                            CLOSED
-                        </option>
-
-                        <option value="LOST">
-                            LOST
-                        </option>
-
+                        <option value="PROSPECT">PROSPECT</option>
+                        <option value="CONTACTED">CONTACTED</option>
+                        <option value="MEETING">MEETING</option>
+                        <option value="PROPOSAL">PROPOSAL</option>
+                        <option value="NEGOTIATION">NEGOTIATION</option>
+                        <option value="CLOSED">CLOSED</option>
+                        <option value="LOST">LOST</option>
                     </select>
-
                 </div>
-
-
-                <!-- OBJECTIVE -->
-
                 <div class="input-group">
-
-                    <label for="companyObjective">
-                        SPONSOR OBJECTIVE
-                    </label>
-
+                    <label for="companyObjective">Objektif Sponsor</label>
                     <select id="companyObjective">
-
-                        <option value="">
-                            SELECT OBJECTIVE
-                        </option>
-
-                        <option value="AWARENESS">
-                            BRAND AWARENESS
-                        </option>
-
-                        <option value="PRODUCT_TRIAL">
-                            PRODUCT TRIAL
-                        </option>
-
-                        <option value="LEADS">
-                            LEAD GENERATION
-                        </option>
-
-                        <option value="CUSTOMER_ACQUISITION">
-                            CUSTOMER ACQUISITION
-                        </option>
-
-                        <option value="CONTENT">
-                            CONTENT
-                        </option>
-
-                        <option value="COMMUNITY">
-                            COMMUNITY ACCESS
-                        </option>
-
-                        <option value="BRAND_LEGACY">
-                            BRAND LEGACY
-                        </option>
-
+                        <option value="AWARENESS">BRAND AWARENESS</option>
+                        <option value="PRODUCT_TRIAL">PRODUCT TRIAL</option>
+                        <option value="LEADS">LEAD GENERATION</option>
+                        <option value="ACQUISITION">CUSTOMER ACQUISITION</option>
+                        <option value="CONTENT">CONTENT CREATION</option>
+                        <option value="COMMUNITY">COMMUNITY ACCESS</option>
                     </select>
-
                 </div>
-
-
-                <!-- VALUE -->
-
                 <div class="input-group">
-
-                    <label for="companyValue">
-                        POTENTIAL VALUE
-                    </label>
-
-                    <input
-                        id="companyValue"
-                        type="number"
-                        min="0"
-                        step="1000"
-                        placeholder="15000000"
-                    >
-
+                    <label for="companyValue">Potensi Nilai (IDR)</label>
+                    <input id="companyValue" type="number" min="0" step="100000" placeholder="15000000">
                 </div>
-
-
-                <!-- CONTACT -->
-
                 <div class="input-group">
-
-                    <label for="companyContact">
-                        COMPANY PIC
-                    </label>
-
-                    <input
-                        id="companyContact"
-                        type="text"
-                        placeholder="Nama PIC"
-                    >
-
+                    <label for="companyContact">Nama PIC / Kontak</label>
+                    <input id="companyContact" type="text" placeholder="Nama PIC Korporat">
                 </div>
-
-
-                <!-- PHONE -->
-
                 <div class="input-group">
-
-                    <label for="companyPhone">
-                        PHONE
-                    </label>
-
-                    <input
-                        id="companyPhone"
-                        type="tel"
-                        placeholder="08..."
-                    >
-
+                    <label for="companyPhone">No WhatsApp PIC</label>
+                    <input id="companyPhone" type="tel" placeholder="628123456789">
                 </div>
-
-
-                <!-- EMAIL -->
-
-                <div class="input-group">
-
-                    <label for="companyEmail">
-                        EMAIL
-                    </label>
-
-                    <input
-                        id="companyEmail"
-                        type="email"
-                        placeholder="pic@company.com"
-                    >
-
-                </div>
-
-
-                <!-- NEXT ACTION -->
-
-                <div class="input-group">
-
-                    <label for="companyNextAction">
-                        NEXT ACTION
-                    </label>
-
-                    <input
-                        id="companyNextAction"
-                        type="text"
-                        placeholder="Follow up proposal"
-                    >
-
-                </div>
-
-
-                <!-- NEXT ACTION DATE -->
-
-                <div class="input-group">
-
-                    <label for="companyNextDate">
-                        NEXT ACTION DATE
-                    </label>
-
-                    <input
-                        id="companyNextDate"
-                        type="date"
-                    >
-
-                </div>
-
-
-                <!-- INTERNAL PIC -->
-
-                <div class="input-group">
-
-                    <label for="companyInternalPic">
-                        INTERNAL PIC
-                    </label>
-
-                    <input
-                        id="companyInternalPic"
-                        type="text"
-                        placeholder="Nama panitia"
-                    >
-
-                </div>
-
-
-                <!-- NOTES -->
-
                 <div class="input-group full">
-
-                    <label for="companyNotes">
-                        INTERNAL NOTES
-                    </label>
-
-                    <textarea
-                        id="companyNotes"
-                        rows="5"
-                        placeholder="Catatan internal..."
-                    ></textarea>
-
+                    <label for="companyNextAction">Tindak Lanjut Berikutnya (Next Action)</label>
+                    <input id="companyNextAction" type="text" placeholder="Kirim penyesuaian proposal kustom">
                 </div>
-
+                <div class="input-group">
+                    <label for="companyNextDate">Tanggal Tindak Lanjut</label>
+                    <input id="companyNextDate" type="date">
+                </div>
+                <div class="input-group">
+                    <label for="companyInternalPic">Panitia Penanggung Jawab</label>
+                    <input id="companyInternalPic" type="text" placeholder="Nama Anggota Panitia">
+                </div>
+                <div class="input-group full">
+                    <label for="companyNotes">Catatan Internal</label>
+                    <textarea id="companyNotes" rows="3" placeholder="Detail respon atau kendala..."></textarea>
+                </div>
             </div>
-
-
-            <div
-                id="companyFormError"
-                class="form-error"
-                role="alert"
-            ></div>
-
-
+            <div id="companyFormError" class="login-error"></div>
             <footer class="modal-actions">
-
-                <button
-                    class="secondary-button"
-                    type="button"
-                    data-close-modal
-                >
-                    CANCEL
-                </button>
-
-                <button
-                    class="primary-button"
-                    type="submit"
-                >
-                    SAVE COMPANY →
-                </button>
-
+                <button class="secondary-button" type="button" data-close-modal>BATAL</button>
+                <button class="primary-button" type="submit">SIMPAN DATA →</button>
             </footer>
-
         </form>
-
     </div>
-
 </div>
 
-
-<!-- =========================================================
-     COMPANY DETAIL MODAL
-========================================================= -->
-
-<div
-    id="detailModal"
-    class="modal hidden"
-    aria-hidden="true"
->
-
-    <div
-        class="modal-backdrop"
-        data-close-modal
-    ></div>
-
-
-    <div
-        class="modal-card detail-modal"
-        role="dialog"
-        aria-modal="true"
-    >
-
+<!-- MODAL DETAIL & WHATSAPP PITCH -->
+<div id="detailModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card">
         <header class="modal-header">
+            <div>
+                <div id="detailIndustry" class="eyebrow" style="margin:0 0 4px 0;">INDUSTRI</div>
+                <h2 id="detailName">NAMA PERUSAHAAN</h2>
+            </div>
+            <button class="modal-close" data-close-modal type="button">×</button>
+        </header>
+        <div class="modal-body">
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; margin-bottom:16px;">
+                <div style="background:#f4f4f4; border:2px solid var(--black); padding:8px;">
+                    <span style="font-family:var(--font-mono); font-size:7px; display:block;">STATUS</span>
+                    <strong id="detailStatus" style="font-size:11px;">—</strong>
+                </div>
+                <div style="background:#f4f4f4; border:2px solid var(--black); padding:8px;">
+                    <span style="font-family:var(--font-mono); font-size:7px; display:block;">POTENSI NILAI</span>
+                    <strong id="detailValue" style="font-size:11px; color:var(--red);">Rp 0</strong>
+                </div>
+                <div style="background:#f4f4f4; border:2px solid var(--black); padding:8px;">
+                    <span style="font-family:var(--font-mono); font-size:7px; display:block;">PENANGGUNG JAWAB</span>
+                    <strong id="detailPIC" style="font-size:11px;">—</strong>
+                </div>
+            </div>
+
+            <div style="margin-bottom:16px; display:flex; gap:8px;">
+                <a id="whatsappDirectBtn" href="#" target="_blank" class="whatsapp-btn" style="flex:1;">
+                    💬 CHAT & GENERATE PITCH WA
+                </a>
+            </div>
+
+            <div style="margin-bottom:16px;">
+                <span class="eyebrow">RIWAYAT AKTIVITAS & PROGRESS</span>
+                <div id="activityTimeline" style="max-height:150px; overflow-y:auto; border:2px solid var(--black); padding:8px; background:#fafafa; margin-top:6px;"></div>
+                <form id="activityForm" style="display:flex; gap:6px; margin-top:8px;">
+                    <select id="activityType" style="width:120px;">
+                        <option value="CHAT_WA">CHAT WA</option>
+                        <option value="CALL">TELEPON</option>
+                        <option value="MEETING">MEETING</option>
+                        <option value="PROPOSAL">KIRIM PROPOSAL</option>
+                        <option value="OTHER">LAINNYA</option>
+                    </select>
+                    <input id="activityDescription" type="text" placeholder="Catat progress follow up..." required style="flex:1;">
+                    <button class="primary-button" type="submit">CATAT</button>
+                </form>
+            </div>
 
             <div>
-
-                <div
-                    id="detailIndustry"
-                    class="eyebrow"
-                >
-                    COMPANY
-                </div>
-
-                <h2 id="detailName">
-                    COMPANY NAME
-                </h2>
-
+                <span class="eyebrow">CATATAN & OBJEKTIF KORPORAT</span>
+                <div id="detailNotes" style="font-family:var(--font-mono); font-size:10px; background:#f9f9f9; border:2px solid var(--black); padding:10px; margin-top:4px;">—</div>
             </div>
-
-
-            <button
-                class="modal-close"
-                data-close-modal
-                type="button"
-            >
-                ×
-            </button>
-
-        </header>
-
-
-        <!-- SUMMARY -->
-
-        <div class="detail-summary">
-
-
-            <div class="detail-stat">
-
-                <span>
-                    STATUS
-                </span>
-
-                <strong id="detailStatus">
-                    —
-                </strong>
-
-            </div>
-
-
-            <div class="detail-stat">
-
-                <span>
-                    POTENTIAL VALUE
-                </span>
-
-                <strong id="detailValue">
-                    Rp 0
-                </strong>
-
-            </div>
-
-
-            <div class="detail-stat">
-
-                <span>
-                    INTERNAL PIC
-                </span>
-
-                <strong id="detailPIC">
-                    —
-                </strong>
-
-            </div>
-
         </div>
-
-
-        <!-- CONTACT / ACTION -->
-
-        <div class="detail-columns">
-
-
-            <div class="detail-section">
-
-                <div class="section-title">
-                    COMPANY CONTACT
-                </div>
-
-                <div
-                    id="detailContact"
-                    class="detail-content"
-                >
-                    —
-                </div>
-
-            </div>
-
-
-            <div class="detail-section">
-
-                <div class="section-title">
-                    NEXT ACTION
-                </div>
-
-                <div
-                    id="detailNextAction"
-                    class="detail-content"
-                >
-                    —
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- ACTIVITY -->
-
-        <div class="detail-section">
-
-            <div class="section-title">
-                ACTIVITY TIMELINE
-            </div>
-
-
-            <div
-                id="activityTimeline"
-                class="activity-timeline"
-            >
-
-                <div class="empty-state">
-                    No activity yet.
-                </div>
-
-            </div>
-
-
-            <form
-                id="activityForm"
-                class="activity-form"
-            >
-
-                <select id="activityType">
-
-                    <option value="CALL">
-                        CALL
-                    </option>
-
-                    <option value="WHATSAPP">
-                        WHATSAPP
-                    </option>
-
-                    <option value="EMAIL">
-                        EMAIL
-                    </option>
-
-                    <option value="MEETING">
-                        MEETING
-                    </option>
-
-                    <option value="PROPOSAL_SENT">
-                        PROPOSAL SENT
-                    </option>
-
-                    <option value="FOLLOW_UP">
-                        FOLLOW UP
-                    </option>
-
-                    <option value="OTHER">
-                        OTHER
-                    </option>
-
-                </select>
-
-
-                <input
-                    id="activityDescription"
-                    type="text"
-                    placeholder="What happened?"
-                    required
-                >
-
-
-                <button
-                    class="primary-button"
-                    type="submit"
-                >
-                    ADD
-                </button>
-
-            </form>
-
-        </div>
-
-
-        <!-- NOTES -->
-
-        <div class="detail-section">
-
-            <div class="section-title">
-                INTERNAL NOTES
-            </div>
-
-            <div
-                id="detailNotes"
-                class="notes-box"
-            >
-                —
-            </div>
-
-        </div>
-
-
         <footer class="modal-actions">
-
-            <button
-                id="editCompanyFromDetail"
-                class="secondary-button"
-                type="button"
-            >
-                EDIT COMPANY
-            </button>
-
+            <button id="deleteCompanyBtn" class="btn btn-danger hidden" type="button">HAPUS SPONSOR (ADMIN)</button>
+            <button id="editCompanyFromDetail" class="secondary-button" type="button">EDIT DATA</button>
         </footer>
-
     </div>
-
 </div>
 
-
-<!-- =========================================================
-     TASK MODAL
-========================================================= -->
-
-<div
-    id="taskModal"
-    class="modal hidden"
-    aria-hidden="true"
->
-
-    <div
-        class="modal-backdrop"
-        data-close-modal
-    ></div>
-
-
-    <div
-        class="modal-card"
-        role="dialog"
-        aria-modal="true"
-    >
-
+<!-- MODAL ADD TASK -->
+<div id="taskModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card">
         <header class="modal-header">
-
-            <div>
-
-                <div class="eyebrow">
-                    EXECUTION
-                </div>
-
-                <h2>
-                    ADD TASK
-                </h2>
-
-            </div>
-
-
-            <button
-                class="modal-close"
-                data-close-modal
-                type="button"
-            >
-                ×
-            </button>
-
+            <h2>TAMBAH TUGAS (TASK)</h2>
+            <button class="modal-close" data-close-modal type="button">×</button>
         </header>
-
-
         <form id="taskForm">
-
-
             <div class="input-group">
-
-                <label for="taskTitle">
-                    TASK TITLE *
-                </label>
-
-                <input
-                    id="taskTitle"
-                    type="text"
-                    placeholder="Follow up proposal BLU"
-                    required
-                >
-
+                <label for="taskTitle">Judul Tugas *</label>
+                <input id="taskTitle" type="text" placeholder="Follow up revisi proposal ke PT..." required>
             </div>
-
-
             <div class="input-group">
-
-                <label for="taskCompany">
-                    COMPANY
-                </label>
-
-                <select id="taskCompany">
-
-                    <option value="">
-                        SELECT COMPANY
-                    </option>
-
-                </select>
-
+                <label for="taskCompany">Terkait Perusahaan</label>
+                <select id="taskCompany"><option value="">-- Pilih Perusahaan --</option></select>
             </div>
-
-
             <div class="input-group">
-
-                <label for="taskDueDate">
-                    DUE DATE
-                </label>
-
-                <input
-                    id="taskDueDate"
-                    type="date"
-                >
-
+                <label for="taskDueDate">Tenggat Waktu (Due Date)</label>
+                <input id="taskDueDate" type="date">
             </div>
-
-
             <div class="input-group">
-
-                <label for="taskDescription">
-                    DESCRIPTION
-                </label>
-
-                <textarea
-                    id="taskDescription"
-                    rows="5"
-                    placeholder="Detail pekerjaan..."
-                ></textarea>
-
+                <label for="taskDescription">Deskripsi Detail</label>
+                <textarea id="taskDescription" rows="3" placeholder="Instruksi pengerjaan tugas..."></textarea>
             </div>
-
-
-            <div
-                id="taskFormError"
-                class="form-error"
-                role="alert"
-            ></div>
-
-
+            <div id="taskFormError" class="login-error"></div>
             <footer class="modal-actions">
-
-                <button
-                    class="secondary-button"
-                    type="button"
-                    data-close-modal
-                >
-                    CANCEL
-                </button>
-
-                <button
-                    class="primary-button"
-                    type="submit"
-                >
-                    CREATE TASK →
-                </button>
-
+                <button class="secondary-button" type="button" data-close-modal>BATAL</button>
+                <button class="primary-button" type="submit">BUAT TUGAS →</button>
             </footer>
-
         </form>
-
     </div>
-
 </div>
 
-
-<!-- =========================================================
-     TOAST
-========================================================= -->
-
-<div
-    id="toast"
-    class="toast"
-    role="status"
-    aria-live="polite"
-></div>
-
-
-<!-- =========================================================
-     SUPABASE CLIENT
-========================================================= -->
+<div id="toast" class="toast">Notifikasi sistem</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-<!-- =========================================================
-     APPLICATION SCRIPT
-========================================================= -->
-
 <script src="script.js"></script>
-
 </body>
 </html>
