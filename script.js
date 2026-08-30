@@ -1,5 +1,5 @@
 /* =========================================================
-   PARTNERSHIP OS — HMM ITENAS (ULTIMATE FINAL SCRIPT)
+   PARTNERSHIP OS — HMM ITENAS (FINAL DATABASE ALIGNED SCRIPT)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -267,10 +267,13 @@ function renderEverything() {
 function renderDashboard() {
     const activeStat = state.companies.filter(c => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(c.status));
     
-    const activeProjects = state.projects.filter(p => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(p.status));
+    // Saringan ditarik langsung dari status tabel companies lewat relasi company_id
+    const activeCompIds = state.companies.filter(c => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(c.status)).map(c => c.id);
+    const activeProjects = state.projects.filter(p => activeCompIds.includes(p.company_id));
     const pipelineVal = activeProjects.reduce((acc, p) => acc + Number(p.target_value || 0), 0);
     
-    const securedProjects = state.projects.filter(p => p.status === "DEAL");
+    const securedCompIds = state.companies.filter(c => c.status === "DEAL").map(c => c.id);
+    const securedProjects = state.projects.filter(p => securedCompIds.includes(p.company_id));
     const securedVal = securedProjects.reduce((acc, p) => acc + Number(p.target_value || 0), 0);
     
     const openTasks = state.tasks.filter(t => t.status !== "DONE");
@@ -492,7 +495,7 @@ function renderTasks() {
     });
 }
 
-/* ================= RELATIONAL SAVE LOGIC + AUTO STATUS SYNC ================= */
+/* ================= RELATIONAL SAVE LOGIC ================= */
 async function saveCompany(e) {
     e.preventDefault();
     const id = $("#companyId").value;
@@ -529,11 +532,11 @@ async function saveCompany(e) {
         compId = data.id;
     }
 
+    // Payload proyek murni tanpa kolom status karena tabel sponsor_projects tidak memilikinya
     const projPayload = {
         company_id: compId,
         title: `Sponsorship - ${compPayload.name}`,
         target_value: Number($("#companyValue").value || 0),
-        status: safeStatus, 
         owner_id: state.user.id
     };
 
