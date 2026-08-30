@@ -1,5 +1,5 @@
 /* =========================================================
-   M52 — PARTNERSHIP OS (ULTIMATE FINAL RELATIONAL SCRIPT)
+   PARTNERSHIP OS — HMM ITENAS (ULTIMATE FINAL SCRIPT)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -158,7 +158,7 @@ function generateWhatsAppLink(company) {
     const picName = company.contact_name || "Bapak/Ibu";
     const compName = company.name || "Perusahaan";
 
-    const text = `Halo selamat siang ${picName},\n\nPerkenalkan saya dari Tim Partnership Mechaniversary 52 HMM Institut Teknologi Nasional (Itenas) Bandung.\n\nKami melihat ${compName} memiliki visi yang luar biasa. Kami ingin menawarkan ruang kolaborasi strategis eksklusif pada rangkaian acara puncak mekanikal terbesar kami tahun 2026.\n\nBolehkah kami mengirimkan ringkasan proposal kerja sama via WhatsApp ini untuk dipelajari lebih lanjut? Terima kasih banyak.`;
+    const text = `Halo selamat siang ${picName},\n\nPerkenalkan saya dari Tim Partnership HMM Institut Teknologi Nasional (Itenas) Bandung.\n\nKami melihat ${compName} memiliki visi yang luar biasa. Kami ingin menawarkan ruang kolaborasi strategis eksklusif pada rangkaian program kerja kami.\n\nBolehkah kami mengirimkan ringkasan proposal kerja sama via WhatsApp ini untuk dipelajari lebih lanjut? Terima kasih banyak.`;
     return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
 }
 
@@ -201,7 +201,7 @@ function exportToCSV() {
     
     const dateStr = new Date().toLocaleDateString('id-ID').replace(/\//g, '-');
     link.setAttribute("href", url);
-    link.setAttribute("download", `Data_Sponsor_M52_${dateStr}.csv`);
+    link.setAttribute("download", `Data_Sponsor_HMM_Itenas_${dateStr}.csv`);
     
     document.body.appendChild(link);
     link.click();
@@ -533,7 +533,7 @@ async function saveCompany(e) {
         company_id: compId,
         title: `Sponsorship - ${compPayload.name}`,
         target_value: Number($("#companyValue").value || 0),
-        status: safeStatus, // STATUS DI TABEL PROYEK SEKARANG OTOMATIS IKUT PILIHAN FORM
+        status: safeStatus, 
         owner_id: state.user.id
     };
 
