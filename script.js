@@ -1,9 +1,9 @@
 /* =========================================================
-   M52 — PARTNERSHIP OS (FULL POWERHOUSE SCRIPT)
+   M52 — PARTNERSHIP OS (FINAL RELATIONAL + RLS SCRIPT)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = sb_publishable_PBP6LR26bD28r0bdT7EVFg_cekn47a7;
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_PBP6LR26bD28r0bdT7EVFg_cekn47a7";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
@@ -11,11 +11,11 @@ const state = {
     user: null,
     profile: null,
     companies: [],
+    projects: [],
     activities: [],
     tasks: [],
     selectedCompany: null,
     companyFilter: "ALL",
-    industryFilter: "ALL",
     taskFilter: "ALL"
 };
 
@@ -101,16 +101,16 @@ async function loadProfile() {
     if (!state.user) return;
     try {
         const { data } = await supabaseClient.from("profiles").select("*").eq("id", state.user.id).maybeSingle();
-        state.profile = data || { role: "STAFF", full_name: state.user.email.split("@")[0] };
+        state.profile = data || { role: "USER", full_name: state.user.email.split("@")[0] };
     } catch (err) {
-        state.profile = { role: "STAFF" };
+        state.profile = { role: "USER" };
     }
 }
 
 function updateUIProfile() {
     const email = state.user?.email || "—";
     const name = state.profile?.full_name || email.split("@")[0];
-    const role = state.profile?.role || "STAFF";
+    const role = state.profile?.role || "USER";
 
     if ($("#userName")) $("#userName").textContent = name;
     if ($("#userEmail")) $("#userEmail").textContent = email;
@@ -132,23 +132,19 @@ function setupRealtimeSubscriptions() {
         .subscribe();
 }
 
+/* ================= MULTI-TABLE FETCHING ================= */
 async function loadAllData() {
-    await Promise.all([loadCompanies(), loadActivities(), loadTasks()]);
-}
+    const [comps, projs, tsks, acts] = await Promise.all([
+        supabaseClient.from("companies").select("*").order("created_at", { ascending: false }),
+        supabaseClient.from("sponsor_projects").select("*, companies(name)").order("created_at", { ascending: false }),
+        supabaseClient.from("tasks").select("*, sponsor_projects(title, companies(name))").order("due_date", { ascending: true }),
+        supabaseClient.from("activities").select("*, companies(name)").order("created_at", { ascending: false }).limit(20)
+    ]);
 
-async function loadCompanies() {
-    const { data } = await supabaseClient.from("companies").select("*").order("created_at", { ascending: false });
-    state.companies = data || [];
-}
-
-async function loadActivities() {
-    const { data } = await supabaseClient.from("activities").select("*, companies(name)").order("created_at", { ascending: false }).limit(100);
-    state.activities = data || [];
-}
-
-async function loadTasks() {
-    const { data } = await supabaseClient.from("tasks").select("*, companies(name)").order("due_date", { ascending: true });
-    state.tasks = data || [];
+    state.companies = comps.data || [];
+    state.projects = projs.data || [];
+    state.tasks = tsks.data || [];
+    state.activities = acts.data || [];
 }
 
 /* ================= WHATSAPP PITCH GENERATOR ================= */
@@ -159,35 +155,29 @@ function generateWhatsAppLink(company) {
 
     const picName = company.contact_name || "Bapak/Ibu";
     const compName = company.name || "Perusahaan";
-    const objective = company.objective || "brand awareness";
 
-    const text = `Halo selamat siang ${picName},\n\nPerkenalkan saya dari Tim Partnership Mechaniversary 52 HMM Institut Teknologi Nasional (Itenas) Bandung.\n\nKami melihat ${compName} memiliki visi yang luar biasa di bidang korporat Anda, terutama dalam hal penguatan *${objective.toLowerCase()}*. Kami ingin menawarkan ruang kolaborasi strategis eksklusif pada rangkaian acara puncak mekanikal terbesar kami tahun 2026.\n\nBolehkah kami mengirimkan ringkasan proposal kerja sama via WhatsApp ini untuk dipelajari lebih lanjut? Terima kasih banyak sebelumnya.`;
-
+    const text = `Halo selamat siang ${picName},\n\nPerkenalkan saya dari Tim Partnership Mechaniversary 52 HMM Institut Teknologi Nasional (Itenas) Bandung.\n\nKami melihat ${compName} memiliki visi yang luar biasa. Kami ingin menawarkan ruang kolaborasi strategis eksklusif pada rangkaian acara puncak mekanikal terbesar kami tahun 2026.\n\nBolehkah kami mengirimkan ringkasan proposal kerja sama via WhatsApp ini untuk dipelajari lebih lanjut? Terima kasih banyak.`;
     return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
 }
 
-/* ================= EVENT BINDINGS & ACTIONS ================= */
+/* ================= EVENT BINDINGS ================= */
 function bindEvents() {
-    $$(".nav-item").forEach(btn => {
-        btn.addEventListener("click", () => navigateTo(btn.dataset.page));
-    });
-    $$("[data-page-link]").forEach(btn => {
-        btn.addEventListener("click", () => navigateTo(btn.dataset.pageLink));
-    });
+    $$(".nav-item").forEach(btn => btn.addEventListener("click", () => navigateTo(btn.dataset.page)));
+    $$("[data-page-link]").forEach(btn => btn.addEventListener("click", () => navigateTo(btn.dataset.pageLink)));
 
     $("#loginForm")?.addEventListener("submit", handleLogin);
     $("#logoutButton")?.addEventListener("click", () => supabaseClient.auth.signOut());
+    
+    // Form Relasional
     $("#companyForm")?.addEventListener("submit", saveCompany);
-    $("#activityForm")?.addEventListener("submit", saveActivity);
     $("#taskForm")?.addEventListener("submit", saveTask);
 
     $("#addCompanyButton")?.addEventListener("click", () => openCompanyEditor());
     $("#addTaskButton")?.addEventListener("click", () => {
-        populateTaskCompanySelect();
+        populateTaskProjectSelect();
         $("#taskForm")?.reset();
         openModal("#taskModal");
     });
-    $("#exportCsvButton")?.addEventListener("click", exportCompaniesCSV);
 
     bindFilters();
     bindModals();
@@ -200,12 +190,8 @@ async function handleLogin(e) {
     const errBox = $("#loginError");
 
     const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-    if (error) {
-        errBox.textContent = "Login gagal: Email atau password keliru.";
-    } else {
-        errBox.textContent = "";
-        showToast("Login berhasil!", "success");
-    }
+    if (error) errBox.textContent = "Login gagal: Kredensial tidak valid.";
+    else { errBox.textContent = ""; showToast("Berhasil login!", "success"); }
 }
 
 function navigateTo(page) {
@@ -228,10 +214,16 @@ function renderEverything() {
 }
 
 function renderDashboard() {
-    const activeStat = state.companies.filter(c => ["PROSPECT", "CONTACTED", "MEETING", "PROPOSAL", "NEGOTIATION"].includes(c.status));
-    const pipelineVal = activeStat.reduce((acc, c) => acc + Number(c.potential_value || 0), 0);
-    const securedVal = state.companies.filter(c => c.status === "CLOSED").reduce((acc, c) => acc + Number(c.potential_value || 0), 0);
-    const openTasks = state.tasks.filter(t => t.status !== "COMPLETED");
+    const activeStat = state.companies.filter(c => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(c.status));
+    
+    // Hitung value dari table sponsor_projects
+    const activeProjects = state.projects.filter(p => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(p.status));
+    const pipelineVal = activeProjects.reduce((acc, p) => acc + Number(p.target_value || 0), 0);
+    
+    const securedProjects = state.projects.filter(p => p.status === "DEAL");
+    const securedVal = securedProjects.reduce((acc, p) => acc + Number(p.target_value || 0), 0);
+    
+    const openTasks = state.tasks.filter(t => t.status !== "DONE");
 
     if ($("#statProspects")) $("#statProspects").textContent = activeStat.length;
     if ($("#statPipeline")) $("#statPipeline").textContent = formatCurrency(pipelineVal);
@@ -239,14 +231,14 @@ function renderDashboard() {
     if ($("#statTasks")) $("#statTasks").textContent = openTasks.length;
 
     renderPipelineBars();
-    renderRecentActivities();
     renderPriorityTasks();
+    renderRecentActivities();
 }
 
 function renderPipelineBars() {
     const container = $("#pipelineBars");
     if (!container) return;
-    const statuses = ["PROSPECT", "CONTACTED", "MEETING", "PROPOSAL", "NEGOTIATION", "CLOSED"];
+    const statuses = ["PROSPECT", "CONTACTED", "NEGOTIATION", "DEAL"];
     const counts = statuses.map(s => state.companies.filter(c => c.status === s).length);
     const max = Math.max(...counts, 1);
 
@@ -272,7 +264,7 @@ function renderRecentActivities() {
         <div class="activity-item">
             <div class="activity-dot"></div>
             <div class="activity-main">
-                <strong>${escapeHTML(a.companies?.name || "Sponsor")}</strong>
+                <strong>${escapeHTML(a.companies?.name || "Sistem")}</strong>
                 <span>${escapeHTML(a.description)}</span>
             </div>
             <time>${formatDate(a.created_at)}</time>
@@ -282,7 +274,7 @@ function renderRecentActivities() {
 function renderPriorityTasks() {
     const container = $("#priorityTasks");
     if (!container) return;
-    const tasks = state.tasks.filter(t => t.status !== "COMPLETED").slice(0, 4);
+    const tasks = state.tasks.filter(t => t.status !== "DONE").slice(0, 4);
     if (!tasks.length) { container.innerHTML = `<div class="kanban-empty">Semua tugas beres!</div>`; return; }
 
     container.innerHTML = tasks.map(t => `
@@ -290,15 +282,15 @@ function renderPriorityTasks() {
             <input type="checkbox" data-toggle-task="${t.id}">
             <div class="priority-task-main">
                 <strong>${escapeHTML(t.title)}</strong>
-                <span>${escapeHTML(t.companies?.name || "Umum")}</span>
+                <span>Project: ${escapeHTML(t.sponsor_projects?.title || "Umum")}</span>
             </div>
             <time>${formatDate(t.due_date)}</time>
         </div>`).join("");
 
     $$("[data-toggle-task]").forEach(cb => {
         cb.addEventListener("change", async () => {
-            await supabaseClient.from("tasks").update({ status: "COMPLETED" }).eq("id", cb.dataset.toggleTask);
-            showToast("Tugas selesai!", "success");
+            await supabaseClient.from("tasks").update({ status: "DONE" }).eq("id", cb.dataset.toggleTask);
+            showToast("Tugas diselesaikan!", "success");
             await loadTasks();
             renderEverything();
         });
@@ -306,7 +298,7 @@ function renderPriorityTasks() {
 }
 
 function renderCRM() {
-    populateTaskCompanySelect();
+    populateTaskProjectSelect();
     renderCompanyGrid();
 }
 
@@ -315,8 +307,7 @@ function getFilteredCompanies() {
     return state.companies.filter(c => {
         const matchSearch = !search || c.name.toLowerCase().includes(search) || (c.contact_name && c.contact_name.toLowerCase().includes(search));
         const matchStatus = state.companyFilter === "ALL" || c.status === state.companyFilter;
-        const matchInd = state.industryFilter === "ALL" || c.industry === state.industryFilter;
-        return matchSearch && matchStatus && matchInd;
+        return matchSearch && matchStatus;
     });
 }
 
@@ -326,110 +317,78 @@ function renderCompanyGrid() {
     const list = getFilteredCompanies();
     if (!list.length) { container.innerHTML = `<div class="kanban-empty">Tidak ada sponsor yang cocok.</div>`; return; }
 
-    container.innerHTML = list.map(c => `
+    container.innerHTML = list.map(c => {
+        const proj = state.projects.find(p => p.company_id === c.id);
+        const val = proj ? proj.target_value : 0;
+        
+        return `
         <article class="company-card" data-company-id="${c.id}">
             <div class="company-card-top">
-                <span class="company-industry">${c.industry || "OTHER"}</span>
+                <span class="company-industry">${c.category || "OTHER"}</span>
                 <span class="status-badge status-${c.status.toLowerCase()}">${c.status}</span>
             </div>
             <h3>${escapeHTML(c.name)}</h3>
-            <div class="company-value">${formatCurrency(c.potential_value)}</div>
+            <div class="company-value">${formatCurrency(val)}</div>
             <div class="company-card-contact">
-                <span>PIC: ${escapeHTML(c.contact_name || "Belum ada PIC")}</span>
-                <span>PJ: ${escapeHTML(c.internal_pic || "Belum diset")}</span>
+                <span>PIC: ${escapeHTML(c.contact_name || "Belum ada")}</span>
             </div>
             <div class="company-card-footer">
-                <span>Next: ${escapeHTML(c.next_action || "—")}</span>
+                <span>Progress: ${proj ? proj.progress + '%' : '0%'}</span>
                 <span>→ Detail</span>
             </div>
-        </article>`).join("");
+        </article>`;
+    }).join("");
 
-    $$(".company-card").forEach(card => {
-        card.addEventListener("click", () => openCompanyDetail(card.dataset.companyId));
-    });
+    $$(".company-card").forEach(card => card.addEventListener("click", () => openCompanyDetail(card.dataset.companyId)));
 }
 
 function openCompanyDetail(id) {
     const comp = state.companies.find(c => String(c.id) === String(id));
     if (!comp) return;
+    const proj = state.projects.find(p => String(p.company_id) === String(id));
+    
     state.selectedCompany = comp;
 
-    $("#detailIndustry").textContent = comp.industry || "OTHER";
+    $("#detailIndustry").textContent = comp.category || "OTHER";
     $("#detailName").textContent = comp.name;
     $("#detailStatus").textContent = comp.status;
-    $("#detailValue").textContent = formatCurrency(comp.potential_value);
-    $("#detailPIC").textContent = comp.internal_pic || "—";
-    $("#detailNotes").textContent = `Objektif: ${comp.objective || "Umum"}\nCatatan: ${comp.notes || "Tidak ada catatan."}`;
+    $("#detailValue").textContent = formatCurrency(proj ? proj.target_value : 0);
+    $("#detailProgress").textContent = proj ? proj.progress + "%" : "0%";
+    $("#detailNotes").textContent = comp.description || "Tidak ada catatan.";
 
-    // WhatsApp Direct Link
     const waBtn = $("#whatsappDirectBtn");
     if (comp.contact_phone) {
         waBtn.href = generateWhatsAppLink(comp);
         waBtn.classList.remove("hidden");
-    } else {
-        waBtn.classList.add("hidden");
-    }
+    } else waBtn.classList.add("hidden");
 
-    // Role-based delete button restriction
     const delBtn = $("#deleteCompanyBtn");
     if (isAdmin()) {
         delBtn.classList.remove("hidden");
         delBtn.onclick = () => deleteCompany(comp.id);
-    } else {
-        delBtn.classList.add("hidden");
-    }
+    } else delBtn.classList.add("hidden");
 
     $("#editCompanyFromDetail").onclick = () => {
         closeModal("#detailModal");
-        openCompanyEditor(comp);
+        openCompanyEditor(comp, proj);
     };
 
-    renderActivityTimeline(comp.id);
     openModal("#detailModal");
 }
 
 async function deleteCompany(id) {
-    if (!confirm("Hapus perusahaan ini secara permanen?")) return;
-    const { error } = await supabaseClient.from("companies").delete().eq("id", id);
-    if (error) {
-        showToast("Gagal menghapus data.", "error");
-    } else {
-        showToast("Sponsor dihapus.", "success");
-        closeModal("#detailModal");
-        await loadAllData();
-        renderEverything();
-    }
-}
-
-function renderActivityTimeline(companyId) {
-    const container = $("#activityTimeline");
-    if (!container) return;
-    const acts = state.activities.filter(a => String(a.company_id) === String(companyId));
-    if (!acts.length) { container.innerHTML = `<div class="kanban-empty">Belum ada riwayat aktivitas.</div>`; return; }
-
-    container.innerHTML = acts.map(a => `
-        <div style="font-family:var(--font-mono); font-size:9px; margin-bottom:6px; border-bottom:1px solid #ddd; padding-bottom:4px;">
-            <strong>[${a.type}]</strong> ${escapeHTML(a.description)} <span style="float:right; color:#777;">${formatDate(a.created_at)}</span>
-        </div>`).join("");
-}
-
-async function saveActivity(e) {
-    e.preventDefault();
-    if (!state.selectedCompany) return;
-    const type = $("#activityType").value;
-    const desc = $("#activityDescription").value.trim();
-
-    await supabaseClient.from("activities").insert({ company_id: state.selectedCompany.id, type, description: desc });
-    $("#activityDescription").value = "";
-    showToast("Aktivitas dicatat!", "success");
-    await loadActivities();
-    renderActivityTimeline(state.selectedCompany.id);
+    if (!confirm("Hapus perusahaan ini? (Akan menghapus project dan task terkait juga)")) return;
+    await supabaseClient.from("companies").delete().eq("id", id);
+    showToast("Sponsor dihapus.", "success");
+    closeModal("#detailModal");
+    await loadAllData();
+    renderEverything();
 }
 
 function renderPipeline() {
     const container = $("#kanban");
     if (!container) return;
-    const stages = ["PROSPECT", "CONTACTED", "MEETING", "PROPOSAL", "NEGOTIATION", "CLOSED"];
+    const stages = ["PROSPECT", "CONTACTED", "NEGOTIATION", "DEAL", "REJECTED"];
 
     container.innerHTML = stages.map(st => {
         const list = state.companies.filter(c => c.status === st);
@@ -437,44 +396,45 @@ function renderPipeline() {
             <div class="kanban-column">
                 <div class="kanban-header">${st} <span>${list.length}</span></div>
                 <div class="kanban-cards">
-                    ${list.length ? list.map(c => `
+                    ${list.length ? list.map(c => {
+                        const proj = state.projects.find(p => p.company_id === c.id);
+                        return `
                         <article class="kanban-card" data-company-id="${c.id}">
-                            <span style="font-family:var(--font-mono); font-size:7px; background:var(--navy); color:var(--yellow); padding:1px 3px;">${c.industry || "OTHER"}</span>
+                            <span style="font-family:var(--font-mono); font-size:7px; background:var(--navy); color:var(--yellow); padding:1px 3px;">${c.category || "OTHER"}</span>
                             <h3>${escapeHTML(c.name)}</h3>
-                            <strong>${formatCurrency(c.potential_value)}</strong>
-                            <small>Next: ${escapeHTML(c.next_action || "—")}</small>
-                        </article>`).join("") : `<div class="kanban-empty">Kosong</div>`}
+                            <strong>${formatCurrency(proj ? proj.target_value : 0)}</strong>
+                        </article>`
+                    }).join("") : `<div class="kanban-empty">Kosong</div>`}
                 </div>
             </div>`;
     }).join("");
 
-    $$(".kanban-card").forEach(card => {
-        card.addEventListener("click", () => openCompanyDetail(card.dataset.companyId));
-    });
+    $$(".kanban-card").forEach(card => card.addEventListener("click", () => openCompanyDetail(card.dataset.companyId)));
 }
 
 function renderTasks() {
     const container = $("#taskList");
     if (!container) return;
     let tasks = [...state.tasks];
-    if (state.taskFilter === "OPEN") tasks = tasks.filter(t => t.status !== "COMPLETED");
-    if (state.taskFilter === "COMPLETED") tasks = tasks.filter(t => t.status === "COMPLETED");
+    if (state.taskFilter !== "ALL") tasks = tasks.filter(t => t.status === state.taskFilter);
 
     if (!tasks.length) { container.innerHTML = `<div class="kanban-empty">Tidak ada task.</div>`; return; }
 
     container.innerHTML = tasks.map(t => `
-        <article class="task-card ${t.status === 'COMPLETED' ? 'completed' : ''}">
-            <input type="checkbox" data-task-id="${t.id}" ${t.status === 'COMPLETED' ? 'checked' : ''}>
+        <article class="task-card ${t.status === 'DONE' ? 'completed' : ''}">
+            <input type="checkbox" data-task-id="${t.id}" ${t.status === 'DONE' ? 'checked' : ''}>
             <div>
                 <h3>${escapeHTML(t.title)}</h3>
-                <p style="font-family:var(--font-mono); font-size:8px; color:#555; margin-top:2px;">${escapeHTML(t.description || "—")} | <strong>${escapeHTML(t.companies?.name || "Umum")}</strong></p>
+                <p style="font-family:var(--font-mono); font-size:8px; color:#555; margin-top:2px;">
+                    ${escapeHTML(t.description || "—")} | <strong>Project: ${escapeHTML(t.sponsor_projects?.title || "Umum")}</strong>
+                </p>
             </div>
             <div style="text-align:right; font-family:var(--font-mono); font-size:8px;">${formatDate(t.due_date)}</div>
         </article>`).join("");
 
     $$("[data-task-id]").forEach(cb => {
         cb.addEventListener("change", async () => {
-            const newStatus = cb.checked ? "COMPLETED" : "OPEN";
+            const newStatus = cb.checked ? "DONE" : "TODO";
             await supabaseClient.from("tasks").update({ status: newStatus }).eq("id", cb.dataset.taskId);
             await loadTasks();
             renderTasks();
@@ -482,105 +442,110 @@ function renderTasks() {
     });
 }
 
+/* ================= RELATIONAL SAVE LOGIC ================= */
 async function saveCompany(e) {
     e.preventDefault();
     const id = $("#companyId").value;
-    const payload = {
+    
+    // Status default di database elu cacat, harus maksa ngirim PROSPECT biar gak meledak
+    const safeStatus = $("#companyStatus").value || "PROSPECT"; 
+
+    const compPayload = {
         name: $("#companyName").value.trim(),
-        industry: $("#companyIndustry").value,
-        status: $("#companyStatus").value,
-        objective: $("#companyObjective").value,
-        potential_value: Number($("#companyValue").value || 0),
+        category: $("#companyIndustry").value,
+        status: safeStatus, 
         contact_name: $("#companyContact").value.trim(),
         contact_phone: $("#companyPhone").value.trim(),
-        next_action: $("#companyNextAction").value.trim(),
-        next_action_date: $("#companyNextDate").value || null,
-        internal_pic: $("#companyInternalPic").value.trim(),
-        notes: $("#companyNotes").value.trim()
+        description: $("#companyNotes").value.trim()
     };
 
-    let res;
+    let compId = id;
     if (id) {
-        res = await supabaseClient.from("companies").update(payload).eq("id", id);
+        // Mode Edit: Update aja, gak usah ubah ownership
+        await supabaseClient.from("companies").update(compPayload).eq("id", id);
     } else {
-        res = await supabaseClient.from("companies").insert(payload);
+        // Mode Insert: Langsung klaim jadi milik user yang lagi login (Inisiatif)
+        compPayload.assigned_to = state.user.id; 
+        
+        const { data, error } = await supabaseClient.from("companies").insert(compPayload).select().single();
+        if(error) { 
+            console.error(error);
+            $("#companyFormError").textContent = "Gagal simpan: " + error.message; 
+            return; 
+        }
+        compId = data.id;
     }
 
-    if (res.error) {
-        $("#companyFormError").textContent = "Gagal menyimpan data perusahaan.";
+    const projPayload = {
+        company_id: compId,
+        title: `Sponsorship - ${compPayload.name}`,
+        target_value: Number($("#companyValue").value || 0),
+        status: safeStatus,
+        owner_id: state.user.id
+    };
+
+    // Sinkronisasi tabel project (deal value dll)
+    const existingProj = state.projects.find(p => p.company_id === compId);
+    if(existingProj) {
+        await supabaseClient.from("sponsor_projects").update(projPayload).eq("id", existingProj.id);
     } else {
-        showToast("Data sponsor berhasil disimpan!", "success");
-        closeModal("#companyModal");
-        await loadAllData();
-        renderEverything();
+        await supabaseClient.from("sponsor_projects").insert(projPayload);
     }
+
+    showToast("Data Tersimpan!", "success");
+    closeModal("#companyModal");
+    await loadAllData();
+    renderEverything();
 }
 
 async function saveTask(e) {
     e.preventDefault();
     const payload = {
         title: $("#taskTitle").value.trim(),
-        company_id: $("#taskCompany").value || null,
+        sponsor_project_id: $("#taskProject").value || null,
         due_date: $("#taskDueDate").value || null,
         description: $("#taskDescription").value.trim(),
-        status: "OPEN"
+        priority: $("#taskPriority").value,
+        status: "TODO"
     };
 
     const { error } = await supabaseClient.from("tasks").insert(payload);
     if (error) {
-        $("#taskFormError").textContent = "Gagal membuat task.";
+        $("#taskFormError").textContent = error.message;
     } else {
-        showToast("Task baru dibuat!", "success");
+        showToast("Task Dibuat!", "success");
         closeModal("#taskModal");
         await loadAllData();
         renderEverything();
     }
 }
 
-function openCompanyEditor(comp = null) {
+function openCompanyEditor(comp = null, proj = null) {
     $("#companyForm").reset();
     $("#companyModalTitle").textContent = comp ? "EDIT SPONSOR" : "TAMBAH SPONSOR";
     $("#companyId").value = comp?.id || "";
     if (comp) {
         $("#companyName").value = comp.name || "";
-        $("#companyIndustry").value = comp.industry || "OTHER";
+        $("#companyIndustry").value = comp.category || "";
         $("#companyStatus").value = comp.status || "PROSPECT";
-        $("#companyObjective").value = comp.objective || "AWARENESS";
-        $("#companyValue").value = comp.potential_value || "";
+        $("#companyValue").value = proj ? proj.target_value : "";
         $("#companyContact").value = comp.contact_name || "";
         $("#companyPhone").value = comp.contact_phone || "";
-        $("#companyNextAction").value = comp.next_action || "";
-        $("#companyNextDate").value = comp.next_action_date || "";
-        $("#companyInternalPic").value = comp.internal_pic || "";
-        $("#companyNotes").value = comp.notes || "";
+        $("#companyNotes").value = comp.description || "";
     }
     openModal("#companyModal");
 }
 
-function populateTaskCompanySelect() {
-    const sel = $("#taskCompany");
+function populateTaskProjectSelect() {
+    const sel = $("#taskProject");
     if (!sel) return;
-    sel.innerHTML = `<option value="">-- Pilih Perusahaan --</option>` + state.companies.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
-}
-
-function exportCompaniesCSV() {
-    let csv = "Nama Perusahaan,Industri,Status,Potensi Nilai,PIC,No HP,PIC Internal\n";
-    state.companies.forEach(c => {
-        csv += `"${c.name}","${c.industry}","${c.status}",${c.potential_value},"${c.contact_name || ''}","${c.contact_phone || ''}","${c.internal_pic || ''}"\n`;
-    });
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `database_sponsor_m52_${new Date().toISOString().slice(0,10)}.csv`;
-    a.click();
-    showToast("CSV Berhasil diunduh!", "success");
+    sel.innerHTML = `<option value="">-- Pilih Proyek --</option>` + 
+        state.projects.map(p => `<option value="${p.id}">${p.title} (${p.companies?.name})</option>`).join("");
 }
 
 function bindFilters() {
     $("#companySearch")?.addEventListener("input", renderCompanyGrid);
     $("#companyStatusFilter")?.addEventListener("change", (e) => { state.companyFilter = e.target.value; renderCompanyGrid(); });
-    $("#companyIndustryFilter")?.addEventListener("change", (e) => { state.industryFilter = e.target.value; renderCompanyGrid(); });
     $$(".task-filter").forEach(b => {
         b.addEventListener("click", () => {
             state.taskFilter = b.dataset.taskFilter;
@@ -611,7 +576,5 @@ function closeModal(selector) {
 }
 
 function setCurrentDate() {
-    if ($("#currentDate")) {
-        $("#currentDate").textContent = new Date().toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" }).toUpperCase();
-    }
+    if ($("#currentDate")) $("#currentDate").textContent = new Date().toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" }).toUpperCase();
 }
