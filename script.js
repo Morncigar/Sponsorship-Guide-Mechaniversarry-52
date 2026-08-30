@@ -1,5 +1,5 @@
 /* =========================================================
-   PARTNERSHIP OS — HMM ITENAS (ULTIMATE FULL SCRIPT)
+   PARTNERSHIP OS — HMM ITENAS (FULL ISOLATED & 403-PROOF SCRIPT)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -134,19 +134,47 @@ function setupRealtimeSubscriptions() {
     channel.subscribe();
 }
 
-/* ================= MULTI-TABLE FETCHING ================= */
+/* ================= MULTI-TABLE FETCHING (ISOLATED & 403 PROOF) ================= */
 async function loadAllData() {
-    const [comps, projs, tsks, acts] = await Promise.all([
-        supabaseClient.from("companies").select("*").order("created_at", { ascending: false }),
-        supabaseClient.from("sponsor_projects").select("*, companies(name)").order("created_at", { ascending: false }),
-        supabaseClient.from("tasks").select("*, sponsor_projects(title, companies(name))").order("due_date", { ascending: true }),
-        supabaseClient.from("activities").select("*, companies(name)").order("created_at", { ascending: false }).limit(20)
-    ]);
+    try {
+        const [compsRes, projsRes, tsksRes, actsRes] = await Promise.all([
+            supabaseClient.from("companies").select("*").order("created_at", { ascending: false }),
+            supabaseClient.from("sponsor_projects").select("*").order("created_at", { ascending: false }),
+            supabaseClient.from("tasks").select("*").order("due_date", { ascending: true }),
+            supabaseClient.from("activities").select("*").order("created_at", { ascending: false }).limit(20)
+        ]);
 
-    state.companies = comps.data || [];
-    state.projects = projs.data || [];
-    state.tasks = tsks.data || [];
-    state.activities = acts.data || [];
+        state.companies = compsRes.data || [];
+        state.projects = projsRes.data || [];
+        state.tasks = tsksRes.data || [];
+        state.activities = actsRes.data || [];
+
+        // Mapping relasi secara manual di JavaScript (Kebal dari error 403 URL join)
+        state.projects = state.projects.map(p => ({
+            ...p,
+            companies: state.companies.find(c => c.id === p.company_id) || { name: "—" }
+        }));
+
+        state.tasks = state.tasks.map(t => {
+            const proj = state.projects.find(p => p.id === t.sponsor_project_id) || {};
+            const comp = state.companies.find(c => c.id === proj.company_id) || { name: "—" };
+            return {
+                ...t,
+                sponsor_projects: {
+                    title: proj.title || "Umum",
+                    companies: { name: comp.name }
+                }
+            };
+        });
+
+        state.activities = state.activities.map(a => ({
+            ...a,
+            companies: state.companies.find(c => c.id === a.company_id) || { name: "Sistem" }
+        }));
+
+    } catch (err) {
+        console.error("Gagal load data:", err);
+    }
 }
 
 /* ================= WHATSAPP PITCH GENERATOR ================= */
