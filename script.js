@@ -1,5 +1,5 @@
 /* =========================================================
-   M52 — PARTNERSHIP OS (FINAL DENGAN MULTI-SELECT CHIPS)
+   M52 — PARTNERSHIP OS (FINAL + EXPORT CSV)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -61,6 +61,7 @@ async function initializeApp() {
             showAppShell();
             await loadAllData();
             setupRealtimeSubscriptions();
+            renderEverything();
         } else {
             showLoginScreen();
         }
@@ -78,6 +79,7 @@ async function initializeApp() {
             showAppShell();
             await loadAllData();
             setupRealtimeSubscriptions();
+            renderEverything();
         } else if (event === "SIGNED_OUT") {
             state.user = null;
             state.profile = null;
@@ -160,6 +162,56 @@ function generateWhatsAppLink(company) {
     return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
 }
 
+/* ================= EXPORT CSV LOGIC ================= */
+function exportToCSV() {
+    if (state.companies.length === 0) {
+        showToast("Tidak ada data untuk diekspor", "normal");
+        return;
+    }
+
+    const headers = ["NAMA PERUSAHAAN", "KATEGORI", "STATUS", "TARGET NILAI (IDR)", "PROGRESS (%)", "PIC KORPORAT", "NO WHATSAPP", "DESKRIPSI/OBJEKTIF"];
+    
+    const rows = state.companies.map(c => {
+        const proj = state.projects.find(p => p.company_id === c.id);
+        const value = proj ? proj.target_value : 0;
+        const progress = proj ? proj.progress : 0;
+        
+        // Fungsi buat nge-escape tanda koma atau enter di dalam deskripsi biar gak ngerusak file Excel
+        const escapeCSV = (str) => {
+            if (!str) return '""';
+            const s = String(str).replace(/"/g, '""');
+            return `"${s}"`;
+        };
+
+        return [
+            escapeCSV(c.name),
+            escapeCSV(c.category),
+            escapeCSV(c.status),
+            value,
+            progress,
+            escapeCSV(c.contact_name),
+            escapeCSV(c.contact_phone),
+            escapeCSV(c.description)
+        ].join(",");
+    });
+
+    const csvContent = "\uFEFF" + [headers.join(","), ...rows].join("\n"); // \uFEFF biar kebaca bener di Excel (BOM)
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    
+    // Format nama file: Data_Sponsor_M52_30-Agustus-2026.csv
+    const dateStr = new Date().toLocaleDateString('id-ID').replace(/\//g, '-');
+    link.setAttribute("href", url);
+    link.setAttribute("download", `Data_Sponsor_M52_${dateStr}.csv`);
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    showToast("Data berhasil diekspor!", "success");
+}
+
 /* ================= EVENT BINDINGS ================= */
 function bindEvents() {
     $$(".nav-item").forEach(btn => btn.addEventListener("click", () => navigateTo(btn.dataset.page)));
@@ -172,6 +224,8 @@ function bindEvents() {
     $("#taskForm")?.addEventListener("submit", saveTask);
 
     $("#addCompanyButton")?.addEventListener("click", () => openCompanyEditor());
+    $("#exportCsvButton")?.addEventListener("click", exportToCSV); // KABEL EXPORT CSV DIPASANG DI SINI
+    
     $("#addTaskButton")?.addEventListener("click", () => {
         populateTaskProjectSelect();
         $("#taskForm")?.reset();
@@ -446,12 +500,10 @@ async function saveCompany(e) {
     const id = $("#companyId").value;
     const safeStatus = $("#companyStatus").value || "PROSPECT"; 
 
-    // Tarik nilai dari chips
     const selectedObjs = Array.from($$(`input[name="objectives"]:checked`)).map(cb => cb.value);
     const customObj = $("#companyCustomObjective").value.trim();
     if (customObj) selectedObjs.push(customObj);
     
-    // Gabungkan jadi teks dan tempel ke depan notes
     const finalObjectives = selectedObjs.join(", ");
     const rawNotes = $("#companyNotes").value.trim();
     const finalDescription = finalObjectives ? `[OBJEKTIF: ${finalObjectives}]\n\n${rawNotes}` : rawNotes;
@@ -525,7 +577,6 @@ async function saveTask(e) {
 function openCompanyEditor(comp = null, proj = null) {
     $("#companyForm").reset();
     
-    // Reset chips
     $$(`input[name="objectives"]`).forEach(cb => cb.checked = false);
     $("#companyCustomObjective").value = "";
 
@@ -538,7 +589,6 @@ function openCompanyEditor(comp = null, proj = null) {
         $("#companyValue").value = proj ? proj.target_value : "";
         $("#companyContact").value = comp.contact_name || "";
         $("#companyPhone").value = comp.contact_phone || "";
-        // Biarkan raw description masuk ke sini biar gampang diedit ulang
         $("#companyNotes").value = comp.description || "";
     }
     openModal("#companyModal");
