@@ -126,7 +126,7 @@ function isAdmin() {
     return String(state.profile?.role || "").toUpperCase() === "ADMIN";
 }
 
-/* ================= REAL-TIME LIVE SYNC (CLEANED) ================= */
+/* ================= REAL-TIME LIVE SYNC ================= */
 function setupRealtimeSubscriptions() {
     if (activeRealtimeChannel) {
         supabaseClient.removeChannel(activeRealtimeChannel);
@@ -139,7 +139,7 @@ function setupRealtimeSubscriptions() {
     activeRealtimeChannel.subscribe();
 }
 
-/* ================= MULTI-TABLE FETCHING (ISOLATED) ================= */
+/* ================= MULTI-TABLE FETCHING ================= */
 async function loadAllData() {
     try {
         const [compsRes, projsRes, tsksRes, actsRes] = await Promise.all([
@@ -425,10 +425,17 @@ function renderCompanyGrid() {
         const proj = state.projects.find(p => p.company_id === c.id);
         const val = proj ? proj.target_value : 0;
         
+        const logoHTML = c.logo_url 
+            ? `<img src="${c.logo_url}" alt="${c.name}" style="width: 32px; height: 32px; object-fit: contain; border: 1px solid var(--black); background: white; padding: 2px;">`
+            : `<div style="width: 32px; height: 32px; background: var(--navy); color: var(--yellow); font-family: var(--font-heading); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; border: 1px solid var(--black);">${c.name.charAt(0).toUpperCase()}</div>`;
+
         return `
         <article class="company-card" data-company-id="${c.id}">
-            <div class="company-card-top">
-                <span class="company-industry">${c.category || "OTHER"}</span>
+            <div class="company-card-top" style="align-items: center;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    ${logoHTML}
+                    <span class="company-industry">${c.category || "OTHER"}</span>
+                </div>
                 <span class="status-badge status-${c.status.toLowerCase()}">${c.status}</span>
             </div>
             <h3>${escapeHTML(c.name)}</h3>
@@ -619,13 +626,41 @@ async function saveCompany(e) {
     const rawNotes = $("#companyNotes").value.trim();
     const finalDescription = finalObjectives ? `[OBJEKTIF: ${finalObjectives}]\n\n${rawNotes}` : rawNotes;
 
+    // --- LOGIKA UPLOAD LOGO KE SUPABASE STORAGE ---
+    let logoUrl = $("#companyLogoFile")?.dataset?.existingUrl || null;
+    const fileInput = $("#companyLogoFile");
+    
+    if (fileInput && fileInput.files && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
+        const filePath = `logos/${fileName}`;
+
+        const { error: uploadError } = await supabaseClient.storage
+            .from('sponsor-logos')
+            .upload(filePath, file);
+
+        if (uploadError) {
+            showToast("Gagal mengupload logo: " + uploadError.message, "normal");
+            return;
+        }
+
+        const { data: publicUrlData } = supabaseClient.storage
+            .from('sponsor-logos')
+            .getPublicUrl(filePath);
+            
+        logoUrl = publicUrlData.publicUrl;
+    }
+    // ---------------------------------------------
+
     const compPayload = {
         name: $("#companyName").value.trim(),
         category: $("#companyIndustry").value,
         status: safeStatus, 
         contact_name: $("#companyContact").value.trim(),
         contact_phone: $("#companyPhone").value.trim(),
-        description: finalDescription
+        description: finalDescription,
+        logo_url: logoUrl
     };
 
     let compId = id;
@@ -715,6 +750,12 @@ function openCompanyEditor(comp = null, proj = null) {
     
     $$(`input[name="objectives"]`).forEach(cb => cb.checked = false);
     $("#companyCustomObjective").value = "";
+
+    const fileInput = $("#companyLogoFile");
+    if (fileInput) {
+        fileInput.value = "";
+        fileInput.dataset.existingUrl = comp?.logo_url || "";
+    }
 
     $("#companyModalTitle").textContent = comp ? "EDIT SPONSOR" : "TAMBAH SPONSOR";
     $("#companyId").value = comp?.id || "";
