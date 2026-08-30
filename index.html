@@ -255,6 +255,20 @@
                         <option value="REJECTED">REJECTED</option>
                     </select>
                 </div>
+                
+                <!-- MULTI SELECT OBJECTIVES -->
+                <div class="input-group full" style="background: var(--gray-bg); padding: 12px; border: 2px dashed var(--black);">
+                    <label>Objektif Sponsor (Bisa Pilih >1 & Custom)</label>
+                    <div class="objective-chips">
+                        <label class="chip"><input type="checkbox" name="objectives" value="BRAND AWARENESS"><span>BRAND AWARENESS</span></label>
+                        <label class="chip"><input type="checkbox" name="objectives" value="LEAD GENERATION"><span>LEAD GENERATION</span></label>
+                        <label class="chip"><input type="checkbox" name="objectives" value="PRODUCT TRIAL"><span>PRODUCT TRIAL</span></label>
+                        <label class="chip"><input type="checkbox" name="objectives" value="COMMUNITY ACCESS"><span>COMMUNITY ACCESS</span></label>
+                        <label class="chip"><input type="checkbox" name="objectives" value="CONTENT CREATION"><span>CONTENT CREATION</span></label>
+                    </div>
+                    <input type="text" id="companyCustomObjective" placeholder="Objektif lainnya... (e.g. CSR, Event Khusus)" style="margin-top: 8px;">
+                </div>
+
                 <div class="input-group">
                     <label for="companyValue">Target Nilai Deal (IDR)</label>
                     <input id="companyValue" type="number" min="0" step="100000" placeholder="15000000">
@@ -268,8 +282,8 @@
                     <input id="companyPhone" type="tel" placeholder="628123456789">
                 </div>
                 <div class="input-group full">
-                    <label for="companyNotes">Deskripsi / Notes</label>
-                    <textarea id="companyNotes" rows="3" placeholder="Detail respon atau kendala..."></textarea>
+                    <label for="companyNotes">Deskripsi / Notes (Bisa di-edit manual)</label>
+                    <textarea id="companyNotes" rows="4" placeholder="Detail respon atau kendala..."></textarea>
                 </div>
             </div>
             <div id="companyFormError" class="login-error"></div>
@@ -314,8 +328,8 @@
             </div>
 
             <div>
-                <span class="eyebrow">CATATAN PERUSAHAAN</span>
-                <div id="detailNotes" style="font-family:var(--font-mono); font-size:10px; background:#f9f9f9; border:2px solid var(--black); padding:10px; margin-top:4px;">—</div>
+                <span class="eyebrow">CATATAN PERUSAHAAN & OBJEKTIF</span>
+                <div id="detailNotes" style="font-family:var(--font-mono); font-size:10px; background:#f9f9f9; border:2px solid var(--black); padding:10px; margin-top:4px; white-space: pre-wrap;">—</div>
             </div>
         </div>
         <footer class="modal-actions">
