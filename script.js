@@ -1,5 +1,5 @@
 /* =========================================================
-   PARTNERSHIP OS — HMM ITENAS (FULL ISOLATED & 403-PROOF SCRIPT)
+   PARTNERSHIP OS — HMM ITENAS (ULTIMATE 403-PROOF SCRIPT)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -124,7 +124,7 @@ function isAdmin() {
     return String(state.profile?.role || "").toUpperCase() === "ADMIN";
 }
 
-/* ================= REAL-TIME LIVE SYNC (FIXED ORDER) ================= */
+/* ================= REAL-TIME LIVE SYNC ================= */
 function setupRealtimeSubscriptions() {
     const channel = supabaseClient.channel('db-changes');
     channel.on('postgres_changes', { event: '*', schema: 'public' }, async () => {
@@ -134,7 +134,7 @@ function setupRealtimeSubscriptions() {
     channel.subscribe();
 }
 
-/* ================= MULTI-TABLE FETCHING (ISOLATED & 403 PROOF) ================= */
+/* ================= MULTI-TABLE FETCHING (ISOLATED) ================= */
 async function loadAllData() {
     try {
         const [compsRes, projsRes, tsksRes, actsRes] = await Promise.all([
@@ -149,7 +149,7 @@ async function loadAllData() {
         state.tasks = tsksRes.data || [];
         state.activities = actsRes.data || [];
 
-        // Mapping relasi secara manual di JavaScript (Kebal dari error 403 URL join)
+        // Mapping relasi secara manual di JS (Kebal dari error 403 URL join)
         state.projects = state.projects.map(p => ({
             ...p,
             companies: state.companies.find(c => c.id === p.company_id) || { name: "—" }
@@ -369,7 +369,7 @@ function renderPriorityTasks() {
         cb.addEventListener("change", async () => {
             await supabaseClient.from("tasks").update({ status: "DONE" }).eq("id", cb.dataset.toggleTask);
             showToast("Tugas diselesaikan!", "success");
-            await loadTasks();
+            await loadAllData();
             renderEverything();
         });
     });
@@ -514,13 +514,14 @@ function renderTasks() {
         cb.addEventListener("change", async () => {
             const newStatus = cb.checked ? "DONE" : "TODO";
             await supabaseClient.from("tasks").update({ status: newStatus }).eq("id", cb.dataset.taskId);
-            await loadTasks();
+            await loadAllData();
             renderTasks();
+            renderDashboard();
         });
     });
 }
 
-/* ================= RELATIONAL SAVE LOGIC (DB ALIGNED) ================= */
+/* ================= RELATIONAL SAVE LOGIC ================= */
 async function saveCompany(e) {
     e.preventDefault();
     const id = $("#companyId").value;
