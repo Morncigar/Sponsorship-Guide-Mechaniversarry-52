@@ -1,5 +1,5 @@
 /* =========================================================
-   PARTNERSHIP OS — HMM ITENAS (FULL SCRIPT + USER TRACKING & DROPDOWN STATUS)
+   PARTNERSHIP OS — HMM ITENAS (FULL SCRIPT + AUTO ACTIVITY LOGGER)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -368,10 +368,27 @@ function renderPriorityTasks() {
 
     $$("[data-toggle-task]").forEach(cb => {
         cb.addEventListener("change", async () => {
+            const taskId = cb.dataset.toggleTask;
+            const taskObj = state.tasks.find(t => t.id === taskId);
+            
             await supabaseClient.from("tasks").update({ 
                 status: "DONE",
                 assigned_to: state.user?.id || null
-            }).eq("id", cb.dataset.toggleTask);
+            }).eq("id", taskId);
+
+            // Auto log ke activities jika task nyambung ke project/company
+            if (taskObj && taskObj.sponsor_project_id) {
+                const proj = state.projects.find(p => p.id === taskObj.sponsor_project_id);
+                if (proj && proj.company_id) {
+                    await supabaseClient.from("activities").insert({
+                        company_id: proj.company_id,
+                        user_id: state.user?.id || null,
+                        type: "OTHER",
+                        description: `Menyelesaikan task: "${taskObj.title}"`
+                    });
+                }
+            }
+
             showToast("Tugas diselesaikan!", "success");
             await loadAllData();
             renderEverything();
@@ -523,15 +540,31 @@ function renderTasks() {
     $$("[data-task-id]").forEach(sel => {
         sel.addEventListener("change", async () => {
             const newStatus = sel.value;
+            const taskId = sel.dataset.taskId;
+            const taskObj = state.tasks.find(t => t.id === taskId);
+
             const { error } = await supabaseClient.from("tasks").update({ 
                 status: newStatus,
                 assigned_to: state.user?.id || null 
-            }).eq("id", sel.dataset.taskId);
+            }).eq("id", taskId);
 
             if (error) {
                 showToast("Gagal update status!", "normal");
                 console.error(error);
                 return;
+            }
+
+            // Auto log ke activities saat status task diubah
+            if (taskObj && taskObj.sponsor_project_id) {
+                const proj = state.projects.find(p => p.id === taskObj.sponsor_project_id);
+                if (proj && proj.company_id) {
+                    await supabaseClient.from("activities").insert({
+                        company_id: proj.company_id,
+                        user_id: state.user?.id || null,
+                        type: "OTHER",
+                        description: `Mengubah status task "${taskObj.title}" menjadi ${newStatus}`
+                    });
+                }
             }
 
             showToast(`Status diubah ke ${newStatus}!`, "success");
@@ -595,6 +628,14 @@ async function saveCompany(e) {
         await supabaseClient.from("sponsor_projects").insert(projPayload);
     }
 
+    // Auto log aktivitas simpan/tambah sponsor
+    await supabaseClient.from("activities").insert({
+        company_id: compId,
+        user_id: state.user?.id || null,
+        type: id ? "OTHER" : "PROPOSAL_SENT",
+        description: id ? `Memperbarui data sponsor ${compPayload.name}` : `Menambahkan prospek sponsor baru ${compPayload.name}`
+    });
+
     showToast("Data Tersimpan!", "success");
     closeModal("#companyModal");
     await loadAllData();
@@ -603,9 +644,12 @@ async function saveCompany(e) {
 
 async function saveTask(e) {
     e.preventDefault();
+    const projId = $("#taskProject").value || null;
+    const taskTitle = $("#taskTitle").value.trim();
+
     const payload = {
-        title: $("#taskTitle").value.trim(),
-        sponsor_project_id: $("#taskProject").value || null,
+        title: taskTitle,
+        sponsor_project_id: projId,
         due_date: $("#taskDueDate").value || null,
         description: $("#taskDescription").value.trim(),
         priority: $("#taskPriority").value,
@@ -616,12 +660,26 @@ async function saveTask(e) {
     const { error } = await supabaseClient.from("tasks").insert(payload);
     if (error) {
         $("#taskFormError").textContent = error.message;
-    } else {
-        showToast("Task Dibuat!", "success");
-        closeModal("#taskModal");
-        await loadAllData();
-        renderEverything();
+        return;
     }
+
+    // Auto log jika task terikat ke perusahaan/proyek
+    if (projId) {
+        const proj = state.projects.find(p => p.id === projId);
+        if (proj && proj.company_id) {
+            await supabaseClient.from("activities").insert({
+                company_id: proj.company_id,
+                user_id: state.user?.id || null,
+                type: "OTHER",
+                description: `Membuat task baru: "${taskTitle}"`
+            });
+        }
+    }
+
+    showToast("Task Dibuat!", "success");
+    closeModal("#taskModal");
+    await loadAllData();
+    renderEverything();
 }
 
 function openCompanyEditor(comp = null, proj = null) {
