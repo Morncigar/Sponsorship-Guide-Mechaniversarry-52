@@ -1,5 +1,5 @@
 /* =========================================================
-   PARTNERSHIP OS — HMM ITENAS (ULTIMATE FULL & FIXED SCRIPT)
+   PARTNERSHIP OS — HMM ITENAS (FULL SCRIPT + USER TRACKING & DROPDOWN STATUS)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -124,7 +124,7 @@ function isAdmin() {
     return String(state.profile?.role || "").toUpperCase() === "ADMIN";
 }
 
-/* ================= REAL-TIME LIVE SYNC (CORRECT ORDER) ================= */
+/* ================= REAL-TIME LIVE SYNC ================= */
 function setupRealtimeSubscriptions() {
     const channel = supabaseClient.channel('db-changes');
     channel.on('postgres_changes', { event: '*', schema: 'public' }, async () => {
@@ -368,7 +368,10 @@ function renderPriorityTasks() {
 
     $$("[data-toggle-task]").forEach(cb => {
         cb.addEventListener("change", async () => {
-            await supabaseClient.from("tasks").update({ status: "DONE" }).eq("id", cb.dataset.toggleTask);
+            await supabaseClient.from("tasks").update({ 
+                status: "DONE",
+                assigned_to: state.user?.id || null
+            }).eq("id", cb.dataset.toggleTask);
             showToast("Tugas diselesaikan!", "success");
             await loadAllData();
             renderEverything();
@@ -501,20 +504,37 @@ function renderTasks() {
 
     container.innerHTML = tasks.map(t => `
         <article class="task-card ${t.status === 'DONE' ? 'completed' : ''}">
-            <input type="checkbox" data-task-id="${t.id}" ${t.status === 'DONE' ? 'checked' : ''}>
             <div>
                 <h3>${escapeHTML(t.title)}</h3>
                 <p style="font-family:var(--font-mono); font-size:8px; color:#555; margin-top:2px;">
                     ${escapeHTML(t.description || "—")} | <strong>Project: ${escapeHTML(t.sponsor_projects?.title || "Umum")}</strong>
                 </p>
             </div>
-            <div style="text-align:right; font-family:var(--font-mono); font-size:8px;">${formatDate(t.due_date)}</div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <select class="task-status-dropdown" data-task-id="${t.id}" style="font-family: var(--font-mono); font-size: 9px; padding: 4px; background: var(--bg); border: 2px solid var(--navy); cursor: pointer;">
+                    <option value="TODO" ${t.status === 'TODO' ? 'selected' : ''}>TODO</option>
+                    <option value="IN_PROGRESS" ${t.status === 'IN_PROGRESS' ? 'selected' : ''}>IN PROGRESS</option>
+                    <option value="DONE" ${t.status === 'DONE' ? 'selected' : ''}>DONE</option>
+                </select>
+                <div style="text-align:right; font-family:var(--font-mono); font-size:8px;">${formatDate(t.due_date)}</div>
+            </div>
         </article>`).join("");
 
-    $$("[data-task-id]").forEach(cb => {
-        cb.addEventListener("change", async () => {
-            const newStatus = cb.checked ? "DONE" : "TODO";
-            await supabaseClient.from("tasks").update({ status: newStatus }).eq("id", cb.dataset.taskId);
+    $$("[data-task-id]").forEach(sel => {
+        sel.addEventListener("change", async () => {
+            const newStatus = sel.value;
+            const { error } = await supabaseClient.from("tasks").update({ 
+                status: newStatus,
+                assigned_to: state.user?.id || null 
+            }).eq("id", sel.dataset.taskId);
+
+            if (error) {
+                showToast("Gagal update status!", "normal");
+                console.error(error);
+                return;
+            }
+
+            showToast(`Status diubah ke ${newStatus}!`, "success");
             await loadAllData();
             renderTasks();
             renderDashboard();
@@ -550,7 +570,7 @@ async function saveCompany(e) {
     if (id) {
         await supabaseClient.from("companies").update(compPayload).eq("id", id);
     } else {
-        compPayload.assigned_to = state.user.id; 
+        compPayload.assigned_to = state.user?.id || null; 
         const { data, error } = await supabaseClient.from("companies").insert(compPayload).select().single();
         if(error) { 
             console.error(error);
@@ -565,7 +585,7 @@ async function saveCompany(e) {
         title: `Sponsorship - ${compPayload.name}`,
         target_value: targetVal,
         status: safeStatus, 
-        owner_id: state.user.id
+        owner_id: state.user?.id || null
     };
 
     const existingProj = state.projects.find(p => String(p.company_id) === String(compId));
@@ -589,7 +609,8 @@ async function saveTask(e) {
         due_date: $("#taskDueDate").value || null,
         description: $("#taskDescription").value.trim(),
         priority: $("#taskPriority").value,
-        status: "TODO"
+        status: "TODO",
+        assigned_to: state.user?.id || null
     };
 
     const { error } = await supabaseClient.from("tasks").insert(payload);
