@@ -76,6 +76,19 @@ button { font-family: var(--font-heading); cursor: pointer; border: none; backgr
 }
 .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: var(--navy); box-shadow: 2px 2px 0px var(--navy); }
 
+/* === CHIPS / TAGS MULTI-SELECT === */
+.objective-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip input { display: none; }
+.chip span {
+    display: inline-block; padding: 6px 12px; border: 2px solid var(--black);
+    background: var(--white); font-family: var(--font-mono); font-size: 0.75rem;
+    cursor: pointer; transition: all 0.2s; font-weight: bold;
+}
+.chip input:checked + span { 
+    background: var(--navy); color: var(--yellow); border-color: var(--navy); 
+    box-shadow: inset 2px 2px 0px rgba(0,0,0,0.3);
+}
+
 /* === LOGIN SCREEN === */
 #loginScreen {
     min-height: 100vh; background: var(--navy); display: flex; align-items: center; justify-content: center; padding: 20px;
