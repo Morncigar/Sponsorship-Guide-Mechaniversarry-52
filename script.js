@@ -1,5 +1,5 @@
 /* =========================================================
-   PARTNERSHIP OS — HMM ITENAS (FINAL DATABASE ALIGNED SCRIPT)
+   PARTNERSHIP OS — HMM ITENAS (FINAL MONEY & STATUS FIXED)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -267,7 +267,6 @@ function renderEverything() {
 function renderDashboard() {
     const activeStat = state.companies.filter(c => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(c.status));
     
-    // Saringan ditarik langsung dari status tabel companies lewat relasi company_id
     const activeCompIds = state.companies.filter(c => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(c.status)).map(c => c.id);
     const activeProjects = state.projects.filter(p => activeCompIds.includes(p.company_id));
     const pipelineVal = activeProjects.reduce((acc, p) => acc + Number(p.target_value || 0), 0);
@@ -532,7 +531,7 @@ async function saveCompany(e) {
         compId = data.id;
     }
 
-    // Payload proyek murni tanpa kolom status karena tabel sponsor_projects tidak memilikinya
+    // TARGET NILAI AMBIL DARI #companyValue SECARA EKSPLISIT
     const projPayload = {
         company_id: compId,
         title: `Sponsorship - ${compPayload.name}`,
