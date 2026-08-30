@@ -1,5 +1,5 @@
 /* =========================================================
-   PARTNERSHIP OS — HMM ITENAS (ULTIMATE 403-PROOF SCRIPT)
+   PARTNERSHIP OS — HMM ITENAS (ULTIMATE FULL & FIXED SCRIPT)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -124,7 +124,7 @@ function isAdmin() {
     return String(state.profile?.role || "").toUpperCase() === "ADMIN";
 }
 
-/* ================= REAL-TIME LIVE SYNC ================= */
+/* ================= REAL-TIME LIVE SYNC (CORRECT ORDER) ================= */
 function setupRealtimeSubscriptions() {
     const channel = supabaseClient.channel('db-changes');
     channel.on('postgres_changes', { event: '*', schema: 'public' }, async () => {
@@ -149,7 +149,6 @@ async function loadAllData() {
         state.tasks = tsksRes.data || [];
         state.activities = actsRes.data || [];
 
-        // Mapping relasi secara manual di JS (Kebal dari error 403 URL join)
         state.projects = state.projects.map(p => ({
             ...p,
             companies: state.companies.find(c => c.id === p.company_id) || { name: "—" }
@@ -295,10 +294,12 @@ function renderEverything() {
 function renderDashboard() {
     const activeStat = state.companies.filter(c => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(c.status));
     
-    const activeProjects = state.projects.filter(p => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(p.status));
+    const activeCompIds = state.companies.filter(c => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(c.status)).map(c => c.id);
+    const activeProjects = state.projects.filter(p => activeCompIds.includes(p.company_id));
     const pipelineVal = activeProjects.reduce((acc, p) => acc + Number(p.target_value || 0), 0);
     
-    const securedProjects = state.projects.filter(p => p.status === "DEAL");
+    const securedCompIds = state.companies.filter(c => c.status === "DEAL").map(c => c.id);
+    const securedProjects = state.projects.filter(p => securedCompIds.includes(p.company_id));
     const securedVal = securedProjects.reduce((acc, p) => acc + Number(p.target_value || 0), 0);
     
     const openTasks = state.tasks.filter(t => t.status !== "DONE");
