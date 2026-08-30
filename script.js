@@ -1,5 +1,5 @@
 /* =========================================================
-   PARTNERSHIP OS — HMM ITENAS (FINAL MONEY & STATUS FIXED)
+   PARTNERSHIP OS — HMM ITENAS (ULTIMATE DATABASE ALIGNED SCRIPT)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -267,12 +267,10 @@ function renderEverything() {
 function renderDashboard() {
     const activeStat = state.companies.filter(c => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(c.status));
     
-    const activeCompIds = state.companies.filter(c => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(c.status)).map(c => c.id);
-    const activeProjects = state.projects.filter(p => activeCompIds.includes(p.company_id));
+    const activeProjects = state.projects.filter(p => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(p.status));
     const pipelineVal = activeProjects.reduce((acc, p) => acc + Number(p.target_value || 0), 0);
     
-    const securedCompIds = state.companies.filter(c => c.status === "DEAL").map(c => c.id);
-    const securedProjects = state.projects.filter(p => securedCompIds.includes(p.company_id));
+    const securedProjects = state.projects.filter(p => p.status === "DEAL");
     const securedVal = securedProjects.reduce((acc, p) => acc + Number(p.target_value || 0), 0);
     
     const openTasks = state.tasks.filter(t => t.status !== "DONE");
@@ -494,11 +492,12 @@ function renderTasks() {
     });
 }
 
-/* ================= RELATIONAL SAVE LOGIC ================= */
+/* ================= RELATIONAL SAVE LOGIC (DB ALIGNED) ================= */
 async function saveCompany(e) {
     e.preventDefault();
     const id = $("#companyId").value;
     const safeStatus = $("#companyStatus").value || "PROSPECT"; 
+    const targetVal = Number($("#companyValue").value || 0);
 
     const selectedObjs = Array.from($$(`input[name="objectives"]:checked`)).map(cb => cb.value);
     const customObj = $("#companyCustomObjective").value.trim();
@@ -531,15 +530,16 @@ async function saveCompany(e) {
         compId = data.id;
     }
 
-    // TARGET NILAI AMBIL DARI #companyValue SECARA EKSPLISIT
+    // KOLOM TARGET_VALUE DAN STATUS ADA DI SPONSOR_PROJECTS, KITA SIMPAN DISINI SECARA AKURAT
     const projPayload = {
         company_id: compId,
         title: `Sponsorship - ${compPayload.name}`,
-        target_value: Number($("#companyValue").value || 0),
+        target_value: targetVal,
+        status: safeStatus, 
         owner_id: state.user.id
     };
 
-    const existingProj = state.projects.find(p => p.company_id === compId);
+    const existingProj = state.projects.find(p => String(p.company_id) === String(compId));
     if(existingProj) {
         await supabaseClient.from("sponsor_projects").update(projPayload).eq("id", existingProj.id);
     } else {
