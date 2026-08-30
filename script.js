@@ -1,5 +1,5 @@
 /* =========================================================
-   PARTNERSHIP OS — HMM ITENAS (FINAL STABLE SCRIPT)
+   PARTNERSHIP OS — HMM ITENAS (ULTIMATE STABLE SCRIPT)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -104,9 +104,23 @@ function showAppShell() {
 async function loadProfile() {
     if (!state.user) return;
     try {
-        const { data } = await supabaseClient.from("profiles").select("*").eq("id", state.user.id).maybeSingle();
-        state.profile = data || { role: "USER", full_name: state.user.email.split("@")[0] };
+        let { data, error } = await supabaseClient.from("profiles").select("*").eq("id", state.user.id).maybeSingle();
+        
+        // Auto-upsert profil jika belum terdaftar di tabel profiles untuk cegah foreign key error
+        if (!data) {
+            const defaultName = state.user.email.split("@")[0];
+            const { data: newProfile } = await supabaseClient.from("profiles").upsert({
+                id: state.user.id,
+                full_name: defaultName,
+                role: "USER"
+            }).select().maybeSingle();
+            
+            state.profile = newProfile || { role: "USER", full_name: defaultName };
+        } else {
+            state.profile = data;
+        }
     } catch (err) {
+        console.error("Profile load error:", err);
         state.profile = { role: "USER" };
     }
 }
@@ -388,7 +402,7 @@ function renderPriorityTasks() {
             }
 
             await supabaseClient.from("activities").insert({
-                company_id: compId,
+                company_id: compId || null,
                 user_id: state.user?.id || null,
                 type: "OTHER",
                 description: `Menyelesaikan task: "${taskObj?.title || 'Task'}"`
@@ -471,12 +485,12 @@ function openCompanyDetail(id) {
             const newStatus = statusSelect.value;
             
             await supabaseClient.from("companies").update({ status: newStatus }).eq("id", comp.id);
-            if (proj) {
+            if (proj && proj.id) {
                 await supabaseClient.from("sponsor_projects").update({ status: newStatus }).eq("id", proj.id);
             }
 
             await supabaseClient.from("activities").insert({
-                company_id: comp.id,
+                company_id: comp.id || null,
                 user_id: state.user?.id || null,
                 type: "OTHER",
                 description: `Mengubah status ${comp.name} menjadi ${newStatus}`
@@ -514,7 +528,16 @@ function openCompanyDetail(id) {
 
 async function deleteCompany(id) {
     if (!confirm("Hapus perusahaan ini? (Akan menghapus project dan task terkait juga)")) return;
+    
+    // Hapus relasi anak secara eksplisit jika cascade belum aktif penuh di DB
+    await supabaseClient.from("tasks").delete().in("sponsor_project_id", 
+        state.projects.filter(p => p.company_id === id).map(p => p.id)
+    );
+    await supabaseClient.from("sponsor_projects").delete().eq("company_id", id);
+    await supabaseClient.from("activities").delete().eq("company_id", id);
+    
     await supabaseClient.from("companies").delete().eq("id", id);
+    
     showToast("Sponsor dihapus.", "success");
     closeModal("#detailModal");
     await loadAllData();
@@ -598,7 +621,7 @@ function renderTasks() {
             }
 
             await supabaseClient.from("activities").insert({
-                company_id: compId,
+                company_id: compId || null,
                 user_id: state.user?.id || null,
                 type: "OTHER",
                 description: `Mengubah status task "${taskObj?.title || 'Task'}" menjadi ${newStatus}`
@@ -614,7 +637,7 @@ function renderTasks() {
 
 async function saveCompany(e) {
     e.preventDefault();
-    const id = $("#companyId").value;
+    const id = $("#companyId").value.trim();
     const safeStatus = $("#companyStatus").value || "PROSPECT"; 
     const targetVal = Number($("#companyValue").value || 0);
 
@@ -626,7 +649,7 @@ async function saveCompany(e) {
     const rawNotes = $("#companyNotes").value.trim();
     const finalDescription = finalObjectives ? `[OBJEKTIF: ${finalObjectives}]\n\n${rawNotes}` : rawNotes;
 
-    // --- LOGIKA UPLOAD LOGO KE SUPABASE STORAGE ---
+    // --- UPLOAD LOGO KE SUPABASE STORAGE ---
     let logoUrl = $("#companyLogoFile")?.dataset?.existingUrl || null;
     const fileInput = $("#companyLogoFile");
     
@@ -651,26 +674,31 @@ async function saveCompany(e) {
             
         logoUrl = publicUrlData.publicUrl;
     }
-    // ---------------------------------------------
+    // -------------------------------------
 
     const compPayload = {
         name: $("#companyName").value.trim(),
-        category: $("#companyIndustry").value,
+        category: $("#companyIndustry").value.trim() || null,
         status: safeStatus, 
-        contact_name: $("#companyContact").value.trim(),
-        contact_phone: $("#companyPhone").value.trim(),
-        description: finalDescription,
-        logo_url: logoUrl
+        contact_name: $("#companyContact").value.trim() || null,
+        contact_phone: $("#companyPhone").value.trim() || null,
+        description: finalDescription || null,
+        logo_url: logoUrl || null
     };
 
-    let compId = id;
-    if (id) {
-        await supabaseClient.from("companies").update(compPayload).eq("id", id);
+    let compId = id ? id : null;
+    if (compId) {
+        const { error: updateErr } = await supabaseClient.from("companies").update(compPayload).eq("id", compId);
+        if (updateErr) {
+            console.error("Update Company Error:", updateErr);
+            $("#companyFormError").textContent = "Gagal update: " + updateErr.message;
+            return;
+        }
     } else {
         compPayload.assigned_to = state.user?.id || null; 
         const { data, error } = await supabaseClient.from("companies").insert(compPayload).select().single();
-        if(error) { 
-            console.error(error);
+        if (error) { 
+            console.error("Insert Company Error:", error);
             $("#companyFormError").textContent = "Gagal simpan: " + error.message; 
             return; 
         }
@@ -686,14 +714,17 @@ async function saveCompany(e) {
     };
 
     const existingProj = state.projects.find(p => String(p.company_id) === String(compId));
-    if(existingProj) {
-        await supabaseClient.from("sponsor_projects").update(projPayload).eq("id", existingProj.id);
+    if (existingProj && existingProj.id) {
+        const { error: updateProjErr } = await supabaseClient.from("sponsor_projects").update(projPayload).eq("id", existingProj.id);
+        if (updateProjErr) {
+            await supabaseClient.from("sponsor_projects").insert(projPayload);
+        }
     } else {
         await supabaseClient.from("sponsor_projects").insert(projPayload);
     }
 
     await supabaseClient.from("activities").insert({
-        company_id: compId,
+        company_id: compId || null,
         user_id: state.user?.id || null,
         type: id ? "OTHER" : "PROPOSAL_SENT",
         description: id ? `Memperbarui data sponsor ${compPayload.name}` : `Menambahkan prospek sponsor baru ${compPayload.name}`
@@ -712,9 +743,9 @@ async function saveTask(e) {
 
     const payload = {
         title: taskTitle,
-        sponsor_project_id: projId,
+        sponsor_project_id: projId || null,
         due_date: $("#taskDueDate").value || null,
-        description: $("#taskDescription").value.trim(),
+        description: $("#taskDescription").value.trim() || null,
         priority: $("#taskPriority").value,
         status: "TODO",
         assigned_to: state.user?.id || null
@@ -733,7 +764,7 @@ async function saveTask(e) {
     }
 
     await supabaseClient.from("activities").insert({
-        company_id: compId,
+        company_id: compId || null,
         user_id: state.user?.id || null,
         type: "OTHER",
         description: `Membuat task baru: "${taskTitle}"`
