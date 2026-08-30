@@ -1,5 +1,5 @@
 /* =========================================================
-   M52 — PARTNERSHIP OS (FINAL + EXPORT CSV)
+   M52 — PARTNERSHIP OS (FINAL + DASHBOARD MONEY FIX)
 ========================================================= */
 
 const SUPABASE_URL = "https://tjtilixseegqliuosgsc.supabase.co";
@@ -176,7 +176,6 @@ function exportToCSV() {
         const value = proj ? proj.target_value : 0;
         const progress = proj ? proj.progress : 0;
         
-        // Fungsi buat nge-escape tanda koma atau enter di dalam deskripsi biar gak ngerusak file Excel
         const escapeCSV = (str) => {
             if (!str) return '""';
             const s = String(str).replace(/"/g, '""');
@@ -195,12 +194,11 @@ function exportToCSV() {
         ].join(",");
     });
 
-    const csvContent = "\uFEFF" + [headers.join(","), ...rows].join("\n"); // \uFEFF biar kebaca bener di Excel (BOM)
+    const csvContent = "\uFEFF" + [headers.join(","), ...rows].join("\n");
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     
-    // Format nama file: Data_Sponsor_M52_30-Agustus-2026.csv
     const dateStr = new Date().toLocaleDateString('id-ID').replace(/\//g, '-');
     link.setAttribute("href", url);
     link.setAttribute("download", `Data_Sponsor_M52_${dateStr}.csv`);
@@ -224,7 +222,7 @@ function bindEvents() {
     $("#taskForm")?.addEventListener("submit", saveTask);
 
     $("#addCompanyButton")?.addEventListener("click", () => openCompanyEditor());
-    $("#exportCsvButton")?.addEventListener("click", exportToCSV); // KABEL EXPORT CSV DIPASANG DI SINI
+    $("#exportCsvButton")?.addEventListener("click", exportToCSV);
     
     $("#addTaskButton")?.addEventListener("click", () => {
         populateTaskProjectSelect();
@@ -269,9 +267,11 @@ function renderEverything() {
 function renderDashboard() {
     const activeStat = state.companies.filter(c => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(c.status));
     
+    // DIPERBAIKI: Pipeline hanya menghitung yang belum deal
     const activeProjects = state.projects.filter(p => ["PROSPECT", "CONTACTED", "NEGOTIATION"].includes(p.status));
     const pipelineVal = activeProjects.reduce((acc, p) => acc + Number(p.target_value || 0), 0);
     
+    // Secured menghitung yang sudah DEAL
     const securedProjects = state.projects.filter(p => p.status === "DEAL");
     const securedVal = securedProjects.reduce((acc, p) => acc + Number(p.target_value || 0), 0);
     
