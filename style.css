@@ -69,9 +69,12 @@ a { color: inherit; text-decoration: none; }
     padding: 20px; background: var(--navy);
 }
 .login-container {
-    width: 100%; max-width: 420px; background: var(--white);
-    border: var(--border); box-shadow: 6px 6px 0px 0px var(--red);
-    padding: 28px;
+    width: 100%;
+    max-width: 420px;
+    background: var(--white);
+    border: var(--border);
+    box-shadow: 6px 6px 0px 0px var(--red);
+    padding: 28px 28px 36px 28px; /* Tambahin padding bawah dikit jadi 36px */
 }
 .login-brand {
     display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
